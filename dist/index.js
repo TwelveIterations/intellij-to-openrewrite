@@ -32950,7 +32950,7 @@ async function run() {
             coreExports.setOutput('count', count);
         }
         else {
-            coreExports.setFailed('No matching version found');
+            coreExports.setFailed('No migration maps found');
         }
     }
     catch (error) {

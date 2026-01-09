@@ -17,7 +17,7 @@ export async function run(): Promise<void> {
     if (count) {
       core.setOutput('count', count)
     } else {
-      core.setFailed('No matching version found')
+      core.setFailed('No migration maps found')
     }
   } catch (error) {
     // Fail the workflow run if an error occurs
