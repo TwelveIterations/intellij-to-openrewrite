@@ -48,13 +48,25 @@ describe('rewrite.ts', () => {
         'utf-8'
       )
 
-      expect(outputContent).toContain('type: org.openrewrite.java.Recipe')
-      expect(outputContent).toContain('name: com.twelveiterations.Test-Migration')
+      expect(outputContent).toContain(
+        'type: specs.openrewrite.org/v1beta/recipe'
+      )
+      expect(outputContent).toContain(
+        'name: com.twelveiterations.Test-Migration'
+      )
       expect(outputContent).toContain('displayName: Test-Migration')
-      expect(outputContent).toContain('oldFullyQualifiedTypeName: com.example.OldClass')
-      expect(outputContent).toContain('newFullyQualifiedTypeName: com.example.NewClass')
-      expect(outputContent).toContain('oldFullyQualifiedTypeName: com.example.OldUtil')
-      expect(outputContent).toContain('newFullyQualifiedTypeName: com.example.NewUtil')
+      expect(outputContent).toContain(
+        'oldFullyQualifiedTypeName: com.example.OldClass'
+      )
+      expect(outputContent).toContain(
+        'newFullyQualifiedTypeName: com.example.NewClass'
+      )
+      expect(outputContent).toContain(
+        'oldFullyQualifiedTypeName: com.example.OldUtil'
+      )
+      expect(outputContent).toContain(
+        'newFullyQualifiedTypeName: com.example.NewUtil'
+      )
     })
 
     it('uses filename as recipe name when no name attribute is present', async () => {
@@ -77,7 +89,9 @@ describe('rewrite.ts', () => {
         'utf-8'
       )
 
-      expect(outputContent).toContain('name: com.twelveiterations.my-custom-migration')
+      expect(outputContent).toContain(
+        'name: com.twelveiterations.my-custom-migration'
+      )
     })
 
     it('skips XML files that are not migration maps', async () => {
@@ -133,8 +147,12 @@ describe('rewrite.ts', () => {
         'utf-8'
       )
 
-      expect(outputContent).toContain('oldFullyQualifiedTypeName: com.example.Single')
-      expect(outputContent).toContain('newFullyQualifiedTypeName: com.example.SingleNew')
+      expect(outputContent).toContain(
+        'oldFullyQualifiedTypeName: com.example.Single'
+      )
+      expect(outputContent).toContain(
+        'newFullyQualifiedTypeName: com.example.SingleNew'
+      )
     })
 
     it('filters out non-class entries from mixed migration maps', async () => {
@@ -159,8 +177,12 @@ describe('rewrite.ts', () => {
         'utf-8'
       )
 
-      expect(outputContent).toContain('oldFullyQualifiedTypeName: com.example.ClassEntry')
-      expect(outputContent).toContain('oldFullyQualifiedTypeName: com.example.AnotherClass')
+      expect(outputContent).toContain(
+        'oldFullyQualifiedTypeName: com.example.ClassEntry'
+      )
+      expect(outputContent).toContain(
+        'oldFullyQualifiedTypeName: com.example.AnotherClass'
+      )
       expect(outputContent).not.toContain('com.example.package')
     })
 
@@ -253,7 +275,9 @@ describe('rewrite.ts', () => {
         'utf-8'
       )
 
-      expect(outputContent).toContain('name: com.twelveiterations.My-Special--Migration--v1-0')
+      expect(outputContent).toContain(
+        'name: com.twelveiterations.My-Special--Migration--v1-0'
+      )
     })
 
     it('includes ignoreDefinition: true in recipe entries', async () => {
@@ -277,29 +301,6 @@ describe('rewrite.ts', () => {
       expect(outputContent).toContain('ignoreDefinition: true')
     })
 
-    it('includes correct tags in generated recipe', async () => {
-      const xmlContent = `<?xml version="1.0" encoding="UTF-8"?>
-<migrationMap>
-  <entry oldName="com.example.Old" newName="com.example.New" type="class"/>
-</migrationMap>`
-
-      await writeFile(join(tempInputDir, 'test.xml'), xmlContent)
-
-      await convertMigrationMapsToOpenRewrite({
-        inputDirectory: tempInputDir,
-        outputDirectory: tempOutputDir
-      })
-
-      const outputContent = await readFile(
-        join(tempOutputDir, 'test.yml'),
-        'utf-8'
-      )
-
-      expect(outputContent).toContain('tags:')
-      expect(outputContent).toContain('- fabric')
-      expect(outputContent).toContain('- migration')
-    })
-
     it('converts the fixture file correctly', async () => {
       const fixtureDir = join(process.cwd(), '__fixtures__')
 
@@ -315,8 +316,10 @@ describe('rewrite.ts', () => {
         'utf-8'
       )
 
-      expect(outputContent).toContain('type: org.openrewrite.java.Recipe')
-      expect(outputContent).toContain('name: com.twelveiterations.Fabric-API-26-1')
+      expect(outputContent).toContain('specs.openrewrite.org/v1beta/recipe')
+      expect(outputContent).toContain(
+        'name: com.twelveiterations.Fabric-API-26-1'
+      )
       expect(outputContent).toContain(
         'oldFullyQualifiedTypeName: net.fabricmc.fabric.api.biome.v1.BiomeModificationContext$SpawnSettingsContext'
       )

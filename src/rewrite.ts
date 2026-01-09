@@ -66,7 +66,7 @@ async function findXmlFiles(directory: string): Promise<string[]> {
   for (const entry of entries) {
     const fullPath = join(directory, entry.name)
     if (entry.isDirectory()) {
-      xmlFiles.push(...await findXmlFiles(fullPath))
+      xmlFiles.push(...(await findXmlFiles(fullPath)))
     } else if (extname(entry.name).toLowerCase() === '.xml') {
       xmlFiles.push(fullPath)
     }
@@ -75,41 +75,47 @@ async function findXmlFiles(directory: string): Promise<string[]> {
   return xmlFiles
 }
 
-async function convertXmlFile(xmlFilePath: string, outputDirectory: string): Promise<boolean> {
+async function convertXmlFile(
+  xmlFilePath: string,
+  outputDirectory: string
+): Promise<boolean> {
   const xmlContent = await readFile(xmlFilePath, 'utf-8')
-  
+
   const parser = new XMLParser({
     ignoreAttributes: false,
     attributeNamePrefix: '_'
   })
-  
+
   const parsed = parser.parse(xmlContent) as MigrationMap
-  
+
   // Check if this is a migrationMap
   if (!parsed.migrationMap || !parsed.migrationMap.entry) {
     return false
   }
-  
-  const entries = Array.isArray(parsed.migrationMap.entry) 
-    ? parsed.migrationMap.entry 
+
+  const entries = Array.isArray(parsed.migrationMap.entry)
+    ? parsed.migrationMap.entry
     : [parsed.migrationMap.entry]
-  
+
   // Filter for class type entries
-  const classEntries = entries.filter(entry => entry._type === 'class')
-  
+  const classEntries = entries.filter((entry) => entry._type === 'class')
+
   if (classEntries.length === 0) {
     return false
   }
-  
-  const recipeName = generateRecipeName(xmlFilePath, parsed.migrationMap.name?._value)
+
+  const recipeName = generateRecipeName(
+    xmlFilePath,
+    parsed.migrationMap.name?._value
+  )
   const recipe = createOpenRewriteRecipe(recipeName, classEntries)
-  
+
   const yamlContent = stringify(recipe, { indent: 2 })
   const outputPath = join(outputDirectory, `${recipeName}.yml`)
-  
+
   await writeFile(outputPath, yamlContent, 'utf-8')
   console.log(`Converted: ${xmlFilePath} -> ${outputPath}`)
-  
+
   return true
 }
 
@@ -117,18 +123,21 @@ function generateRecipeName(xmlFilePath: string, mapName?: string): string {
   if (mapName) {
     return mapName.replace(/[^a-zA-Z0-9-_]/g, '-')
   }
-  
+
   const fileName = basename(xmlFilePath, '.xml')
   return fileName.replace(/[^a-zA-Z0-9-_]/g, '-')
 }
 
-function createOpenRewriteRecipe(name: string, entries: MigrationEntry[]): OpenRewriteRecipe {
+function createOpenRewriteRecipe(
+  name: string,
+  entries: MigrationEntry[]
+): OpenRewriteRecipe {
   return {
     type: 'specs.openrewrite.org/v1beta/recipe',
     name: `com.twelveiterations.${name}`,
     displayName: name,
     description: `Apply package and class name migrations`,
-    recipeList: entries.map(entry => ({
+    recipeList: entries.map((entry) => ({
       type: 'org.openrewrite.java.ChangeType',
       oldFullyQualifiedTypeName: entry._oldName,
       newFullyQualifiedTypeName: entry._newName,

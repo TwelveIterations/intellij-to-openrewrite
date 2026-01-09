@@ -1,7 +1,7 @@
 import require$$0 from 'os';
 import require$$0$1 from 'crypto';
-import require$$1 from 'fs';
-import require$$1$5 from 'path';
+import require$$1, { existsSync } from 'fs';
+import require$$1$5, { join, extname, basename as basename$1 } from 'path';
 import require$$2 from 'http';
 import require$$3 from 'https';
 import require$$0$4 from 'net';
@@ -27,6 +27,7 @@ import require$$6 from 'string_decoder';
 import require$$0$9 from 'diagnostics_channel';
 import require$$2$2 from 'child_process';
 import require$$6$1 from 'timers';
+import { mkdir, readdir, readFile, writeFile } from 'fs/promises';
 
 var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -1122,12 +1123,12 @@ function requireConstants$4 () {
 	return constants$4;
 }
 
-var util$6;
-var hasRequiredUtil$6;
+var util$7;
+var hasRequiredUtil$7;
 
-function requireUtil$6 () {
-	if (hasRequiredUtil$6) return util$6;
-	hasRequiredUtil$6 = 1;
+function requireUtil$7 () {
+	if (hasRequiredUtil$7) return util$7;
+	hasRequiredUtil$7 = 1;
 
 	const assert = require$$0$3;
 	const { kDestroyed, kBodyUsed } = requireSymbols$4();
@@ -1612,7 +1613,7 @@ function requireUtil$6 () {
 	const kEnumerableProperty = Object.create(null);
 	kEnumerableProperty.enumerable = true;
 
-	util$6 = {
+	util$7 = {
 	  kEnumerableProperty,
 	  nop,
 	  isDisturbed,
@@ -1649,7 +1650,7 @@ function requireUtil$6 () {
 	  nodeHasAutoSelectFamily: nodeMajor > 18 || (nodeMajor === 18 && nodeMinor >= 13),
 	  safeHTTPMethods: ['GET', 'HEAD', 'OPTIONS', 'TRACE']
 	};
-	return util$6;
+	return util$7;
 }
 
 var timers;
@@ -3591,17 +3592,17 @@ function requireGlobal$1 () {
 	return global$2;
 }
 
-var util$5;
-var hasRequiredUtil$5;
+var util$6;
+var hasRequiredUtil$6;
 
-function requireUtil$5 () {
-	if (hasRequiredUtil$5) return util$5;
-	hasRequiredUtil$5 = 1;
+function requireUtil$6 () {
+	if (hasRequiredUtil$6) return util$6;
+	hasRequiredUtil$6 = 1;
 
 	const { redirectStatusSet, referrerPolicySet: referrerPolicyTokens, badPortsSet } = requireConstants$3();
 	const { getGlobalOrigin } = requireGlobal$1();
 	const { performance } = require$$2$1;
-	const { isBlobLike, toUSVString, ReadableStreamFrom } = requireUtil$6();
+	const { isBlobLike, toUSVString, ReadableStreamFrom } = requireUtil$7();
 	const assert = require$$0$3;
 	const { isUint8Array } = require$$5;
 
@@ -4692,7 +4693,7 @@ function requireUtil$5 () {
 	 */
 	const hasOwn = Object.hasOwn || ((dict, key) => Object.prototype.hasOwnProperty.call(dict, key));
 
-	util$5 = {
+	util$6 = {
 	  isAborted,
 	  isCancelled,
 	  createDeferredPromise,
@@ -4739,7 +4740,7 @@ function requireUtil$5 () {
 	  normalizeMethodRecord,
 	  parseMetadata
 	};
-	return util$5;
+	return util$6;
 }
 
 var symbols$3;
@@ -4768,7 +4769,7 @@ function requireWebidl () {
 	hasRequiredWebidl = 1;
 
 	const { types } = require$$0$2;
-	const { hasOwn, toUSVString } = requireUtil$5();
+	const { hasOwn, toUSVString } = requireUtil$6();
 
 	/** @type {import('../../types/webidl').Webidl} */
 	const webidl = {};
@@ -5422,7 +5423,7 @@ function requireDataURL () {
 	hasRequiredDataURL = 1;
 	const assert = require$$0$3;
 	const { atob } = require$$7;
-	const { isomorphicDecode } = requireUtil$5();
+	const { isomorphicDecode } = requireUtil$6();
 
 	const encoder = new TextEncoder();
 
@@ -6060,10 +6061,10 @@ function requireFile () {
 	const { Blob, File: NativeFile } = require$$7;
 	const { types } = require$$0$2;
 	const { kState } = requireSymbols$3();
-	const { isBlobLike } = requireUtil$5();
+	const { isBlobLike } = requireUtil$6();
 	const { webidl } = requireWebidl();
 	const { parseMIMEType, serializeAMimeType } = requireDataURL();
-	const { kEnumerableProperty } = requireUtil$6();
+	const { kEnumerableProperty } = requireUtil$7();
 	const encoder = new TextEncoder();
 
 	class File extends Blob {
@@ -6409,7 +6410,7 @@ function requireFormdata () {
 	if (hasRequiredFormdata) return formdata;
 	hasRequiredFormdata = 1;
 
-	const { isBlobLike, toUSVString, makeIterator } = requireUtil$5();
+	const { isBlobLike, toUSVString, makeIterator } = requireUtil$6();
 	const { kState } = requireSymbols$3();
 	const { File: UndiciFile, FileLike, isFileLike } = requireFile();
 	const { webidl } = requireWebidl();
@@ -6683,7 +6684,7 @@ function requireBody () {
 	hasRequiredBody = 1;
 
 	const Busboy = requireMain();
-	const util = requireUtil$6();
+	const util = requireUtil$7();
 	const {
 	  ReadableStreamFrom,
 	  isBlobLike,
@@ -6691,7 +6692,7 @@ function requireBody () {
 	  readableStreamClose,
 	  createDeferredPromise,
 	  fullyReadBody
-	} = requireUtil$5();
+	} = requireUtil$6();
 	const { FormData } = requireFormdata();
 	const { kState } = requireSymbols$3();
 	const { webidl } = requireWebidl();
@@ -6699,7 +6700,7 @@ function requireBody () {
 	const { Blob, File: NativeFile } = require$$7;
 	const { kBodyUsed } = requireSymbols$4();
 	const assert = require$$0$3;
-	const { isErrored } = requireUtil$6();
+	const { isErrored } = requireUtil$7();
 	const { isUint8Array, isArrayBuffer } = require$$5;
 	const { File: UndiciFile } = requireFile();
 	const { parseMIMEType, serializeAMimeType } = requireDataURL();
@@ -7309,7 +7310,7 @@ function requireRequest$1 () {
 	} = requireErrors();
 	const assert = require$$0$3;
 	const { kHTTP2BuildRequest, kHTTP2CopyHeaders, kHTTP1BuildRequest } = requireSymbols$4();
-	const util = requireUtil$6();
+	const util = requireUtil$7();
 
 	// tokenRegExp and headerCharRegex have been lifted from
 	// https://github.com/nodejs/node/blob/main/lib/_http_common.js
@@ -8039,7 +8040,7 @@ function requireConnect () {
 
 	const net = require$$0$4;
 	const assert = require$$0$3;
-	const util = requireUtil$6();
+	const util = requireUtil$7();
 	const { InvalidArgumentError, ConnectTimeoutError } = requireErrors();
 
 	let tls; // include tls conditionally since it is not always available
@@ -8541,7 +8542,7 @@ function requireRedirectHandler () {
 	if (hasRequiredRedirectHandler) return RedirectHandler_1;
 	hasRequiredRedirectHandler = 1;
 
-	const util = requireUtil$6();
+	const util = requireUtil$7();
 	const { kBodyUsed } = requireSymbols$4();
 	const assert = require$$0$3;
 	const { InvalidArgumentError } = requireErrors();
@@ -8807,7 +8808,7 @@ function requireClient () {
 	const net = require$$0$4;
 	const http = require$$2;
 	const { pipeline } = require$$0$5;
-	const util = requireUtil$6();
+	const util = requireUtil$7();
 	const timers = requireTimers();
 	const Request = requireRequest$1();
 	const DispatcherBase = requireDispatcherBase();
@@ -11469,7 +11470,7 @@ function requirePool () {
 	const {
 	  InvalidArgumentError
 	} = requireErrors();
-	const util = requireUtil$6();
+	const util = requireUtil$7();
 	const { kUrl, kInterceptors } = requireSymbols$4();
 	const buildConnector = requireConnect();
 
@@ -11588,7 +11589,7 @@ function requireBalancedPool () {
 	} = requirePoolBase();
 	const Pool = requirePool();
 	const { kUrl, kInterceptors } = requireSymbols$4();
-	const { parseOrigin } = requireUtil$6();
+	const { parseOrigin } = requireUtil$7();
 	const kFactory = Symbol('factory');
 
 	const kOptions = Symbol('options');
@@ -11833,7 +11834,7 @@ function requireAgent () {
 	const DispatcherBase = requireDispatcherBase();
 	const Pool = requirePool();
 	const Client = requireClient();
-	const util = requireUtil$6();
+	const util = requireUtil$7();
 	const createRedirectInterceptor = requireRedirectInterceptor();
 	const { WeakRef, FinalizationRegistry } = requireDispatcherWeakref()();
 
@@ -11991,8 +11992,8 @@ function requireReadable () {
 	const assert = require$$0$3;
 	const { Readable } = require$$0$5;
 	const { RequestAbortedError, NotSupportedError, InvalidArgumentError } = requireErrors();
-	const util = requireUtil$6();
-	const { ReadableStreamFrom, toUSVString } = requireUtil$6();
+	const util = requireUtil$7();
+	const { ReadableStreamFrom, toUSVString } = requireUtil$7();
 
 	let Blob;
 
@@ -12309,17 +12310,17 @@ function requireReadable () {
 	return readable;
 }
 
-var util$4;
-var hasRequiredUtil$4;
+var util$5;
+var hasRequiredUtil$5;
 
-function requireUtil$4 () {
-	if (hasRequiredUtil$4) return util$4;
-	hasRequiredUtil$4 = 1;
+function requireUtil$5 () {
+	if (hasRequiredUtil$5) return util$5;
+	hasRequiredUtil$5 = 1;
 	const assert = require$$0$3;
 	const {
 	  ResponseStatusCodeError
 	} = requireErrors();
-	const { toUSVString } = requireUtil$6();
+	const { toUSVString } = requireUtil$7();
 
 	async function getResolveErrorBodyCallback ({ callback, body, contentType, statusCode, statusMessage, headers }) {
 	  assert(body);
@@ -12360,8 +12361,8 @@ function requireUtil$4 () {
 	  process.nextTick(callback, new ResponseStatusCodeError(`Response status code ${statusCode}${statusMessage ? `: ${statusMessage}` : ''}`, statusCode, headers));
 	}
 
-	util$4 = { getResolveErrorBodyCallback };
-	return util$4;
+	util$5 = { getResolveErrorBodyCallback };
+	return util$5;
 }
 
 var abortSignal;
@@ -12370,7 +12371,7 @@ var hasRequiredAbortSignal;
 function requireAbortSignal () {
 	if (hasRequiredAbortSignal) return abortSignal;
 	hasRequiredAbortSignal = 1;
-	const { addAbortListener } = requireUtil$6();
+	const { addAbortListener } = requireUtil$7();
 	const { RequestAbortedError } = requireErrors();
 
 	const kListener = Symbol('kListener');
@@ -12438,8 +12439,8 @@ function requireApiRequest () {
 	  InvalidArgumentError,
 	  RequestAbortedError
 	} = requireErrors();
-	const util = requireUtil$6();
-	const { getResolveErrorBodyCallback } = requireUtil$4();
+	const util = requireUtil$7();
+	const { getResolveErrorBodyCallback } = requireUtil$5();
 	const { AsyncResource } = require$$4$1;
 	const { addSignal, removeSignal } = requireAbortSignal();
 
@@ -12627,8 +12628,8 @@ function requireApiStream () {
 	  InvalidReturnValueError,
 	  RequestAbortedError
 	} = requireErrors();
-	const util = requireUtil$6();
-	const { getResolveErrorBodyCallback } = requireUtil$4();
+	const util = requireUtil$7();
+	const { getResolveErrorBodyCallback } = requireUtil$5();
 	const { AsyncResource } = require$$4$1;
 	const { addSignal, removeSignal } = requireAbortSignal();
 
@@ -12859,7 +12860,7 @@ function requireApiPipeline () {
 	  InvalidReturnValueError,
 	  RequestAbortedError
 	} = requireErrors();
-	const util = requireUtil$6();
+	const util = requireUtil$7();
 	const { AsyncResource } = require$$4$1;
 	const { addSignal, removeSignal } = requireAbortSignal();
 	const assert = require$$0$3;
@@ -13108,7 +13109,7 @@ function requireApiUpgrade () {
 
 	const { InvalidArgumentError, RequestAbortedError, SocketError } = requireErrors();
 	const { AsyncResource } = require$$4$1;
-	const util = requireUtil$6();
+	const util = requireUtil$7();
 	const { addSignal, removeSignal } = requireAbortSignal();
 	const assert = require$$0$3;
 
@@ -13221,7 +13222,7 @@ function requireApiConnect () {
 
 	const { AsyncResource } = require$$4$1;
 	const { InvalidArgumentError, RequestAbortedError, SocketError } = requireErrors();
-	const util = requireUtil$6();
+	const util = requireUtil$7();
 	const { addSignal, removeSignal } = requireAbortSignal();
 
 	class ConnectHandler extends AsyncResource {
@@ -13409,7 +13410,7 @@ function requireMockUtils () {
 	  kOrigin,
 	  kGetNetConnect
 	} = requireMockSymbols();
-	const { buildURL, nop } = requireUtil$6();
+	const { buildURL, nop } = requireUtil$7();
 	const { STATUS_CODES } = require$$2;
 	const {
 	  types: {
@@ -13771,7 +13772,7 @@ function requireMockInterceptor () {
 	  kMockDispatch
 	} = requireMockSymbols();
 	const { InvalidArgumentError } = requireErrors();
-	const { buildURL } = requireUtil$6();
+	const { buildURL } = requireUtil$7();
 
 	/**
 	 * Defines the scope API for an interceptor reply
@@ -14573,7 +14574,7 @@ function requireRetryHandler () {
 
 	const { kRetryHandlerDefaultRetry } = requireSymbols$4();
 	const { RequestRetryError } = requireErrors();
-	const { isDisturbed, parseHeaders, parseRangeHeader } = requireUtil$6();
+	const { isDisturbed, parseHeaders, parseRangeHeader } = requireUtil$7();
 
 	function calculateRetryAfterHeader (retryAfter) {
 	  const current = Date.now();
@@ -15000,12 +15001,12 @@ function requireHeaders () {
 
 	const { kHeadersList, kConstruct } = requireSymbols$4();
 	const { kGuard } = requireSymbols$3();
-	const { kEnumerableProperty } = requireUtil$6();
+	const { kEnumerableProperty } = requireUtil$7();
 	const {
 	  makeIterator,
 	  isValidHeaderName,
 	  isValidHeaderValue
-	} = requireUtil$5();
+	} = requireUtil$6();
 	const util = require$$0$2;
 	const { webidl } = requireWebidl();
 	const assert = require$$0$3;
@@ -15592,7 +15593,7 @@ function requireResponse () {
 
 	const { Headers, HeadersList, fill } = requireHeaders();
 	const { extractBody, cloneBody, mixinBody } = requireBody();
-	const util = requireUtil$6();
+	const util = requireUtil$7();
 	const { kEnumerableProperty } = util;
 	const {
 	  isValidReasonPhrase,
@@ -15602,7 +15603,7 @@ function requireResponse () {
 	  serializeJavascriptValueToJSONString,
 	  isErrorLike,
 	  isomorphicEncode
-	} = requireUtil$5();
+	} = requireUtil$6();
 	const {
 	  redirectStatusSet,
 	  nullBodyStatus,
@@ -16174,14 +16175,14 @@ function requireRequest () {
 	const { extractBody, mixinBody, cloneBody } = requireBody();
 	const { Headers, fill: fillHeaders, HeadersList } = requireHeaders();
 	const { FinalizationRegistry } = requireDispatcherWeakref()();
-	const util = requireUtil$6();
+	const util = requireUtil$7();
 	const {
 	  isValidHTTPToken,
 	  sameOrigin,
 	  normalizeMethod,
 	  makePolicyContainer,
 	  normalizeMethodRecord
-	} = requireUtil$5();
+	} = requireUtil$6();
 	const {
 	  forbiddenMethodsSet,
 	  corsSafeListedMethodsSet,
@@ -17162,7 +17163,7 @@ function requireFetch () {
 	  urlIsLocal,
 	  urlIsHttpHttpsScheme,
 	  urlHasHttpsScheme
-	} = requireUtil$5();
+	} = requireUtil$6();
 	const { kState, kHeaders, kGuard, kRealm } = requireSymbols$3();
 	const assert = require$$0$3;
 	const { safelyExtractBody } = requireBody();
@@ -17177,7 +17178,7 @@ function requireFetch () {
 	const { kHeadersList } = requireSymbols$4();
 	const EE = require$$4;
 	const { Readable, pipeline } = require$$0$5;
-	const { addAbortListener, isErrored, isReadable, nodeMajor, nodeMinor } = requireUtil$6();
+	const { addAbortListener, isErrored, isReadable, nodeMajor, nodeMinor } = requireUtil$7();
 	const { dataURLProcessor, serializeAMimeType } = requireDataURL();
 	const { TransformStream } = require$$14;
 	const { getGlobalDispatcher } = requireGlobal();
@@ -19598,12 +19599,12 @@ function requireEncoding () {
 	return encoding;
 }
 
-var util$3;
-var hasRequiredUtil$3;
+var util$4;
+var hasRequiredUtil$4;
 
-function requireUtil$3 () {
-	if (hasRequiredUtil$3) return util$3;
-	hasRequiredUtil$3 = 1;
+function requireUtil$4 () {
+	if (hasRequiredUtil$4) return util$4;
+	hasRequiredUtil$4 = 1;
 
 	const {
 	  kState,
@@ -19990,12 +19991,12 @@ function requireUtil$3 () {
 	  }, new Uint8Array(size))
 	}
 
-	util$3 = {
+	util$4 = {
 	  staticPropertyDescriptors,
 	  readOperation,
 	  fireAProgressEvent
 	};
-	return util$3;
+	return util$4;
 }
 
 var filereader;
@@ -20009,7 +20010,7 @@ function requireFilereader () {
 	  staticPropertyDescriptors,
 	  readOperation,
 	  fireAProgressEvent
-	} = requireUtil$3();
+	} = requireUtil$4();
 	const {
 	  kState,
 	  kError,
@@ -20018,7 +20019,7 @@ function requireFilereader () {
 	  kAborted
 	} = requireSymbols$2();
 	const { webidl } = requireWebidl();
-	const { kEnumerableProperty } = requireUtil$6();
+	const { kEnumerableProperty } = requireUtil$7();
 
 	class FileReader extends EventTarget {
 	  constructor () {
@@ -20363,16 +20364,16 @@ function requireSymbols$1 () {
 	return symbols$1;
 }
 
-var util$2;
-var hasRequiredUtil$2;
+var util$3;
+var hasRequiredUtil$3;
 
-function requireUtil$2 () {
-	if (hasRequiredUtil$2) return util$2;
-	hasRequiredUtil$2 = 1;
+function requireUtil$3 () {
+	if (hasRequiredUtil$3) return util$3;
+	hasRequiredUtil$3 = 1;
 
 	const assert = require$$0$3;
 	const { URLSerializer } = requireDataURL();
-	const { isValidHeaderName } = requireUtil$5();
+	const { isValidHeaderName } = requireUtil$6();
 
 	/**
 	 * @see https://url.spec.whatwg.org/#concept-url-equals
@@ -20413,11 +20414,11 @@ function requireUtil$2 () {
 	  return values
 	}
 
-	util$2 = {
+	util$3 = {
 	  urlEquals,
 	  fieldValues
 	};
-	return util$2;
+	return util$3;
 }
 
 var cache;
@@ -20428,15 +20429,15 @@ function requireCache () {
 	hasRequiredCache = 1;
 
 	const { kConstruct } = requireSymbols$1();
-	const { urlEquals, fieldValues: getFieldValues } = requireUtil$2();
-	const { kEnumerableProperty, isDisturbed } = requireUtil$6();
+	const { urlEquals, fieldValues: getFieldValues } = requireUtil$3();
+	const { kEnumerableProperty, isDisturbed } = requireUtil$7();
 	const { kHeadersList } = requireSymbols$4();
 	const { webidl } = requireWebidl();
 	const { Response, cloneResponse } = requireResponse();
 	const { Request } = requireRequest();
 	const { kState, kHeaders, kGuard, kRealm } = requireSymbols$3();
 	const { fetching } = requireFetch();
-	const { urlIsHttpHttpsScheme, createDeferredPromise, readAllBytes } = requireUtil$5();
+	const { urlIsHttpHttpsScheme, createDeferredPromise, readAllBytes } = requireUtil$6();
 	const assert = require$$0$3;
 	const { getGlobalDispatcher } = requireGlobal();
 
@@ -21276,7 +21277,7 @@ function requireCachestorage () {
 	const { kConstruct } = requireSymbols$1();
 	const { Cache } = requireCache();
 	const { webidl } = requireWebidl();
-	const { kEnumerableProperty } = requireUtil$6();
+	const { kEnumerableProperty } = requireUtil$7();
 
 	class CacheStorage {
 	  /**
@@ -21438,12 +21439,12 @@ function requireConstants$1 () {
 	return constants$1;
 }
 
-var util$1;
-var hasRequiredUtil$1;
+var util$2;
+var hasRequiredUtil$2;
 
-function requireUtil$1 () {
-	if (hasRequiredUtil$1) return util$1;
-	hasRequiredUtil$1 = 1;
+function requireUtil$2 () {
+	if (hasRequiredUtil$2) return util$2;
+	hasRequiredUtil$2 = 1;
 
 	/**
 	 * @param {string} value
@@ -21709,7 +21710,7 @@ function requireUtil$1 () {
 	  return out.join('; ')
 	}
 
-	util$1 = {
+	util$2 = {
 	  isCTLExcludingHtab,
 	  validateCookieName,
 	  validateCookiePath,
@@ -21717,7 +21718,7 @@ function requireUtil$1 () {
 	  toIMFDate,
 	  stringify
 	};
-	return util$1;
+	return util$2;
 }
 
 var parse;
@@ -21728,7 +21729,7 @@ function requireParse () {
 	hasRequiredParse = 1;
 
 	const { maxNameValuePairSize, maxAttributeValueSize } = requireConstants$1();
-	const { isCTLExcludingHtab } = requireUtil$1();
+	const { isCTLExcludingHtab } = requireUtil$2();
 	const { collectASequenceOfCodePointsFast } = requireDataURL();
 	const assert = require$$0$3;
 
@@ -22053,7 +22054,7 @@ function requireCookies () {
 	hasRequiredCookies = 1;
 
 	const { parseSetCookie } = requireParse();
-	const { stringify } = requireUtil$1();
+	const { stringify } = requireUtil$2();
 	const { webidl } = requireWebidl();
 	const { Headers } = requireHeaders();
 
@@ -22323,7 +22324,7 @@ function requireEvents () {
 	hasRequiredEvents = 1;
 
 	const { webidl } = requireWebidl();
-	const { kEnumerableProperty } = requireUtil$6();
+	const { kEnumerableProperty } = requireUtil$7();
 	const { MessagePort } = require$$0$8;
 
 	/**
@@ -22626,12 +22627,12 @@ function requireEvents () {
 	return events;
 }
 
-var util;
-var hasRequiredUtil;
+var util$1;
+var hasRequiredUtil$1;
 
-function requireUtil () {
-	if (hasRequiredUtil) return util;
-	hasRequiredUtil = 1;
+function requireUtil$1 () {
+	if (hasRequiredUtil$1) return util$1;
+	hasRequiredUtil$1 = 1;
 
 	const { kReadyState, kController, kResponse, kBinaryType, kWebSocketURL } = requireSymbols();
 	const { states, opcodes } = requireConstants();
@@ -22821,7 +22822,7 @@ function requireUtil () {
 	  }
 	}
 
-	util = {
+	util$1 = {
 	  isEstablished,
 	  isClosing,
 	  isClosed,
@@ -22831,7 +22832,7 @@ function requireUtil () {
 	  failWebsocketConnection,
 	  websocketMessageReceived
 	};
-	return util;
+	return util$1;
 }
 
 var connection;
@@ -22849,7 +22850,7 @@ function requireConnection () {
 	  kByteParser,
 	  kReceivedClose
 	} = requireSymbols();
-	const { fireEvent, failWebsocketConnection } = requireUtil();
+	const { fireEvent, failWebsocketConnection } = requireUtil$1();
 	const { CloseEvent } = requireEvents();
 	const { makeRequest } = requireRequest();
 	const { fetching } = requireFetch();
@@ -23225,7 +23226,7 @@ function requireReceiver () {
 	const diagnosticsChannel = require$$0$9;
 	const { parserStates, opcodes, states, emptyBuffer } = requireConstants();
 	const { kReadyState, kSentClose, kResponse, kReceivedClose } = requireSymbols();
-	const { isValidStatusCode, failWebsocketConnection, websocketMessageReceived } = requireUtil();
+	const { isValidStatusCode, failWebsocketConnection, websocketMessageReceived } = requireUtil$1();
 	const { WebsocketFrameSend } = requireFrame();
 
 	// This code was influenced by ws released under the MIT license.
@@ -23587,11 +23588,11 @@ function requireWebsocket () {
 	  kSentClose,
 	  kByteParser
 	} = requireSymbols();
-	const { isEstablished, isClosing, isValidSubprotocol, failWebsocketConnection, fireEvent } = requireUtil();
+	const { isEstablished, isClosing, isValidSubprotocol, failWebsocketConnection, fireEvent } = requireUtil$1();
 	const { establishWebSocketConnection } = requireConnection();
 	const { WebsocketFrameSend } = requireFrame();
 	const { ByteParser } = requireReceiver();
-	const { kEnumerableProperty, isBlobLike } = requireUtil$6();
+	const { kEnumerableProperty, isBlobLike } = requireUtil$7();
 	const { getGlobalDispatcher } = requireGlobal();
 	const { types } = require$$0$2;
 
@@ -24224,7 +24225,7 @@ function requireUndici () {
 	const Pool = requirePool();
 	const BalancedPool = requireBalancedPool();
 	const Agent = requireAgent();
-	const util = requireUtil$6();
+	const util = requireUtil$7();
 	const { InvalidArgumentError } = errors;
 	const api = requireApi();
 	const buildConnector = requireConnect();
@@ -27487,2086 +27488,5750 @@ function requireCore () {
 
 var coreExports = requireCore();
 
-const balanced = (a, b, str) => {
-    const ma = a instanceof RegExp ? maybeMatch(a, str) : a;
-    const mb = b instanceof RegExp ? maybeMatch(b, str) : b;
-    const r = ma !== null && mb != null && range(ma, mb, str);
-    return (r && {
-        start: r[0],
-        end: r[1],
-        pre: str.slice(0, r[0]),
-        body: str.slice(r[0] + ma.length, r[1]),
-        post: str.slice(r[1] + mb.length),
-    });
-};
-const maybeMatch = (reg, str) => {
-    const m = str.match(reg);
-    return m ? m[0] : null;
-};
-const range = (a, b, str) => {
-    let begs, beg, left, right = undefined, result;
-    let ai = str.indexOf(a);
-    let bi = str.indexOf(b, ai + 1);
-    let i = ai;
-    if (ai >= 0 && bi > 0) {
-        if (a === b) {
-            return [ai, bi];
+var validator = {};
+
+var util = {};
+
+var hasRequiredUtil;
+
+function requireUtil () {
+	if (hasRequiredUtil) return util;
+	hasRequiredUtil = 1;
+	(function (exports$1) {
+
+		const nameStartChar = ':A-Za-z_\\u00C0-\\u00D6\\u00D8-\\u00F6\\u00F8-\\u02FF\\u0370-\\u037D\\u037F-\\u1FFF\\u200C-\\u200D\\u2070-\\u218F\\u2C00-\\u2FEF\\u3001-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFFD';
+		const nameChar = nameStartChar + '\\-.\\d\\u00B7\\u0300-\\u036F\\u203F-\\u2040';
+		const nameRegexp = '[' + nameStartChar + '][' + nameChar + ']*';
+		const regexName = new RegExp('^' + nameRegexp + '$');
+
+		const getAllMatches = function(string, regex) {
+		  const matches = [];
+		  let match = regex.exec(string);
+		  while (match) {
+		    const allmatches = [];
+		    allmatches.startIndex = regex.lastIndex - match[0].length;
+		    const len = match.length;
+		    for (let index = 0; index < len; index++) {
+		      allmatches.push(match[index]);
+		    }
+		    matches.push(allmatches);
+		    match = regex.exec(string);
+		  }
+		  return matches;
+		};
+
+		const isName = function(string) {
+		  const match = regexName.exec(string);
+		  return !(match === null || typeof match === 'undefined');
+		};
+
+		exports$1.isExist = function(v) {
+		  return typeof v !== 'undefined';
+		};
+
+		exports$1.isEmptyObject = function(obj) {
+		  return Object.keys(obj).length === 0;
+		};
+
+		/**
+		 * Copy all the properties of a into b.
+		 * @param {*} target
+		 * @param {*} a
+		 */
+		exports$1.merge = function(target, a, arrayMode) {
+		  if (a) {
+		    const keys = Object.keys(a); // will return an array of own properties
+		    const len = keys.length; //don't make it inline
+		    for (let i = 0; i < len; i++) {
+		      if (arrayMode === 'strict') {
+		        target[keys[i]] = [ a[keys[i]] ];
+		      } else {
+		        target[keys[i]] = a[keys[i]];
+		      }
+		    }
+		  }
+		};
+		/* exports.merge =function (b,a){
+		  return Object.assign(b,a);
+		} */
+
+		exports$1.getValue = function(v) {
+		  if (exports$1.isExist(v)) {
+		    return v;
+		  } else {
+		    return '';
+		  }
+		};
+
+		// const fakeCall = function(a) {return a;};
+		// const fakeCallNoReturn = function() {};
+
+		exports$1.isName = isName;
+		exports$1.getAllMatches = getAllMatches;
+		exports$1.nameRegexp = nameRegexp; 
+	} (util));
+	return util;
+}
+
+var hasRequiredValidator;
+
+function requireValidator () {
+	if (hasRequiredValidator) return validator;
+	hasRequiredValidator = 1;
+
+	const util = requireUtil();
+
+	const defaultOptions = {
+	  allowBooleanAttributes: false, //A tag can have attributes without any value
+	  unpairedTags: []
+	};
+
+	//const tagsPattern = new RegExp("<\\/?([\\w:\\-_\.]+)\\s*\/?>","g");
+	validator.validate = function (xmlData, options) {
+	  options = Object.assign({}, defaultOptions, options);
+
+	  //xmlData = xmlData.replace(/(\r\n|\n|\r)/gm,"");//make it single line
+	  //xmlData = xmlData.replace(/(^\s*<\?xml.*?\?>)/g,"");//Remove XML starting tag
+	  //xmlData = xmlData.replace(/(<!DOCTYPE[\s\w\"\.\/\-\:]+(\[.*\])*\s*>)/g,"");//Remove DOCTYPE
+	  const tags = [];
+	  let tagFound = false;
+
+	  //indicates that the root tag has been closed (aka. depth 0 has been reached)
+	  let reachedRoot = false;
+
+	  if (xmlData[0] === '\ufeff') {
+	    // check for byte order mark (BOM)
+	    xmlData = xmlData.substr(1);
+	  }
+	  
+	  for (let i = 0; i < xmlData.length; i++) {
+
+	    if (xmlData[i] === '<' && xmlData[i+1] === '?') {
+	      i+=2;
+	      i = readPI(xmlData,i);
+	      if (i.err) return i;
+	    }else if (xmlData[i] === '<') {
+	      //starting of tag
+	      //read until you reach to '>' avoiding any '>' in attribute value
+	      let tagStartPos = i;
+	      i++;
+	      
+	      if (xmlData[i] === '!') {
+	        i = readCommentAndCDATA(xmlData, i);
+	        continue;
+	      } else {
+	        let closingTag = false;
+	        if (xmlData[i] === '/') {
+	          //closing tag
+	          closingTag = true;
+	          i++;
+	        }
+	        //read tagname
+	        let tagName = '';
+	        for (; i < xmlData.length &&
+	          xmlData[i] !== '>' &&
+	          xmlData[i] !== ' ' &&
+	          xmlData[i] !== '\t' &&
+	          xmlData[i] !== '\n' &&
+	          xmlData[i] !== '\r'; i++
+	        ) {
+	          tagName += xmlData[i];
+	        }
+	        tagName = tagName.trim();
+	        //console.log(tagName);
+
+	        if (tagName[tagName.length - 1] === '/') {
+	          //self closing tag without attributes
+	          tagName = tagName.substring(0, tagName.length - 1);
+	          //continue;
+	          i--;
+	        }
+	        if (!validateTagName(tagName)) {
+	          let msg;
+	          if (tagName.trim().length === 0) {
+	            msg = "Invalid space after '<'.";
+	          } else {
+	            msg = "Tag '"+tagName+"' is an invalid name.";
+	          }
+	          return getErrorObject('InvalidTag', msg, getLineNumberForPosition(xmlData, i));
+	        }
+
+	        const result = readAttributeStr(xmlData, i);
+	        if (result === false) {
+	          return getErrorObject('InvalidAttr', "Attributes for '"+tagName+"' have open quote.", getLineNumberForPosition(xmlData, i));
+	        }
+	        let attrStr = result.value;
+	        i = result.index;
+
+	        if (attrStr[attrStr.length - 1] === '/') {
+	          //self closing tag
+	          const attrStrStart = i - attrStr.length;
+	          attrStr = attrStr.substring(0, attrStr.length - 1);
+	          const isValid = validateAttributeString(attrStr, options);
+	          if (isValid === true) {
+	            tagFound = true;
+	            //continue; //text may presents after self closing tag
+	          } else {
+	            //the result from the nested function returns the position of the error within the attribute
+	            //in order to get the 'true' error line, we need to calculate the position where the attribute begins (i - attrStr.length) and then add the position within the attribute
+	            //this gives us the absolute index in the entire xml, which we can use to find the line at last
+	            return getErrorObject(isValid.err.code, isValid.err.msg, getLineNumberForPosition(xmlData, attrStrStart + isValid.err.line));
+	          }
+	        } else if (closingTag) {
+	          if (!result.tagClosed) {
+	            return getErrorObject('InvalidTag', "Closing tag '"+tagName+"' doesn't have proper closing.", getLineNumberForPosition(xmlData, i));
+	          } else if (attrStr.trim().length > 0) {
+	            return getErrorObject('InvalidTag', "Closing tag '"+tagName+"' can't have attributes or invalid starting.", getLineNumberForPosition(xmlData, tagStartPos));
+	          } else if (tags.length === 0) {
+	            return getErrorObject('InvalidTag', "Closing tag '"+tagName+"' has not been opened.", getLineNumberForPosition(xmlData, tagStartPos));
+	          } else {
+	            const otg = tags.pop();
+	            if (tagName !== otg.tagName) {
+	              let openPos = getLineNumberForPosition(xmlData, otg.tagStartPos);
+	              return getErrorObject('InvalidTag',
+	                "Expected closing tag '"+otg.tagName+"' (opened in line "+openPos.line+", col "+openPos.col+") instead of closing tag '"+tagName+"'.",
+	                getLineNumberForPosition(xmlData, tagStartPos));
+	            }
+
+	            //when there are no more tags, we reached the root level.
+	            if (tags.length == 0) {
+	              reachedRoot = true;
+	            }
+	          }
+	        } else {
+	          const isValid = validateAttributeString(attrStr, options);
+	          if (isValid !== true) {
+	            //the result from the nested function returns the position of the error within the attribute
+	            //in order to get the 'true' error line, we need to calculate the position where the attribute begins (i - attrStr.length) and then add the position within the attribute
+	            //this gives us the absolute index in the entire xml, which we can use to find the line at last
+	            return getErrorObject(isValid.err.code, isValid.err.msg, getLineNumberForPosition(xmlData, i - attrStr.length + isValid.err.line));
+	          }
+
+	          //if the root level has been reached before ...
+	          if (reachedRoot === true) {
+	            return getErrorObject('InvalidXml', 'Multiple possible root nodes found.', getLineNumberForPosition(xmlData, i));
+	          } else if(options.unpairedTags.indexOf(tagName) !== -1); else {
+	            tags.push({tagName, tagStartPos});
+	          }
+	          tagFound = true;
+	        }
+
+	        //skip tag text value
+	        //It may include comments and CDATA value
+	        for (i++; i < xmlData.length; i++) {
+	          if (xmlData[i] === '<') {
+	            if (xmlData[i + 1] === '!') {
+	              //comment or CADATA
+	              i++;
+	              i = readCommentAndCDATA(xmlData, i);
+	              continue;
+	            } else if (xmlData[i+1] === '?') {
+	              i = readPI(xmlData, ++i);
+	              if (i.err) return i;
+	            } else {
+	              break;
+	            }
+	          } else if (xmlData[i] === '&') {
+	            const afterAmp = validateAmpersand(xmlData, i);
+	            if (afterAmp == -1)
+	              return getErrorObject('InvalidChar', "char '&' is not expected.", getLineNumberForPosition(xmlData, i));
+	            i = afterAmp;
+	          }else {
+	            if (reachedRoot === true && !isWhiteSpace(xmlData[i])) {
+	              return getErrorObject('InvalidXml', "Extra text at the end", getLineNumberForPosition(xmlData, i));
+	            }
+	          }
+	        } //end of reading tag text value
+	        if (xmlData[i] === '<') {
+	          i--;
+	        }
+	      }
+	    } else {
+	      if ( isWhiteSpace(xmlData[i])) {
+	        continue;
+	      }
+	      return getErrorObject('InvalidChar', "char '"+xmlData[i]+"' is not expected.", getLineNumberForPosition(xmlData, i));
+	    }
+	  }
+
+	  if (!tagFound) {
+	    return getErrorObject('InvalidXml', 'Start tag expected.', 1);
+	  }else if (tags.length == 1) {
+	      return getErrorObject('InvalidTag', "Unclosed tag '"+tags[0].tagName+"'.", getLineNumberForPosition(xmlData, tags[0].tagStartPos));
+	  }else if (tags.length > 0) {
+	      return getErrorObject('InvalidXml', "Invalid '"+
+	          JSON.stringify(tags.map(t => t.tagName), null, 4).replace(/\r?\n/g, '')+
+	          "' found.", {line: 1, col: 1});
+	  }
+
+	  return true;
+	};
+
+	function isWhiteSpace(char){
+	  return char === ' ' || char === '\t' || char === '\n'  || char === '\r';
+	}
+	/**
+	 * Read Processing insstructions and skip
+	 * @param {*} xmlData
+	 * @param {*} i
+	 */
+	function readPI(xmlData, i) {
+	  const start = i;
+	  for (; i < xmlData.length; i++) {
+	    if (xmlData[i] == '?' || xmlData[i] == ' ') {
+	      //tagname
+	      const tagname = xmlData.substr(start, i - start);
+	      if (i > 5 && tagname === 'xml') {
+	        return getErrorObject('InvalidXml', 'XML declaration allowed only at the start of the document.', getLineNumberForPosition(xmlData, i));
+	      } else if (xmlData[i] == '?' && xmlData[i + 1] == '>') {
+	        //check if valid attribut string
+	        i++;
+	        break;
+	      } else {
+	        continue;
+	      }
+	    }
+	  }
+	  return i;
+	}
+
+	function readCommentAndCDATA(xmlData, i) {
+	  if (xmlData.length > i + 5 && xmlData[i + 1] === '-' && xmlData[i + 2] === '-') {
+	    //comment
+	    for (i += 3; i < xmlData.length; i++) {
+	      if (xmlData[i] === '-' && xmlData[i + 1] === '-' && xmlData[i + 2] === '>') {
+	        i += 2;
+	        break;
+	      }
+	    }
+	  } else if (
+	    xmlData.length > i + 8 &&
+	    xmlData[i + 1] === 'D' &&
+	    xmlData[i + 2] === 'O' &&
+	    xmlData[i + 3] === 'C' &&
+	    xmlData[i + 4] === 'T' &&
+	    xmlData[i + 5] === 'Y' &&
+	    xmlData[i + 6] === 'P' &&
+	    xmlData[i + 7] === 'E'
+	  ) {
+	    let angleBracketsCount = 1;
+	    for (i += 8; i < xmlData.length; i++) {
+	      if (xmlData[i] === '<') {
+	        angleBracketsCount++;
+	      } else if (xmlData[i] === '>') {
+	        angleBracketsCount--;
+	        if (angleBracketsCount === 0) {
+	          break;
+	        }
+	      }
+	    }
+	  } else if (
+	    xmlData.length > i + 9 &&
+	    xmlData[i + 1] === '[' &&
+	    xmlData[i + 2] === 'C' &&
+	    xmlData[i + 3] === 'D' &&
+	    xmlData[i + 4] === 'A' &&
+	    xmlData[i + 5] === 'T' &&
+	    xmlData[i + 6] === 'A' &&
+	    xmlData[i + 7] === '['
+	  ) {
+	    for (i += 8; i < xmlData.length; i++) {
+	      if (xmlData[i] === ']' && xmlData[i + 1] === ']' && xmlData[i + 2] === '>') {
+	        i += 2;
+	        break;
+	      }
+	    }
+	  }
+
+	  return i;
+	}
+
+	const doubleQuote = '"';
+	const singleQuote = "'";
+
+	/**
+	 * Keep reading xmlData until '<' is found outside the attribute value.
+	 * @param {string} xmlData
+	 * @param {number} i
+	 */
+	function readAttributeStr(xmlData, i) {
+	  let attrStr = '';
+	  let startChar = '';
+	  let tagClosed = false;
+	  for (; i < xmlData.length; i++) {
+	    if (xmlData[i] === doubleQuote || xmlData[i] === singleQuote) {
+	      if (startChar === '') {
+	        startChar = xmlData[i];
+	      } else if (startChar !== xmlData[i]) ; else {
+	        startChar = '';
+	      }
+	    } else if (xmlData[i] === '>') {
+	      if (startChar === '') {
+	        tagClosed = true;
+	        break;
+	      }
+	    }
+	    attrStr += xmlData[i];
+	  }
+	  if (startChar !== '') {
+	    return false;
+	  }
+
+	  return {
+	    value: attrStr,
+	    index: i,
+	    tagClosed: tagClosed
+	  };
+	}
+
+	/**
+	 * Select all the attributes whether valid or invalid.
+	 */
+	const validAttrStrRegxp = new RegExp('(\\s*)([^\\s=]+)(\\s*=)?(\\s*([\'"])(([\\s\\S])*?)\\5)?', 'g');
+
+	//attr, ="sd", a="amit's", a="sd"b="saf", ab  cd=""
+
+	function validateAttributeString(attrStr, options) {
+	  //console.log("start:"+attrStr+":end");
+
+	  //if(attrStr.trim().length === 0) return true; //empty string
+
+	  const matches = util.getAllMatches(attrStr, validAttrStrRegxp);
+	  const attrNames = {};
+
+	  for (let i = 0; i < matches.length; i++) {
+	    if (matches[i][1].length === 0) {
+	      //nospace before attribute name: a="sd"b="saf"
+	      return getErrorObject('InvalidAttr', "Attribute '"+matches[i][2]+"' has no space in starting.", getPositionFromMatch(matches[i]))
+	    } else if (matches[i][3] !== undefined && matches[i][4] === undefined) {
+	      return getErrorObject('InvalidAttr', "Attribute '"+matches[i][2]+"' is without value.", getPositionFromMatch(matches[i]));
+	    } else if (matches[i][3] === undefined && !options.allowBooleanAttributes) {
+	      //independent attribute: ab
+	      return getErrorObject('InvalidAttr', "boolean attribute '"+matches[i][2]+"' is not allowed.", getPositionFromMatch(matches[i]));
+	    }
+	    /* else if(matches[i][6] === undefined){//attribute without value: ab=
+	                    return { err: { code:"InvalidAttr",msg:"attribute " + matches[i][2] + " has no value assigned."}};
+	                } */
+	    const attrName = matches[i][2];
+	    if (!validateAttrName(attrName)) {
+	      return getErrorObject('InvalidAttr', "Attribute '"+attrName+"' is an invalid name.", getPositionFromMatch(matches[i]));
+	    }
+	    if (!attrNames.hasOwnProperty(attrName)) {
+	      //check for duplicate attribute.
+	      attrNames[attrName] = 1;
+	    } else {
+	      return getErrorObject('InvalidAttr', "Attribute '"+attrName+"' is repeated.", getPositionFromMatch(matches[i]));
+	    }
+	  }
+
+	  return true;
+	}
+
+	function validateNumberAmpersand(xmlData, i) {
+	  let re = /\d/;
+	  if (xmlData[i] === 'x') {
+	    i++;
+	    re = /[\da-fA-F]/;
+	  }
+	  for (; i < xmlData.length; i++) {
+	    if (xmlData[i] === ';')
+	      return i;
+	    if (!xmlData[i].match(re))
+	      break;
+	  }
+	  return -1;
+	}
+
+	function validateAmpersand(xmlData, i) {
+	  // https://www.w3.org/TR/xml/#dt-charref
+	  i++;
+	  if (xmlData[i] === ';')
+	    return -1;
+	  if (xmlData[i] === '#') {
+	    i++;
+	    return validateNumberAmpersand(xmlData, i);
+	  }
+	  let count = 0;
+	  for (; i < xmlData.length; i++, count++) {
+	    if (xmlData[i].match(/\w/) && count < 20)
+	      continue;
+	    if (xmlData[i] === ';')
+	      break;
+	    return -1;
+	  }
+	  return i;
+	}
+
+	function getErrorObject(code, message, lineNumber) {
+	  return {
+	    err: {
+	      code: code,
+	      msg: message,
+	      line: lineNumber.line || lineNumber,
+	      col: lineNumber.col,
+	    },
+	  };
+	}
+
+	function validateAttrName(attrName) {
+	  return util.isName(attrName);
+	}
+
+	// const startsWithXML = /^xml/i;
+
+	function validateTagName(tagname) {
+	  return util.isName(tagname) /* && !tagname.match(startsWithXML) */;
+	}
+
+	//this function returns the line number for the character at the given index
+	function getLineNumberForPosition(xmlData, index) {
+	  const lines = xmlData.substring(0, index).split(/\r?\n/);
+	  return {
+	    line: lines.length,
+
+	    // column number is last line's length + 1, because column numbering starts at 1:
+	    col: lines[lines.length - 1].length + 1
+	  };
+	}
+
+	//this function returns the position of the first character of match within attrStr
+	function getPositionFromMatch(match) {
+	  return match.startIndex + match[1].length;
+	}
+	return validator;
+}
+
+var OptionsBuilder = {};
+
+var hasRequiredOptionsBuilder;
+
+function requireOptionsBuilder () {
+	if (hasRequiredOptionsBuilder) return OptionsBuilder;
+	hasRequiredOptionsBuilder = 1;
+	const defaultOptions = {
+	    preserveOrder: false,
+	    attributeNamePrefix: '@_',
+	    attributesGroupName: false,
+	    textNodeName: '#text',
+	    ignoreAttributes: true,
+	    removeNSPrefix: false, // remove NS from tag name or attribute name if true
+	    allowBooleanAttributes: false, //a tag can have attributes without any value
+	    //ignoreRootElement : false,
+	    parseTagValue: true,
+	    parseAttributeValue: false,
+	    trimValues: true, //Trim string values of tag and attributes
+	    cdataPropName: false,
+	    numberParseOptions: {
+	      hex: true,
+	      leadingZeros: true,
+	      eNotation: true
+	    },
+	    tagValueProcessor: function(tagName, val) {
+	      return val;
+	    },
+	    attributeValueProcessor: function(attrName, val) {
+	      return val;
+	    },
+	    stopNodes: [], //nested tags will not be parsed even for errors
+	    alwaysCreateTextNode: false,
+	    isArray: () => false,
+	    commentPropName: false,
+	    unpairedTags: [],
+	    processEntities: true,
+	    htmlEntities: false,
+	    ignoreDeclaration: false,
+	    ignorePiTags: false,
+	    transformTagName: false,
+	    transformAttributeName: false,
+	    updateTag: function(tagName, jPath, attrs){
+	      return tagName
+	    },
+	    // skipEmptyListItem: false
+	};
+	   
+	const buildOptions = function(options) {
+	    return Object.assign({}, defaultOptions, options);
+	};
+
+	OptionsBuilder.buildOptions = buildOptions;
+	OptionsBuilder.defaultOptions = defaultOptions;
+	return OptionsBuilder;
+}
+
+var xmlNode;
+var hasRequiredXmlNode;
+
+function requireXmlNode () {
+	if (hasRequiredXmlNode) return xmlNode;
+	hasRequiredXmlNode = 1;
+
+	class XmlNode{
+	  constructor(tagname) {
+	    this.tagname = tagname;
+	    this.child = []; //nested tags, text, cdata, comments in order
+	    this[":@"] = {}; //attributes map
+	  }
+	  add(key,val){
+	    // this.child.push( {name : key, val: val, isCdata: isCdata });
+	    if(key === "__proto__") key = "#__proto__";
+	    this.child.push( {[key]: val });
+	  }
+	  addChild(node) {
+	    if(node.tagname === "__proto__") node.tagname = "#__proto__";
+	    if(node[":@"] && Object.keys(node[":@"]).length > 0){
+	      this.child.push( { [node.tagname]: node.child, [":@"]: node[":@"] });
+	    }else {
+	      this.child.push( { [node.tagname]: node.child });
+	    }
+	  };
+	}
+
+	xmlNode = XmlNode;
+	return xmlNode;
+}
+
+var DocTypeReader;
+var hasRequiredDocTypeReader;
+
+function requireDocTypeReader () {
+	if (hasRequiredDocTypeReader) return DocTypeReader;
+	hasRequiredDocTypeReader = 1;
+	const util = requireUtil();
+
+	//TODO: handle comments
+	function readDocType(xmlData, i){
+	    
+	    const entities = {};
+	    if( xmlData[i + 3] === 'O' &&
+	         xmlData[i + 4] === 'C' &&
+	         xmlData[i + 5] === 'T' &&
+	         xmlData[i + 6] === 'Y' &&
+	         xmlData[i + 7] === 'P' &&
+	         xmlData[i + 8] === 'E')
+	    {    
+	        i = i+9;
+	        let angleBracketsCount = 1;
+	        let hasBody = false, comment = false;
+	        let exp = "";
+	        for(;i<xmlData.length;i++){
+	            if (xmlData[i] === '<' && !comment) { //Determine the tag type
+	                if( hasBody && isEntity(xmlData, i)){
+	                    i += 7; 
+	                    let entityName, val;
+	                    [entityName, val,i] = readEntityExp(xmlData,i+1);
+	                    if(val.indexOf("&") === -1) //Parameter entities are not supported
+	                        entities[ validateEntityName(entityName) ] = {
+	                            regx : RegExp( `&${entityName};`,"g"),
+	                            val: val
+	                        };
+	                }
+	                else if( hasBody && isElement(xmlData, i))  i += 8;//Not supported
+	                else if( hasBody && isAttlist(xmlData, i))  i += 8;//Not supported
+	                else if( hasBody && isNotation(xmlData, i)) i += 9;//Not supported
+	                else if( isComment)                         comment = true;
+	                else                                        throw new Error("Invalid DOCTYPE");
+
+	                angleBracketsCount++;
+	                exp = "";
+	            } else if (xmlData[i] === '>') { //Read tag content
+	                if(comment){
+	                    if( xmlData[i - 1] === "-" && xmlData[i - 2] === "-"){
+	                        comment = false;
+	                        angleBracketsCount--;
+	                    }
+	                }else {
+	                    angleBracketsCount--;
+	                }
+	                if (angleBracketsCount === 0) {
+	                  break;
+	                }
+	            }else if( xmlData[i] === '['){
+	                hasBody = true;
+	            }else {
+	                exp += xmlData[i];
+	            }
+	        }
+	        if(angleBracketsCount !== 0){
+	            throw new Error(`Unclosed DOCTYPE`);
+	        }
+	    }else {
+	        throw new Error(`Invalid Tag instead of DOCTYPE`);
+	    }
+	    return {entities, i};
+	}
+
+	function readEntityExp(xmlData,i){
+	    //External entities are not supported
+	    //    <!ENTITY ext SYSTEM "http://normal-website.com" >
+
+	    //Parameter entities are not supported
+	    //    <!ENTITY entityname "&anotherElement;">
+
+	    //Internal entities are supported
+	    //    <!ENTITY entityname "replacement text">
+	    
+	    //read EntityName
+	    let entityName = "";
+	    for (; i < xmlData.length && (xmlData[i] !== "'" && xmlData[i] !== '"' ); i++) {
+	        // if(xmlData[i] === " ") continue;
+	        // else 
+	        entityName += xmlData[i];
+	    }
+	    entityName = entityName.trim();
+	    if(entityName.indexOf(" ") !== -1) throw new Error("External entites are not supported");
+
+	    //read Entity Value
+	    const startChar = xmlData[i++];
+	    let val = "";
+	    for (; i < xmlData.length && xmlData[i] !== startChar ; i++) {
+	        val += xmlData[i];
+	    }
+	    return [entityName, val, i];
+	}
+
+	function isComment(xmlData, i){
+	    if(xmlData[i+1] === '!' &&
+	    xmlData[i+2] === '-' &&
+	    xmlData[i+3] === '-') return true
+	    return false
+	}
+	function isEntity(xmlData, i){
+	    if(xmlData[i+1] === '!' &&
+	    xmlData[i+2] === 'E' &&
+	    xmlData[i+3] === 'N' &&
+	    xmlData[i+4] === 'T' &&
+	    xmlData[i+5] === 'I' &&
+	    xmlData[i+6] === 'T' &&
+	    xmlData[i+7] === 'Y') return true
+	    return false
+	}
+	function isElement(xmlData, i){
+	    if(xmlData[i+1] === '!' &&
+	    xmlData[i+2] === 'E' &&
+	    xmlData[i+3] === 'L' &&
+	    xmlData[i+4] === 'E' &&
+	    xmlData[i+5] === 'M' &&
+	    xmlData[i+6] === 'E' &&
+	    xmlData[i+7] === 'N' &&
+	    xmlData[i+8] === 'T') return true
+	    return false
+	}
+
+	function isAttlist(xmlData, i){
+	    if(xmlData[i+1] === '!' &&
+	    xmlData[i+2] === 'A' &&
+	    xmlData[i+3] === 'T' &&
+	    xmlData[i+4] === 'T' &&
+	    xmlData[i+5] === 'L' &&
+	    xmlData[i+6] === 'I' &&
+	    xmlData[i+7] === 'S' &&
+	    xmlData[i+8] === 'T') return true
+	    return false
+	}
+	function isNotation(xmlData, i){
+	    if(xmlData[i+1] === '!' &&
+	    xmlData[i+2] === 'N' &&
+	    xmlData[i+3] === 'O' &&
+	    xmlData[i+4] === 'T' &&
+	    xmlData[i+5] === 'A' &&
+	    xmlData[i+6] === 'T' &&
+	    xmlData[i+7] === 'I' &&
+	    xmlData[i+8] === 'O' &&
+	    xmlData[i+9] === 'N') return true
+	    return false
+	}
+
+	function validateEntityName(name){
+	    if (util.isName(name))
+		return name;
+	    else
+	        throw new Error(`Invalid entity name ${name}`);
+	}
+
+	DocTypeReader = readDocType;
+	return DocTypeReader;
+}
+
+var strnum;
+var hasRequiredStrnum;
+
+function requireStrnum () {
+	if (hasRequiredStrnum) return strnum;
+	hasRequiredStrnum = 1;
+	const hexRegex = /^[-+]?0x[a-fA-F0-9]+$/;
+	const numRegex = /^([\-\+])?(0*)([0-9]*(\.[0-9]*)?)$/;
+	// const octRegex = /^0x[a-z0-9]+/;
+	// const binRegex = /0x[a-z0-9]+/;
+
+	 
+	const consider = {
+	    hex :  true,
+	    // oct: false,
+	    leadingZeros: true,
+	    decimalPoint: "\.",
+	    eNotation: true,
+	    //skipLike: /regex/
+	};
+
+	function toNumber(str, options = {}){
+	    options = Object.assign({}, consider, options );
+	    if(!str || typeof str !== "string" ) return str;
+	    
+	    let trimmedStr  = str.trim();
+	    
+	    if(options.skipLike !== undefined && options.skipLike.test(trimmedStr)) return str;
+	    else if(str==="0") return 0;
+	    else if (options.hex && hexRegex.test(trimmedStr)) {
+	        return parse_int(trimmedStr, 16);
+	    // }else if (options.oct && octRegex.test(str)) {
+	    //     return Number.parseInt(val, 8);
+	    }else if (trimmedStr.search(/[eE]/)!== -1) { //eNotation
+	        const notation = trimmedStr.match(/^([-\+])?(0*)([0-9]*(\.[0-9]*)?[eE][-\+]?[0-9]+)$/); 
+	        // +00.123 => [ , '+', '00', '.123', ..
+	        if(notation){
+	            // console.log(notation)
+	            if(options.leadingZeros){ //accept with leading zeros
+	                trimmedStr = (notation[1] || "") + notation[3];
+	            }else {
+	                if(notation[2] === "0" && notation[3][0]=== ".");else {
+	                    return str;
+	                }
+	            }
+	            return options.eNotation ? Number(trimmedStr) : str;
+	        }else {
+	            return str;
+	        }
+	    // }else if (options.parseBin && binRegex.test(str)) {
+	    //     return Number.parseInt(val, 2);
+	    }else {
+	        //separate negative sign, leading zeros, and rest number
+	        const match = numRegex.exec(trimmedStr);
+	        // +00.123 => [ , '+', '00', '.123', ..
+	        if(match){
+	            const sign = match[1];
+	            const leadingZeros = match[2];
+	            let numTrimmedByZeros = trimZeros(match[3]); //complete num without leading zeros
+	            //trim ending zeros for floating number
+	            
+	            if(!options.leadingZeros && leadingZeros.length > 0 && sign && trimmedStr[2] !== ".") return str; //-0123
+	            else if(!options.leadingZeros && leadingZeros.length > 0 && !sign && trimmedStr[1] !== ".") return str; //0123
+	            else if(options.leadingZeros && leadingZeros===str) return 0; //00
+	            
+	            else {//no leading zeros or leading zeros are allowed
+	                const num = Number(trimmedStr);
+	                const numStr = "" + num;
+
+	                if(numStr.search(/[eE]/) !== -1){ //given number is long and parsed to eNotation
+	                    if(options.eNotation) return num;
+	                    else return str;
+	                }else if(trimmedStr.indexOf(".") !== -1){ //floating number
+	                    if(numStr === "0" && (numTrimmedByZeros === "") ) return num; //0.0
+	                    else if(numStr === numTrimmedByZeros) return num; //0.456. 0.79000
+	                    else if( sign && numStr === "-"+numTrimmedByZeros) return num;
+	                    else return str;
+	                }
+	                
+	                if(leadingZeros){
+	                    return (numTrimmedByZeros === numStr) || (sign+numTrimmedByZeros === numStr) ? num : str
+	                }else  {
+	                    return (trimmedStr === numStr) || (trimmedStr === sign+numStr) ? num : str
+	                }
+	            }
+	        }else { //non-numeric string
+	            return str;
+	        }
+	    }
+	}
+
+	/**
+	 * 
+	 * @param {string} numStr without leading zeros
+	 * @returns 
+	 */
+	function trimZeros(numStr){
+	    if(numStr && numStr.indexOf(".") !== -1){//float
+	        numStr = numStr.replace(/0+$/, ""); //remove ending zeros
+	        if(numStr === ".")  numStr = "0";
+	        else if(numStr[0] === ".")  numStr = "0"+numStr;
+	        else if(numStr[numStr.length-1] === ".")  numStr = numStr.substr(0,numStr.length-1);
+	        return numStr;
+	    }
+	    return numStr;
+	}
+
+	function parse_int(numStr, base){
+	    //polyfill
+	    if(parseInt) return parseInt(numStr, base);
+	    else if(Number.parseInt) return Number.parseInt(numStr, base);
+	    else if(window && window.parseInt) return window.parseInt(numStr, base);
+	    else throw new Error("parseInt, Number.parseInt, window.parseInt are not supported")
+	}
+
+	strnum = toNumber;
+	return strnum;
+}
+
+var ignoreAttributes;
+var hasRequiredIgnoreAttributes;
+
+function requireIgnoreAttributes () {
+	if (hasRequiredIgnoreAttributes) return ignoreAttributes;
+	hasRequiredIgnoreAttributes = 1;
+	function getIgnoreAttributesFn(ignoreAttributes) {
+	    if (typeof ignoreAttributes === 'function') {
+	        return ignoreAttributes
+	    }
+	    if (Array.isArray(ignoreAttributes)) {
+	        return (attrName) => {
+	            for (const pattern of ignoreAttributes) {
+	                if (typeof pattern === 'string' && attrName === pattern) {
+	                    return true
+	                }
+	                if (pattern instanceof RegExp && pattern.test(attrName)) {
+	                    return true
+	                }
+	            }
+	        }
+	    }
+	    return () => false
+	}
+
+	ignoreAttributes = getIgnoreAttributesFn;
+	return ignoreAttributes;
+}
+
+var OrderedObjParser_1;
+var hasRequiredOrderedObjParser;
+
+function requireOrderedObjParser () {
+	if (hasRequiredOrderedObjParser) return OrderedObjParser_1;
+	hasRequiredOrderedObjParser = 1;
+	///@ts-check
+
+	const util = requireUtil();
+	const xmlNode = requireXmlNode();
+	const readDocType = requireDocTypeReader();
+	const toNumber = requireStrnum();
+	const getIgnoreAttributesFn = requireIgnoreAttributes();
+
+	// const regx =
+	//   '<((!\\[CDATA\\[([\\s\\S]*?)(]]>))|((NAME:)?(NAME))([^>]*)>|((\\/)(NAME)\\s*>))([^<]*)'
+	//   .replace(/NAME/g, util.nameRegexp);
+
+	//const tagsRegx = new RegExp("<(\\/?[\\w:\\-\._]+)([^>]*)>(\\s*"+cdataRegx+")*([^<]+)?","g");
+	//const tagsRegx = new RegExp("<(\\/?)((\\w*:)?([\\w:\\-\._]+))([^>]*)>([^<]*)("+cdataRegx+"([^<]*))*([^<]+)?","g");
+
+	class OrderedObjParser{
+	  constructor(options){
+	    this.options = options;
+	    this.currentNode = null;
+	    this.tagsNodeStack = [];
+	    this.docTypeEntities = {};
+	    this.lastEntities = {
+	      "apos" : { regex: /&(apos|#39|#x27);/g, val : "'"},
+	      "gt" : { regex: /&(gt|#62|#x3E);/g, val : ">"},
+	      "lt" : { regex: /&(lt|#60|#x3C);/g, val : "<"},
+	      "quot" : { regex: /&(quot|#34|#x22);/g, val : "\""},
+	    };
+	    this.ampEntity = { regex: /&(amp|#38|#x26);/g, val : "&"};
+	    this.htmlEntities = {
+	      "space": { regex: /&(nbsp|#160);/g, val: " " },
+	      // "lt" : { regex: /&(lt|#60);/g, val: "<" },
+	      // "gt" : { regex: /&(gt|#62);/g, val: ">" },
+	      // "amp" : { regex: /&(amp|#38);/g, val: "&" },
+	      // "quot" : { regex: /&(quot|#34);/g, val: "\"" },
+	      // "apos" : { regex: /&(apos|#39);/g, val: "'" },
+	      "cent" : { regex: /&(cent|#162);/g, val: "¢" },
+	      "pound" : { regex: /&(pound|#163);/g, val: "£" },
+	      "yen" : { regex: /&(yen|#165);/g, val: "¥" },
+	      "euro" : { regex: /&(euro|#8364);/g, val: "€" },
+	      "copyright" : { regex: /&(copy|#169);/g, val: "©" },
+	      "reg" : { regex: /&(reg|#174);/g, val: "®" },
+	      "inr" : { regex: /&(inr|#8377);/g, val: "₹" },
+	      "num_dec": { regex: /&#([0-9]{1,7});/g, val : (_, str) => String.fromCharCode(Number.parseInt(str, 10)) },
+	      "num_hex": { regex: /&#x([0-9a-fA-F]{1,6});/g, val : (_, str) => String.fromCharCode(Number.parseInt(str, 16)) },
+	    };
+	    this.addExternalEntities = addExternalEntities;
+	    this.parseXml = parseXml;
+	    this.parseTextData = parseTextData;
+	    this.resolveNameSpace = resolveNameSpace;
+	    this.buildAttributesMap = buildAttributesMap;
+	    this.isItStopNode = isItStopNode;
+	    this.replaceEntitiesValue = replaceEntitiesValue;
+	    this.readStopNodeData = readStopNodeData;
+	    this.saveTextToParentTag = saveTextToParentTag;
+	    this.addChild = addChild;
+	    this.ignoreAttributesFn = getIgnoreAttributesFn(this.options.ignoreAttributes);
+	  }
+
+	}
+
+	function addExternalEntities(externalEntities){
+	  const entKeys = Object.keys(externalEntities);
+	  for (let i = 0; i < entKeys.length; i++) {
+	    const ent = entKeys[i];
+	    this.lastEntities[ent] = {
+	       regex: new RegExp("&"+ent+";","g"),
+	       val : externalEntities[ent]
+	    };
+	  }
+	}
+
+	/**
+	 * @param {string} val
+	 * @param {string} tagName
+	 * @param {string} jPath
+	 * @param {boolean} dontTrim
+	 * @param {boolean} hasAttributes
+	 * @param {boolean} isLeafNode
+	 * @param {boolean} escapeEntities
+	 */
+	function parseTextData(val, tagName, jPath, dontTrim, hasAttributes, isLeafNode, escapeEntities) {
+	  if (val !== undefined) {
+	    if (this.options.trimValues && !dontTrim) {
+	      val = val.trim();
+	    }
+	    if(val.length > 0){
+	      if(!escapeEntities) val = this.replaceEntitiesValue(val);
+	      
+	      const newval = this.options.tagValueProcessor(tagName, val, jPath, hasAttributes, isLeafNode);
+	      if(newval === null || newval === undefined){
+	        //don't parse
+	        return val;
+	      }else if(typeof newval !== typeof val || newval !== val){
+	        //overwrite
+	        return newval;
+	      }else if(this.options.trimValues){
+	        return parseValue(val, this.options.parseTagValue, this.options.numberParseOptions);
+	      }else {
+	        const trimmedVal = val.trim();
+	        if(trimmedVal === val){
+	          return parseValue(val, this.options.parseTagValue, this.options.numberParseOptions);
+	        }else {
+	          return val;
+	        }
+	      }
+	    }
+	  }
+	}
+
+	function resolveNameSpace(tagname) {
+	  if (this.options.removeNSPrefix) {
+	    const tags = tagname.split(':');
+	    const prefix = tagname.charAt(0) === '/' ? '/' : '';
+	    if (tags[0] === 'xmlns') {
+	      return '';
+	    }
+	    if (tags.length === 2) {
+	      tagname = prefix + tags[1];
+	    }
+	  }
+	  return tagname;
+	}
+
+	//TODO: change regex to capture NS
+	//const attrsRegx = new RegExp("([\\w\\-\\.\\:]+)\\s*=\\s*(['\"])((.|\n)*?)\\2","gm");
+	const attrsRegx = new RegExp('([^\\s=]+)\\s*(=\\s*([\'"])([\\s\\S]*?)\\3)?', 'gm');
+
+	function buildAttributesMap(attrStr, jPath, tagName) {
+	  if (this.options.ignoreAttributes !== true && typeof attrStr === 'string') {
+	    // attrStr = attrStr.replace(/\r?\n/g, ' ');
+	    //attrStr = attrStr || attrStr.trim();
+
+	    const matches = util.getAllMatches(attrStr, attrsRegx);
+	    const len = matches.length; //don't make it inline
+	    const attrs = {};
+	    for (let i = 0; i < len; i++) {
+	      const attrName = this.resolveNameSpace(matches[i][1]);
+	      if (this.ignoreAttributesFn(attrName, jPath)) {
+	        continue
+	      }
+	      let oldVal = matches[i][4];
+	      let aName = this.options.attributeNamePrefix + attrName;
+	      if (attrName.length) {
+	        if (this.options.transformAttributeName) {
+	          aName = this.options.transformAttributeName(aName);
+	        }
+	        if(aName === "__proto__") aName  = "#__proto__";
+	        if (oldVal !== undefined) {
+	          if (this.options.trimValues) {
+	            oldVal = oldVal.trim();
+	          }
+	          oldVal = this.replaceEntitiesValue(oldVal);
+	          const newVal = this.options.attributeValueProcessor(attrName, oldVal, jPath);
+	          if(newVal === null || newVal === undefined){
+	            //don't parse
+	            attrs[aName] = oldVal;
+	          }else if(typeof newVal !== typeof oldVal || newVal !== oldVal){
+	            //overwrite
+	            attrs[aName] = newVal;
+	          }else {
+	            //parse
+	            attrs[aName] = parseValue(
+	              oldVal,
+	              this.options.parseAttributeValue,
+	              this.options.numberParseOptions
+	            );
+	          }
+	        } else if (this.options.allowBooleanAttributes) {
+	          attrs[aName] = true;
+	        }
+	      }
+	    }
+	    if (!Object.keys(attrs).length) {
+	      return;
+	    }
+	    if (this.options.attributesGroupName) {
+	      const attrCollection = {};
+	      attrCollection[this.options.attributesGroupName] = attrs;
+	      return attrCollection;
+	    }
+	    return attrs
+	  }
+	}
+
+	const parseXml = function(xmlData) {
+	  xmlData = xmlData.replace(/\r\n?/g, "\n"); //TODO: remove this line
+	  const xmlObj = new xmlNode('!xml');
+	  let currentNode = xmlObj;
+	  let textData = "";
+	  let jPath = "";
+	  for(let i=0; i< xmlData.length; i++){//for each char in XML data
+	    const ch = xmlData[i];
+	    if(ch === '<'){
+	      // const nextIndex = i+1;
+	      // const _2ndChar = xmlData[nextIndex];
+	      if( xmlData[i+1] === '/') {//Closing Tag
+	        const closeIndex = findClosingIndex(xmlData, ">", i, "Closing Tag is not closed.");
+	        let tagName = xmlData.substring(i+2,closeIndex).trim();
+
+	        if(this.options.removeNSPrefix){
+	          const colonIndex = tagName.indexOf(":");
+	          if(colonIndex !== -1){
+	            tagName = tagName.substr(colonIndex+1);
+	          }
+	        }
+
+	        if(this.options.transformTagName) {
+	          tagName = this.options.transformTagName(tagName);
+	        }
+
+	        if(currentNode){
+	          textData = this.saveTextToParentTag(textData, currentNode, jPath);
+	        }
+
+	        //check if last tag of nested tag was unpaired tag
+	        const lastTagName = jPath.substring(jPath.lastIndexOf(".")+1);
+	        if(tagName && this.options.unpairedTags.indexOf(tagName) !== -1 ){
+	          throw new Error(`Unpaired tag can not be used as closing tag: </${tagName}>`);
+	        }
+	        let propIndex = 0;
+	        if(lastTagName && this.options.unpairedTags.indexOf(lastTagName) !== -1 ){
+	          propIndex = jPath.lastIndexOf('.', jPath.lastIndexOf('.')-1);
+	          this.tagsNodeStack.pop();
+	        }else {
+	          propIndex = jPath.lastIndexOf(".");
+	        }
+	        jPath = jPath.substring(0, propIndex);
+
+	        currentNode = this.tagsNodeStack.pop();//avoid recursion, set the parent tag scope
+	        textData = "";
+	        i = closeIndex;
+	      } else if( xmlData[i+1] === '?') {
+
+	        let tagData = readTagExp(xmlData,i, false, "?>");
+	        if(!tagData) throw new Error("Pi Tag is not closed.");
+
+	        textData = this.saveTextToParentTag(textData, currentNode, jPath);
+	        if( (this.options.ignoreDeclaration && tagData.tagName === "?xml") || this.options.ignorePiTags);else {
+	  
+	          const childNode = new xmlNode(tagData.tagName);
+	          childNode.add(this.options.textNodeName, "");
+	          
+	          if(tagData.tagName !== tagData.tagExp && tagData.attrExpPresent){
+	            childNode[":@"] = this.buildAttributesMap(tagData.tagExp, jPath, tagData.tagName);
+	          }
+	          this.addChild(currentNode, childNode, jPath);
+
+	        }
+
+
+	        i = tagData.closeIndex + 1;
+	      } else if(xmlData.substr(i + 1, 3) === '!--') {
+	        const endIndex = findClosingIndex(xmlData, "-->", i+4, "Comment is not closed.");
+	        if(this.options.commentPropName){
+	          const comment = xmlData.substring(i + 4, endIndex - 2);
+
+	          textData = this.saveTextToParentTag(textData, currentNode, jPath);
+
+	          currentNode.add(this.options.commentPropName, [ { [this.options.textNodeName] : comment } ]);
+	        }
+	        i = endIndex;
+	      } else if( xmlData.substr(i + 1, 2) === '!D') {
+	        const result = readDocType(xmlData, i);
+	        this.docTypeEntities = result.entities;
+	        i = result.i;
+	      }else if(xmlData.substr(i + 1, 2) === '![') {
+	        const closeIndex = findClosingIndex(xmlData, "]]>", i, "CDATA is not closed.") - 2;
+	        const tagExp = xmlData.substring(i + 9,closeIndex);
+
+	        textData = this.saveTextToParentTag(textData, currentNode, jPath);
+
+	        let val = this.parseTextData(tagExp, currentNode.tagname, jPath, true, false, true, true);
+	        if(val == undefined) val = "";
+
+	        //cdata should be set even if it is 0 length string
+	        if(this.options.cdataPropName){
+	          currentNode.add(this.options.cdataPropName, [ { [this.options.textNodeName] : tagExp } ]);
+	        }else {
+	          currentNode.add(this.options.textNodeName, val);
+	        }
+	        
+	        i = closeIndex + 2;
+	      }else {//Opening tag
+	        let result = readTagExp(xmlData,i, this.options.removeNSPrefix);
+	        let tagName= result.tagName;
+	        const rawTagName = result.rawTagName;
+	        let tagExp = result.tagExp;
+	        let attrExpPresent = result.attrExpPresent;
+	        let closeIndex = result.closeIndex;
+
+	        if (this.options.transformTagName) {
+	          tagName = this.options.transformTagName(tagName);
+	        }
+	        
+	        //save text as child node
+	        if (currentNode && textData) {
+	          if(currentNode.tagname !== '!xml'){
+	            //when nested tag is found
+	            textData = this.saveTextToParentTag(textData, currentNode, jPath, false);
+	          }
+	        }
+
+	        //check if last tag was unpaired tag
+	        const lastTag = currentNode;
+	        if(lastTag && this.options.unpairedTags.indexOf(lastTag.tagname) !== -1 ){
+	          currentNode = this.tagsNodeStack.pop();
+	          jPath = jPath.substring(0, jPath.lastIndexOf("."));
+	        }
+	        if(tagName !== xmlObj.tagname){
+	          jPath += jPath ? "." + tagName : tagName;
+	        }
+	        if (this.isItStopNode(this.options.stopNodes, jPath, tagName)) {
+	          let tagContent = "";
+	          //self-closing tag
+	          if(tagExp.length > 0 && tagExp.lastIndexOf("/") === tagExp.length - 1){
+	            if(tagName[tagName.length - 1] === "/"){ //remove trailing '/'
+	              tagName = tagName.substr(0, tagName.length - 1);
+	              jPath = jPath.substr(0, jPath.length - 1);
+	              tagExp = tagName;
+	            }else {
+	              tagExp = tagExp.substr(0, tagExp.length - 1);
+	            }
+	            i = result.closeIndex;
+	          }
+	          //unpaired tag
+	          else if(this.options.unpairedTags.indexOf(tagName) !== -1){
+	            
+	            i = result.closeIndex;
+	          }
+	          //normal tag
+	          else {
+	            //read until closing tag is found
+	            const result = this.readStopNodeData(xmlData, rawTagName, closeIndex + 1);
+	            if(!result) throw new Error(`Unexpected end of ${rawTagName}`);
+	            i = result.i;
+	            tagContent = result.tagContent;
+	          }
+
+	          const childNode = new xmlNode(tagName);
+	          if(tagName !== tagExp && attrExpPresent){
+	            childNode[":@"] = this.buildAttributesMap(tagExp, jPath, tagName);
+	          }
+	          if(tagContent) {
+	            tagContent = this.parseTextData(tagContent, tagName, jPath, true, attrExpPresent, true, true);
+	          }
+	          
+	          jPath = jPath.substr(0, jPath.lastIndexOf("."));
+	          childNode.add(this.options.textNodeName, tagContent);
+	          
+	          this.addChild(currentNode, childNode, jPath);
+	        }else {
+	  //selfClosing tag
+	          if(tagExp.length > 0 && tagExp.lastIndexOf("/") === tagExp.length - 1){
+	            if(tagName[tagName.length - 1] === "/"){ //remove trailing '/'
+	              tagName = tagName.substr(0, tagName.length - 1);
+	              jPath = jPath.substr(0, jPath.length - 1);
+	              tagExp = tagName;
+	            }else {
+	              tagExp = tagExp.substr(0, tagExp.length - 1);
+	            }
+	            
+	            if(this.options.transformTagName) {
+	              tagName = this.options.transformTagName(tagName);
+	            }
+
+	            const childNode = new xmlNode(tagName);
+	            if(tagName !== tagExp && attrExpPresent){
+	              childNode[":@"] = this.buildAttributesMap(tagExp, jPath, tagName);
+	            }
+	            this.addChild(currentNode, childNode, jPath);
+	            jPath = jPath.substr(0, jPath.lastIndexOf("."));
+	          }
+	    //opening tag
+	          else {
+	            const childNode = new xmlNode( tagName);
+	            this.tagsNodeStack.push(currentNode);
+	            
+	            if(tagName !== tagExp && attrExpPresent){
+	              childNode[":@"] = this.buildAttributesMap(tagExp, jPath, tagName);
+	            }
+	            this.addChild(currentNode, childNode, jPath);
+	            currentNode = childNode;
+	          }
+	          textData = "";
+	          i = closeIndex;
+	        }
+	      }
+	    }else {
+	      textData += xmlData[i];
+	    }
+	  }
+	  return xmlObj.child;
+	};
+
+	function addChild(currentNode, childNode, jPath){
+	  const result = this.options.updateTag(childNode.tagname, jPath, childNode[":@"]);
+	  if(result === false);else if(typeof result === "string"){
+	    childNode.tagname = result;
+	    currentNode.addChild(childNode);
+	  }else {
+	    currentNode.addChild(childNode);
+	  }
+	}
+
+	const replaceEntitiesValue = function(val){
+
+	  if(this.options.processEntities){
+	    for(let entityName in this.docTypeEntities){
+	      const entity = this.docTypeEntities[entityName];
+	      val = val.replace( entity.regx, entity.val);
+	    }
+	    for(let entityName in this.lastEntities){
+	      const entity = this.lastEntities[entityName];
+	      val = val.replace( entity.regex, entity.val);
+	    }
+	    if(this.options.htmlEntities){
+	      for(let entityName in this.htmlEntities){
+	        const entity = this.htmlEntities[entityName];
+	        val = val.replace( entity.regex, entity.val);
+	      }
+	    }
+	    val = val.replace( this.ampEntity.regex, this.ampEntity.val);
+	  }
+	  return val;
+	};
+	function saveTextToParentTag(textData, currentNode, jPath, isLeafNode) {
+	  if (textData) { //store previously collected data as textNode
+	    if(isLeafNode === undefined) isLeafNode = currentNode.child.length === 0;
+	    
+	    textData = this.parseTextData(textData,
+	      currentNode.tagname,
+	      jPath,
+	      false,
+	      currentNode[":@"] ? Object.keys(currentNode[":@"]).length !== 0 : false,
+	      isLeafNode);
+
+	    if (textData !== undefined && textData !== "")
+	      currentNode.add(this.options.textNodeName, textData);
+	    textData = "";
+	  }
+	  return textData;
+	}
+
+	//TODO: use jPath to simplify the logic
+	/**
+	 * 
+	 * @param {string[]} stopNodes 
+	 * @param {string} jPath
+	 * @param {string} currentTagName 
+	 */
+	function isItStopNode(stopNodes, jPath, currentTagName){
+	  const allNodesExp = "*." + currentTagName;
+	  for (const stopNodePath in stopNodes) {
+	    const stopNodeExp = stopNodes[stopNodePath];
+	    if( allNodesExp === stopNodeExp || jPath === stopNodeExp  ) return true;
+	  }
+	  return false;
+	}
+
+	/**
+	 * Returns the tag Expression and where it is ending handling single-double quotes situation
+	 * @param {string} xmlData 
+	 * @param {number} i starting index
+	 * @returns 
+	 */
+	function tagExpWithClosingIndex(xmlData, i, closingChar = ">"){
+	  let attrBoundary;
+	  let tagExp = "";
+	  for (let index = i; index < xmlData.length; index++) {
+	    let ch = xmlData[index];
+	    if (attrBoundary) {
+	        if (ch === attrBoundary) attrBoundary = "";//reset
+	    } else if (ch === '"' || ch === "'") {
+	        attrBoundary = ch;
+	    } else if (ch === closingChar[0]) {
+	      if(closingChar[1]){
+	        if(xmlData[index + 1] === closingChar[1]){
+	          return {
+	            data: tagExp,
+	            index: index
+	          }
+	        }
+	      }else {
+	        return {
+	          data: tagExp,
+	          index: index
+	        }
+	      }
+	    } else if (ch === '\t') {
+	      ch = " ";
+	    }
+	    tagExp += ch;
+	  }
+	}
+
+	function findClosingIndex(xmlData, str, i, errMsg){
+	  const closingIndex = xmlData.indexOf(str, i);
+	  if(closingIndex === -1){
+	    throw new Error(errMsg)
+	  }else {
+	    return closingIndex + str.length - 1;
+	  }
+	}
+
+	function readTagExp(xmlData,i, removeNSPrefix, closingChar = ">"){
+	  const result = tagExpWithClosingIndex(xmlData, i+1, closingChar);
+	  if(!result) return;
+	  let tagExp = result.data;
+	  const closeIndex = result.index;
+	  const separatorIndex = tagExp.search(/\s/);
+	  let tagName = tagExp;
+	  let attrExpPresent = true;
+	  if(separatorIndex !== -1){//separate tag name and attributes expression
+	    tagName = tagExp.substring(0, separatorIndex);
+	    tagExp = tagExp.substring(separatorIndex + 1).trimStart();
+	  }
+
+	  const rawTagName = tagName;
+	  if(removeNSPrefix){
+	    const colonIndex = tagName.indexOf(":");
+	    if(colonIndex !== -1){
+	      tagName = tagName.substr(colonIndex+1);
+	      attrExpPresent = tagName !== result.data.substr(colonIndex + 1);
+	    }
+	  }
+
+	  return {
+	    tagName: tagName,
+	    tagExp: tagExp,
+	    closeIndex: closeIndex,
+	    attrExpPresent: attrExpPresent,
+	    rawTagName: rawTagName,
+	  }
+	}
+	/**
+	 * find paired tag for a stop node
+	 * @param {string} xmlData 
+	 * @param {string} tagName 
+	 * @param {number} i 
+	 */
+	function readStopNodeData(xmlData, tagName, i){
+	  const startIndex = i;
+	  // Starting at 1 since we already have an open tag
+	  let openTagCount = 1;
+
+	  for (; i < xmlData.length; i++) {
+	    if( xmlData[i] === "<"){ 
+	      if (xmlData[i+1] === "/") {//close tag
+	          const closeIndex = findClosingIndex(xmlData, ">", i, `${tagName} is not closed`);
+	          let closeTagName = xmlData.substring(i+2,closeIndex).trim();
+	          if(closeTagName === tagName){
+	            openTagCount--;
+	            if (openTagCount === 0) {
+	              return {
+	                tagContent: xmlData.substring(startIndex, i),
+	                i : closeIndex
+	              }
+	            }
+	          }
+	          i=closeIndex;
+	        } else if(xmlData[i+1] === '?') { 
+	          const closeIndex = findClosingIndex(xmlData, "?>", i+1, "StopNode is not closed.");
+	          i=closeIndex;
+	        } else if(xmlData.substr(i + 1, 3) === '!--') { 
+	          const closeIndex = findClosingIndex(xmlData, "-->", i+3, "StopNode is not closed.");
+	          i=closeIndex;
+	        } else if(xmlData.substr(i + 1, 2) === '![') { 
+	          const closeIndex = findClosingIndex(xmlData, "]]>", i, "StopNode is not closed.") - 2;
+	          i=closeIndex;
+	        } else {
+	          const tagData = readTagExp(xmlData, i, '>');
+
+	          if (tagData) {
+	            const openTagName = tagData && tagData.tagName;
+	            if (openTagName === tagName && tagData.tagExp[tagData.tagExp.length-1] !== "/") {
+	              openTagCount++;
+	            }
+	            i=tagData.closeIndex;
+	          }
+	        }
+	      }
+	  }//end for loop
+	}
+
+	function parseValue(val, shouldParse, options) {
+	  if (shouldParse && typeof val === 'string') {
+	    //console.log(options)
+	    const newval = val.trim();
+	    if(newval === 'true' ) return true;
+	    else if(newval === 'false' ) return false;
+	    else return toNumber(val, options);
+	  } else {
+	    if (util.isExist(val)) {
+	      return val;
+	    } else {
+	      return '';
+	    }
+	  }
+	}
+
+
+	OrderedObjParser_1 = OrderedObjParser;
+	return OrderedObjParser_1;
+}
+
+var node2json = {};
+
+var hasRequiredNode2json;
+
+function requireNode2json () {
+	if (hasRequiredNode2json) return node2json;
+	hasRequiredNode2json = 1;
+
+	/**
+	 * 
+	 * @param {array} node 
+	 * @param {any} options 
+	 * @returns 
+	 */
+	function prettify(node, options){
+	  return compress( node, options);
+	}
+
+	/**
+	 * 
+	 * @param {array} arr 
+	 * @param {object} options 
+	 * @param {string} jPath 
+	 * @returns object
+	 */
+	function compress(arr, options, jPath){
+	  let text;
+	  const compressedObj = {};
+	  for (let i = 0; i < arr.length; i++) {
+	    const tagObj = arr[i];
+	    const property = propName(tagObj);
+	    let newJpath = "";
+	    if(jPath === undefined) newJpath = property;
+	    else newJpath = jPath + "." + property;
+
+	    if(property === options.textNodeName){
+	      if(text === undefined) text = tagObj[property];
+	      else text += "" + tagObj[property];
+	    }else if(property === undefined){
+	      continue;
+	    }else if(tagObj[property]){
+	      
+	      let val = compress(tagObj[property], options, newJpath);
+	      const isLeaf = isLeafTag(val, options);
+
+	      if(tagObj[":@"]){
+	        assignAttributes( val, tagObj[":@"], newJpath, options);
+	      }else if(Object.keys(val).length === 1 && val[options.textNodeName] !== undefined && !options.alwaysCreateTextNode){
+	        val = val[options.textNodeName];
+	      }else if(Object.keys(val).length === 0){
+	        if(options.alwaysCreateTextNode) val[options.textNodeName] = "";
+	        else val = "";
+	      }
+
+	      if(compressedObj[property] !== undefined && compressedObj.hasOwnProperty(property)) {
+	        if(!Array.isArray(compressedObj[property])) {
+	            compressedObj[property] = [ compressedObj[property] ];
+	        }
+	        compressedObj[property].push(val);
+	      }else {
+	        //TODO: if a node is not an array, then check if it should be an array
+	        //also determine if it is a leaf node
+	        if (options.isArray(property, newJpath, isLeaf )) {
+	          compressedObj[property] = [val];
+	        }else {
+	          compressedObj[property] = val;
+	        }
+	      }
+	    }
+	    
+	  }
+	  // if(text && text.length > 0) compressedObj[options.textNodeName] = text;
+	  if(typeof text === "string"){
+	    if(text.length > 0) compressedObj[options.textNodeName] = text;
+	  }else if(text !== undefined) compressedObj[options.textNodeName] = text;
+	  return compressedObj;
+	}
+
+	function propName(obj){
+	  const keys = Object.keys(obj);
+	  for (let i = 0; i < keys.length; i++) {
+	    const key = keys[i];
+	    if(key !== ":@") return key;
+	  }
+	}
+
+	function assignAttributes(obj, attrMap, jpath, options){
+	  if (attrMap) {
+	    const keys = Object.keys(attrMap);
+	    const len = keys.length; //don't make it inline
+	    for (let i = 0; i < len; i++) {
+	      const atrrName = keys[i];
+	      if (options.isArray(atrrName, jpath + "." + atrrName, true, true)) {
+	        obj[atrrName] = [ attrMap[atrrName] ];
+	      } else {
+	        obj[atrrName] = attrMap[atrrName];
+	      }
+	    }
+	  }
+	}
+
+	function isLeafTag(obj, options){
+	  const { textNodeName } = options;
+	  const propCount = Object.keys(obj).length;
+	  
+	  if (propCount === 0) {
+	    return true;
+	  }
+
+	  if (
+	    propCount === 1 &&
+	    (obj[textNodeName] || typeof obj[textNodeName] === "boolean" || obj[textNodeName] === 0)
+	  ) {
+	    return true;
+	  }
+
+	  return false;
+	}
+	node2json.prettify = prettify;
+	return node2json;
+}
+
+var XMLParser_1;
+var hasRequiredXMLParser;
+
+function requireXMLParser () {
+	if (hasRequiredXMLParser) return XMLParser_1;
+	hasRequiredXMLParser = 1;
+	const { buildOptions} = requireOptionsBuilder();
+	const OrderedObjParser = requireOrderedObjParser();
+	const { prettify} = requireNode2json();
+	const validator = requireValidator();
+
+	class XMLParser{
+	    
+	    constructor(options){
+	        this.externalEntities = {};
+	        this.options = buildOptions(options);
+	        
+	    }
+	    /**
+	     * Parse XML dats to JS object 
+	     * @param {string|Buffer} xmlData 
+	     * @param {boolean|Object} validationOption 
+	     */
+	    parse(xmlData,validationOption){
+	        if(typeof xmlData === "string");else if( xmlData.toString){
+	            xmlData = xmlData.toString();
+	        }else {
+	            throw new Error("XML data is accepted in String or Bytes[] form.")
+	        }
+	        if( validationOption){
+	            if(validationOption === true) validationOption = {}; //validate with default options
+	            
+	            const result = validator.validate(xmlData, validationOption);
+	            if (result !== true) {
+	              throw Error( `${result.err.msg}:${result.err.line}:${result.err.col}` )
+	            }
+	          }
+	        const orderedObjParser = new OrderedObjParser(this.options);
+	        orderedObjParser.addExternalEntities(this.externalEntities);
+	        const orderedResult = orderedObjParser.parseXml(xmlData);
+	        if(this.options.preserveOrder || orderedResult === undefined) return orderedResult;
+	        else return prettify(orderedResult, this.options);
+	    }
+
+	    /**
+	     * Add Entity which is not by default supported by this library
+	     * @param {string} key 
+	     * @param {string} value 
+	     */
+	    addEntity(key, value){
+	        if(value.indexOf("&") !== -1){
+	            throw new Error("Entity value can't have '&'")
+	        }else if(key.indexOf("&") !== -1 || key.indexOf(";") !== -1){
+	            throw new Error("An entity must be set without '&' and ';'. Eg. use '#xD' for '&#xD;'")
+	        }else if(value === "&"){
+	            throw new Error("An entity with value '&' is not permitted");
+	        }else {
+	            this.externalEntities[key] = value;
+	        }
+	    }
+	}
+
+	XMLParser_1 = XMLParser;
+	return XMLParser_1;
+}
+
+var orderedJs2Xml;
+var hasRequiredOrderedJs2Xml;
+
+function requireOrderedJs2Xml () {
+	if (hasRequiredOrderedJs2Xml) return orderedJs2Xml;
+	hasRequiredOrderedJs2Xml = 1;
+	const EOL = "\n";
+
+	/**
+	 * 
+	 * @param {array} jArray 
+	 * @param {any} options 
+	 * @returns 
+	 */
+	function toXml(jArray, options) {
+	    let indentation = "";
+	    if (options.format && options.indentBy.length > 0) {
+	        indentation = EOL;
+	    }
+	    return arrToStr(jArray, options, "", indentation);
+	}
+
+	function arrToStr(arr, options, jPath, indentation) {
+	    let xmlStr = "";
+	    let isPreviousElementTag = false;
+
+	    for (let i = 0; i < arr.length; i++) {
+	        const tagObj = arr[i];
+	        const tagName = propName(tagObj);
+	        if(tagName === undefined) continue;
+
+	        let newJPath = "";
+	        if (jPath.length === 0) newJPath = tagName;
+	        else newJPath = `${jPath}.${tagName}`;
+
+	        if (tagName === options.textNodeName) {
+	            let tagText = tagObj[tagName];
+	            if (!isStopNode(newJPath, options)) {
+	                tagText = options.tagValueProcessor(tagName, tagText);
+	                tagText = replaceEntitiesValue(tagText, options);
+	            }
+	            if (isPreviousElementTag) {
+	                xmlStr += indentation;
+	            }
+	            xmlStr += tagText;
+	            isPreviousElementTag = false;
+	            continue;
+	        } else if (tagName === options.cdataPropName) {
+	            if (isPreviousElementTag) {
+	                xmlStr += indentation;
+	            }
+	            xmlStr += `<![CDATA[${tagObj[tagName][0][options.textNodeName]}]]>`;
+	            isPreviousElementTag = false;
+	            continue;
+	        } else if (tagName === options.commentPropName) {
+	            xmlStr += indentation + `<!--${tagObj[tagName][0][options.textNodeName]}-->`;
+	            isPreviousElementTag = true;
+	            continue;
+	        } else if (tagName[0] === "?") {
+	            const attStr = attr_to_str(tagObj[":@"], options);
+	            const tempInd = tagName === "?xml" ? "" : indentation;
+	            let piTextNodeName = tagObj[tagName][0][options.textNodeName];
+	            piTextNodeName = piTextNodeName.length !== 0 ? " " + piTextNodeName : ""; //remove extra spacing
+	            xmlStr += tempInd + `<${tagName}${piTextNodeName}${attStr}?>`;
+	            isPreviousElementTag = true;
+	            continue;
+	        }
+	        let newIdentation = indentation;
+	        if (newIdentation !== "") {
+	            newIdentation += options.indentBy;
+	        }
+	        const attStr = attr_to_str(tagObj[":@"], options);
+	        const tagStart = indentation + `<${tagName}${attStr}`;
+	        const tagValue = arrToStr(tagObj[tagName], options, newJPath, newIdentation);
+	        if (options.unpairedTags.indexOf(tagName) !== -1) {
+	            if (options.suppressUnpairedNode) xmlStr += tagStart + ">";
+	            else xmlStr += tagStart + "/>";
+	        } else if ((!tagValue || tagValue.length === 0) && options.suppressEmptyNode) {
+	            xmlStr += tagStart + "/>";
+	        } else if (tagValue && tagValue.endsWith(">")) {
+	            xmlStr += tagStart + `>${tagValue}${indentation}</${tagName}>`;
+	        } else {
+	            xmlStr += tagStart + ">";
+	            if (tagValue && indentation !== "" && (tagValue.includes("/>") || tagValue.includes("</"))) {
+	                xmlStr += indentation + options.indentBy + tagValue + indentation;
+	            } else {
+	                xmlStr += tagValue;
+	            }
+	            xmlStr += `</${tagName}>`;
+	        }
+	        isPreviousElementTag = true;
+	    }
+
+	    return xmlStr;
+	}
+
+	function propName(obj) {
+	    const keys = Object.keys(obj);
+	    for (let i = 0; i < keys.length; i++) {
+	        const key = keys[i];
+	        if(!obj.hasOwnProperty(key)) continue;
+	        if (key !== ":@") return key;
+	    }
+	}
+
+	function attr_to_str(attrMap, options) {
+	    let attrStr = "";
+	    if (attrMap && !options.ignoreAttributes) {
+	        for (let attr in attrMap) {
+	            if(!attrMap.hasOwnProperty(attr)) continue;
+	            let attrVal = options.attributeValueProcessor(attr, attrMap[attr]);
+	            attrVal = replaceEntitiesValue(attrVal, options);
+	            if (attrVal === true && options.suppressBooleanAttributes) {
+	                attrStr += ` ${attr.substr(options.attributeNamePrefix.length)}`;
+	            } else {
+	                attrStr += ` ${attr.substr(options.attributeNamePrefix.length)}="${attrVal}"`;
+	            }
+	        }
+	    }
+	    return attrStr;
+	}
+
+	function isStopNode(jPath, options) {
+	    jPath = jPath.substr(0, jPath.length - options.textNodeName.length - 1);
+	    let tagName = jPath.substr(jPath.lastIndexOf(".") + 1);
+	    for (let index in options.stopNodes) {
+	        if (options.stopNodes[index] === jPath || options.stopNodes[index] === "*." + tagName) return true;
+	    }
+	    return false;
+	}
+
+	function replaceEntitiesValue(textValue, options) {
+	    if (textValue && textValue.length > 0 && options.processEntities) {
+	        for (let i = 0; i < options.entities.length; i++) {
+	            const entity = options.entities[i];
+	            textValue = textValue.replace(entity.regex, entity.val);
+	        }
+	    }
+	    return textValue;
+	}
+	orderedJs2Xml = toXml;
+	return orderedJs2Xml;
+}
+
+var json2xml;
+var hasRequiredJson2xml;
+
+function requireJson2xml () {
+	if (hasRequiredJson2xml) return json2xml;
+	hasRequiredJson2xml = 1;
+	//parse Empty Node as self closing node
+	const buildFromOrderedJs = requireOrderedJs2Xml();
+	const getIgnoreAttributesFn = requireIgnoreAttributes();
+
+	const defaultOptions = {
+	  attributeNamePrefix: '@_',
+	  attributesGroupName: false,
+	  textNodeName: '#text',
+	  ignoreAttributes: true,
+	  cdataPropName: false,
+	  format: false,
+	  indentBy: '  ',
+	  suppressEmptyNode: false,
+	  suppressUnpairedNode: true,
+	  suppressBooleanAttributes: true,
+	  tagValueProcessor: function(key, a) {
+	    return a;
+	  },
+	  attributeValueProcessor: function(attrName, a) {
+	    return a;
+	  },
+	  preserveOrder: false,
+	  commentPropName: false,
+	  unpairedTags: [],
+	  entities: [
+	    { regex: new RegExp("&", "g"), val: "&amp;" },//it must be on top
+	    { regex: new RegExp(">", "g"), val: "&gt;" },
+	    { regex: new RegExp("<", "g"), val: "&lt;" },
+	    { regex: new RegExp("\'", "g"), val: "&apos;" },
+	    { regex: new RegExp("\"", "g"), val: "&quot;" }
+	  ],
+	  processEntities: true,
+	  stopNodes: [],
+	  // transformTagName: false,
+	  // transformAttributeName: false,
+	  oneListGroup: false
+	};
+
+	function Builder(options) {
+	  this.options = Object.assign({}, defaultOptions, options);
+	  if (this.options.ignoreAttributes === true || this.options.attributesGroupName) {
+	    this.isAttribute = function(/*a*/) {
+	      return false;
+	    };
+	  } else {
+	    this.ignoreAttributesFn = getIgnoreAttributesFn(this.options.ignoreAttributes);
+	    this.attrPrefixLen = this.options.attributeNamePrefix.length;
+	    this.isAttribute = isAttribute;
+	  }
+
+	  this.processTextOrObjNode = processTextOrObjNode;
+
+	  if (this.options.format) {
+	    this.indentate = indentate;
+	    this.tagEndChar = '>\n';
+	    this.newLine = '\n';
+	  } else {
+	    this.indentate = function() {
+	      return '';
+	    };
+	    this.tagEndChar = '>';
+	    this.newLine = '';
+	  }
+	}
+
+	Builder.prototype.build = function(jObj) {
+	  if(this.options.preserveOrder){
+	    return buildFromOrderedJs(jObj, this.options);
+	  }else {
+	    if(Array.isArray(jObj) && this.options.arrayNodeName && this.options.arrayNodeName.length > 1){
+	      jObj = {
+	        [this.options.arrayNodeName] : jObj
+	      };
+	    }
+	    return this.j2x(jObj, 0, []).val;
+	  }
+	};
+
+	Builder.prototype.j2x = function(jObj, level, ajPath) {
+	  let attrStr = '';
+	  let val = '';
+	  const jPath = ajPath.join('.');
+	  for (let key in jObj) {
+	    if(!Object.prototype.hasOwnProperty.call(jObj, key)) continue;
+	    if (typeof jObj[key] === 'undefined') {
+	      // supress undefined node only if it is not an attribute
+	      if (this.isAttribute(key)) {
+	        val += '';
+	      }
+	    } else if (jObj[key] === null) {
+	      // null attribute should be ignored by the attribute list, but should not cause the tag closing
+	      if (this.isAttribute(key)) {
+	        val += '';
+	      } else if (key === this.options.cdataPropName) {
+	        val += '';
+	      } else if (key[0] === '?') {
+	        val += this.indentate(level) + '<' + key + '?' + this.tagEndChar;
+	      } else {
+	        val += this.indentate(level) + '<' + key + '/' + this.tagEndChar;
+	      }
+	      // val += this.indentate(level) + '<' + key + '/' + this.tagEndChar;
+	    } else if (jObj[key] instanceof Date) {
+	      val += this.buildTextValNode(jObj[key], key, '', level);
+	    } else if (typeof jObj[key] !== 'object') {
+	      //premitive type
+	      const attr = this.isAttribute(key);
+	      if (attr && !this.ignoreAttributesFn(attr, jPath)) {
+	        attrStr += this.buildAttrPairStr(attr, '' + jObj[key]);
+	      } else if (!attr) {
+	        //tag value
+	        if (key === this.options.textNodeName) {
+	          let newval = this.options.tagValueProcessor(key, '' + jObj[key]);
+	          val += this.replaceEntitiesValue(newval);
+	        } else {
+	          val += this.buildTextValNode(jObj[key], key, '', level);
+	        }
+	      }
+	    } else if (Array.isArray(jObj[key])) {
+	      //repeated nodes
+	      const arrLen = jObj[key].length;
+	      let listTagVal = "";
+	      let listTagAttr = "";
+	      for (let j = 0; j < arrLen; j++) {
+	        const item = jObj[key][j];
+	        if (typeof item === 'undefined') ; else if (item === null) {
+	          if(key[0] === "?") val += this.indentate(level) + '<' + key + '?' + this.tagEndChar;
+	          else val += this.indentate(level) + '<' + key + '/' + this.tagEndChar;
+	          // val += this.indentate(level) + '<' + key + '/' + this.tagEndChar;
+	        } else if (typeof item === 'object') {
+	          if(this.options.oneListGroup){
+	            const result = this.j2x(item, level + 1, ajPath.concat(key));
+	            listTagVal += result.val;
+	            if (this.options.attributesGroupName && item.hasOwnProperty(this.options.attributesGroupName)) {
+	              listTagAttr += result.attrStr;
+	            }
+	          }else {
+	            listTagVal += this.processTextOrObjNode(item, key, level, ajPath);
+	          }
+	        } else {
+	          if (this.options.oneListGroup) {
+	            let textValue = this.options.tagValueProcessor(key, item);
+	            textValue = this.replaceEntitiesValue(textValue);
+	            listTagVal += textValue;
+	          } else {
+	            listTagVal += this.buildTextValNode(item, key, '', level);
+	          }
+	        }
+	      }
+	      if(this.options.oneListGroup){
+	        listTagVal = this.buildObjectNode(listTagVal, key, listTagAttr, level);
+	      }
+	      val += listTagVal;
+	    } else {
+	      //nested node
+	      if (this.options.attributesGroupName && key === this.options.attributesGroupName) {
+	        const Ks = Object.keys(jObj[key]);
+	        const L = Ks.length;
+	        for (let j = 0; j < L; j++) {
+	          attrStr += this.buildAttrPairStr(Ks[j], '' + jObj[key][Ks[j]]);
+	        }
+	      } else {
+	        val += this.processTextOrObjNode(jObj[key], key, level, ajPath);
+	      }
+	    }
+	  }
+	  return {attrStr: attrStr, val: val};
+	};
+
+	Builder.prototype.buildAttrPairStr = function(attrName, val){
+	  val = this.options.attributeValueProcessor(attrName, '' + val);
+	  val = this.replaceEntitiesValue(val);
+	  if (this.options.suppressBooleanAttributes && val === "true") {
+	    return ' ' + attrName;
+	  } else return ' ' + attrName + '="' + val + '"';
+	};
+
+	function processTextOrObjNode (object, key, level, ajPath) {
+	  const result = this.j2x(object, level + 1, ajPath.concat(key));
+	  if (object[this.options.textNodeName] !== undefined && Object.keys(object).length === 1) {
+	    return this.buildTextValNode(object[this.options.textNodeName], key, result.attrStr, level);
+	  } else {
+	    return this.buildObjectNode(result.val, key, result.attrStr, level);
+	  }
+	}
+
+	Builder.prototype.buildObjectNode = function(val, key, attrStr, level) {
+	  if(val === ""){
+	    if(key[0] === "?") return  this.indentate(level) + '<' + key + attrStr+ '?' + this.tagEndChar;
+	    else {
+	      return this.indentate(level) + '<' + key + attrStr + this.closeTag(key) + this.tagEndChar;
+	    }
+	  }else {
+
+	    let tagEndExp = '</' + key + this.tagEndChar;
+	    let piClosingChar = "";
+	    
+	    if(key[0] === "?") {
+	      piClosingChar = "?";
+	      tagEndExp = "";
+	    }
+	  
+	    // attrStr is an empty string in case the attribute came as undefined or null
+	    if ((attrStr || attrStr === '') && val.indexOf('<') === -1) {
+	      return ( this.indentate(level) + '<' +  key + attrStr + piClosingChar + '>' + val + tagEndExp );
+	    } else if (this.options.commentPropName !== false && key === this.options.commentPropName && piClosingChar.length === 0) {
+	      return this.indentate(level) + `<!--${val}-->` + this.newLine;
+	    }else {
+	      return (
+	        this.indentate(level) + '<' + key + attrStr + piClosingChar + this.tagEndChar +
+	        val +
+	        this.indentate(level) + tagEndExp    );
+	    }
+	  }
+	};
+
+	Builder.prototype.closeTag = function(key){
+	  let closeTag = "";
+	  if(this.options.unpairedTags.indexOf(key) !== -1){ //unpaired
+	    if(!this.options.suppressUnpairedNode) closeTag = "/";
+	  }else if(this.options.suppressEmptyNode){ //empty
+	    closeTag = "/";
+	  }else {
+	    closeTag = `></${key}`;
+	  }
+	  return closeTag;
+	};
+
+	Builder.prototype.buildTextValNode = function(val, key, attrStr, level) {
+	  if (this.options.cdataPropName !== false && key === this.options.cdataPropName) {
+	    return this.indentate(level) + `<![CDATA[${val}]]>` +  this.newLine;
+	  }else if (this.options.commentPropName !== false && key === this.options.commentPropName) {
+	    return this.indentate(level) + `<!--${val}-->` +  this.newLine;
+	  }else if(key[0] === "?") {//PI tag
+	    return  this.indentate(level) + '<' + key + attrStr+ '?' + this.tagEndChar; 
+	  }else {
+	    let textValue = this.options.tagValueProcessor(key, val);
+	    textValue = this.replaceEntitiesValue(textValue);
+	  
+	    if( textValue === ''){
+	      return this.indentate(level) + '<' + key + attrStr + this.closeTag(key) + this.tagEndChar;
+	    }else {
+	      return this.indentate(level) + '<' + key + attrStr + '>' +
+	         textValue +
+	        '</' + key + this.tagEndChar;
+	    }
+	  }
+	};
+
+	Builder.prototype.replaceEntitiesValue = function(textValue){
+	  if(textValue && textValue.length > 0 && this.options.processEntities){
+	    for (let i=0; i<this.options.entities.length; i++) {
+	      const entity = this.options.entities[i];
+	      textValue = textValue.replace(entity.regex, entity.val);
+	    }
+	  }
+	  return textValue;
+	};
+
+	function indentate(level) {
+	  return this.options.indentBy.repeat(level);
+	}
+
+	function isAttribute(name /*, options*/) {
+	  if (name.startsWith(this.options.attributeNamePrefix) && name !== this.options.textNodeName) {
+	    return name.substr(this.attrPrefixLen);
+	  } else {
+	    return false;
+	  }
+	}
+
+	json2xml = Builder;
+	return json2xml;
+}
+
+var fxp;
+var hasRequiredFxp;
+
+function requireFxp () {
+	if (hasRequiredFxp) return fxp;
+	hasRequiredFxp = 1;
+
+	const validator = requireValidator();
+	const XMLParser = requireXMLParser();
+	const XMLBuilder = requireJson2xml();
+
+	fxp = {
+	  XMLParser: XMLParser,
+	  XMLValidator: validator,
+	  XMLBuilder: XMLBuilder
+	};
+	return fxp;
+}
+
+var fxpExports = requireFxp();
+
+const ALIAS = Symbol.for('yaml.alias');
+const DOC = Symbol.for('yaml.document');
+const MAP = Symbol.for('yaml.map');
+const PAIR = Symbol.for('yaml.pair');
+const SCALAR = Symbol.for('yaml.scalar');
+const SEQ = Symbol.for('yaml.seq');
+const NODE_TYPE = Symbol.for('yaml.node.type');
+const isAlias = (node) => !!node && typeof node === 'object' && node[NODE_TYPE] === ALIAS;
+const isDocument = (node) => !!node && typeof node === 'object' && node[NODE_TYPE] === DOC;
+const isMap = (node) => !!node && typeof node === 'object' && node[NODE_TYPE] === MAP;
+const isPair = (node) => !!node && typeof node === 'object' && node[NODE_TYPE] === PAIR;
+const isScalar = (node) => !!node && typeof node === 'object' && node[NODE_TYPE] === SCALAR;
+const isSeq = (node) => !!node && typeof node === 'object' && node[NODE_TYPE] === SEQ;
+function isCollection(node) {
+    if (node && typeof node === 'object')
+        switch (node[NODE_TYPE]) {
+            case MAP:
+            case SEQ:
+                return true;
         }
-        begs = [];
-        left = str.length;
-        while (i >= 0 && !result) {
-            if (i === ai) {
-                begs.push(i);
-                ai = str.indexOf(a, i + 1);
-            }
-            else if (begs.length === 1) {
-                const r = begs.pop();
-                if (r !== undefined)
-                    result = [r, bi];
-            }
-            else {
-                beg = begs.pop();
-                if (beg !== undefined && beg < left) {
-                    left = beg;
-                    right = bi;
+    return false;
+}
+function isNode(node) {
+    if (node && typeof node === 'object')
+        switch (node[NODE_TYPE]) {
+            case ALIAS:
+            case MAP:
+            case SCALAR:
+            case SEQ:
+                return true;
+        }
+    return false;
+}
+const hasAnchor = (node) => (isScalar(node) || isCollection(node)) && !!node.anchor;
+
+const BREAK = Symbol('break visit');
+const SKIP = Symbol('skip children');
+const REMOVE = Symbol('remove node');
+/**
+ * Apply a visitor to an AST node or document.
+ *
+ * Walks through the tree (depth-first) starting from `node`, calling a
+ * `visitor` function with three arguments:
+ *   - `key`: For sequence values and map `Pair`, the node's index in the
+ *     collection. Within a `Pair`, `'key'` or `'value'`, correspondingly.
+ *     `null` for the root node.
+ *   - `node`: The current node.
+ *   - `path`: The ancestry of the current node.
+ *
+ * The return value of the visitor may be used to control the traversal:
+ *   - `undefined` (default): Do nothing and continue
+ *   - `visit.SKIP`: Do not visit the children of this node, continue with next
+ *     sibling
+ *   - `visit.BREAK`: Terminate traversal completely
+ *   - `visit.REMOVE`: Remove the current node, then continue with the next one
+ *   - `Node`: Replace the current node, then continue by visiting it
+ *   - `number`: While iterating the items of a sequence or map, set the index
+ *     of the next step. This is useful especially if the index of the current
+ *     node has changed.
+ *
+ * If `visitor` is a single function, it will be called with all values
+ * encountered in the tree, including e.g. `null` values. Alternatively,
+ * separate visitor functions may be defined for each `Map`, `Pair`, `Seq`,
+ * `Alias` and `Scalar` node. To define the same visitor function for more than
+ * one node type, use the `Collection` (map and seq), `Value` (map, seq & scalar)
+ * and `Node` (alias, map, seq & scalar) targets. Of all these, only the most
+ * specific defined one will be used for each node.
+ */
+function visit(node, visitor) {
+    const visitor_ = initVisitor(visitor);
+    if (isDocument(node)) {
+        const cd = visit_(null, node.contents, visitor_, Object.freeze([node]));
+        if (cd === REMOVE)
+            node.contents = null;
+    }
+    else
+        visit_(null, node, visitor_, Object.freeze([]));
+}
+// Without the `as symbol` casts, TS declares these in the `visit`
+// namespace using `var`, but then complains about that because
+// `unique symbol` must be `const`.
+/** Terminate visit traversal completely */
+visit.BREAK = BREAK;
+/** Do not visit the children of the current node */
+visit.SKIP = SKIP;
+/** Remove the current node */
+visit.REMOVE = REMOVE;
+function visit_(key, node, visitor, path) {
+    const ctrl = callVisitor(key, node, visitor, path);
+    if (isNode(ctrl) || isPair(ctrl)) {
+        replaceNode(key, path, ctrl);
+        return visit_(key, ctrl, visitor, path);
+    }
+    if (typeof ctrl !== 'symbol') {
+        if (isCollection(node)) {
+            path = Object.freeze(path.concat(node));
+            for (let i = 0; i < node.items.length; ++i) {
+                const ci = visit_(i, node.items[i], visitor, path);
+                if (typeof ci === 'number')
+                    i = ci - 1;
+                else if (ci === BREAK)
+                    return BREAK;
+                else if (ci === REMOVE) {
+                    node.items.splice(i, 1);
+                    i -= 1;
                 }
-                bi = str.indexOf(b, i + 1);
             }
-            i = ai < bi && ai >= 0 ? ai : bi;
         }
-        if (begs.length && right !== undefined) {
-            result = [left, right];
+        else if (isPair(node)) {
+            path = Object.freeze(path.concat(node));
+            const ck = visit_('key', node.key, visitor, path);
+            if (ck === BREAK)
+                return BREAK;
+            else if (ck === REMOVE)
+                node.key = null;
+            const cv = visit_('value', node.value, visitor, path);
+            if (cv === BREAK)
+                return BREAK;
+            else if (cv === REMOVE)
+                node.value = null;
         }
     }
-    return result;
-};
+    return ctrl;
+}
+function initVisitor(visitor) {
+    if (typeof visitor === 'object' &&
+        (visitor.Collection || visitor.Node || visitor.Value)) {
+        return Object.assign({
+            Alias: visitor.Node,
+            Map: visitor.Node,
+            Scalar: visitor.Node,
+            Seq: visitor.Node
+        }, visitor.Value && {
+            Map: visitor.Value,
+            Scalar: visitor.Value,
+            Seq: visitor.Value
+        }, visitor.Collection && {
+            Map: visitor.Collection,
+            Seq: visitor.Collection
+        }, visitor);
+    }
+    return visitor;
+}
+function callVisitor(key, node, visitor, path) {
+    if (typeof visitor === 'function')
+        return visitor(key, node, path);
+    if (isMap(node))
+        return visitor.Map?.(key, node, path);
+    if (isSeq(node))
+        return visitor.Seq?.(key, node, path);
+    if (isPair(node))
+        return visitor.Pair?.(key, node, path);
+    if (isScalar(node))
+        return visitor.Scalar?.(key, node, path);
+    if (isAlias(node))
+        return visitor.Alias?.(key, node, path);
+    return undefined;
+}
+function replaceNode(key, path, node) {
+    const parent = path[path.length - 1];
+    if (isCollection(parent)) {
+        parent.items[key] = node;
+    }
+    else if (isPair(parent)) {
+        if (key === 'key')
+            parent.key = node;
+        else
+            parent.value = node;
+    }
+    else if (isDocument(parent)) {
+        parent.contents = node;
+    }
+    else {
+        const pt = isAlias(parent) ? 'alias' : 'scalar';
+        throw new Error(`Cannot replace node with ${pt} parent`);
+    }
+}
 
-const escSlash = '\0SLASH' + Math.random() + '\0';
-const escOpen = '\0OPEN' + Math.random() + '\0';
-const escClose = '\0CLOSE' + Math.random() + '\0';
-const escComma = '\0COMMA' + Math.random() + '\0';
-const escPeriod = '\0PERIOD' + Math.random() + '\0';
-const escSlashPattern = new RegExp(escSlash, 'g');
-const escOpenPattern = new RegExp(escOpen, 'g');
-const escClosePattern = new RegExp(escClose, 'g');
-const escCommaPattern = new RegExp(escComma, 'g');
-const escPeriodPattern = new RegExp(escPeriod, 'g');
-const slashPattern = /\\\\/g;
-const openPattern = /\\{/g;
-const closePattern = /\\}/g;
-const commaPattern = /\\,/g;
-const periodPattern = /\\./g;
-function numeric(str) {
-    return !isNaN(str) ? parseInt(str, 10) : str.charCodeAt(0);
+const escapeChars = {
+    '!': '%21',
+    ',': '%2C',
+    '[': '%5B',
+    ']': '%5D',
+    '{': '%7B',
+    '}': '%7D'
+};
+const escapeTagName = (tn) => tn.replace(/[!,[\]{}]/g, ch => escapeChars[ch]);
+class Directives {
+    constructor(yaml, tags) {
+        /**
+         * The directives-end/doc-start marker `---`. If `null`, a marker may still be
+         * included in the document's stringified representation.
+         */
+        this.docStart = null;
+        /** The doc-end marker `...`.  */
+        this.docEnd = false;
+        this.yaml = Object.assign({}, Directives.defaultYaml, yaml);
+        this.tags = Object.assign({}, Directives.defaultTags, tags);
+    }
+    clone() {
+        const copy = new Directives(this.yaml, this.tags);
+        copy.docStart = this.docStart;
+        return copy;
+    }
+    /**
+     * During parsing, get a Directives instance for the current document and
+     * update the stream state according to the current version's spec.
+     */
+    atDocument() {
+        const res = new Directives(this.yaml, this.tags);
+        switch (this.yaml.version) {
+            case '1.1':
+                this.atNextDocument = true;
+                break;
+            case '1.2':
+                this.atNextDocument = false;
+                this.yaml = {
+                    explicit: Directives.defaultYaml.explicit,
+                    version: '1.2'
+                };
+                this.tags = Object.assign({}, Directives.defaultTags);
+                break;
+        }
+        return res;
+    }
+    /**
+     * @param onError - May be called even if the action was successful
+     * @returns `true` on success
+     */
+    add(line, onError) {
+        if (this.atNextDocument) {
+            this.yaml = { explicit: Directives.defaultYaml.explicit, version: '1.1' };
+            this.tags = Object.assign({}, Directives.defaultTags);
+            this.atNextDocument = false;
+        }
+        const parts = line.trim().split(/[ \t]+/);
+        const name = parts.shift();
+        switch (name) {
+            case '%TAG': {
+                if (parts.length !== 2) {
+                    onError(0, '%TAG directive should contain exactly two parts');
+                    if (parts.length < 2)
+                        return false;
+                }
+                const [handle, prefix] = parts;
+                this.tags[handle] = prefix;
+                return true;
+            }
+            case '%YAML': {
+                this.yaml.explicit = true;
+                if (parts.length !== 1) {
+                    onError(0, '%YAML directive should contain exactly one part');
+                    return false;
+                }
+                const [version] = parts;
+                if (version === '1.1' || version === '1.2') {
+                    this.yaml.version = version;
+                    return true;
+                }
+                else {
+                    const isValid = /^\d+\.\d+$/.test(version);
+                    onError(6, `Unsupported YAML version ${version}`, isValid);
+                    return false;
+                }
+            }
+            default:
+                onError(0, `Unknown directive ${name}`, true);
+                return false;
+        }
+    }
+    /**
+     * Resolves a tag, matching handles to those defined in %TAG directives.
+     *
+     * @returns Resolved tag, which may also be the non-specific tag `'!'` or a
+     *   `'!local'` tag, or `null` if unresolvable.
+     */
+    tagName(source, onError) {
+        if (source === '!')
+            return '!'; // non-specific tag
+        if (source[0] !== '!') {
+            onError(`Not a valid tag: ${source}`);
+            return null;
+        }
+        if (source[1] === '<') {
+            const verbatim = source.slice(2, -1);
+            if (verbatim === '!' || verbatim === '!!') {
+                onError(`Verbatim tags aren't resolved, so ${source} is invalid.`);
+                return null;
+            }
+            if (source[source.length - 1] !== '>')
+                onError('Verbatim tags must end with a >');
+            return verbatim;
+        }
+        const [, handle, suffix] = source.match(/^(.*!)([^!]*)$/s);
+        if (!suffix)
+            onError(`The ${source} tag has no suffix`);
+        const prefix = this.tags[handle];
+        if (prefix) {
+            try {
+                return prefix + decodeURIComponent(suffix);
+            }
+            catch (error) {
+                onError(String(error));
+                return null;
+            }
+        }
+        if (handle === '!')
+            return source; // local tag
+        onError(`Could not resolve tag: ${source}`);
+        return null;
+    }
+    /**
+     * Given a fully resolved tag, returns its printable string form,
+     * taking into account current tag prefixes and defaults.
+     */
+    tagString(tag) {
+        for (const [handle, prefix] of Object.entries(this.tags)) {
+            if (tag.startsWith(prefix))
+                return handle + escapeTagName(tag.substring(prefix.length));
+        }
+        return tag[0] === '!' ? tag : `!<${tag}>`;
+    }
+    toString(doc) {
+        const lines = this.yaml.explicit
+            ? [`%YAML ${this.yaml.version || '1.2'}`]
+            : [];
+        const tagEntries = Object.entries(this.tags);
+        let tagNames;
+        if (doc && tagEntries.length > 0 && isNode(doc.contents)) {
+            const tags = {};
+            visit(doc.contents, (_key, node) => {
+                if (isNode(node) && node.tag)
+                    tags[node.tag] = true;
+            });
+            tagNames = Object.keys(tags);
+        }
+        else
+            tagNames = [];
+        for (const [handle, prefix] of tagEntries) {
+            if (handle === '!!' && prefix === 'tag:yaml.org,2002:')
+                continue;
+            if (!doc || tagNames.some(tn => tn.startsWith(prefix)))
+                lines.push(`%TAG ${handle} ${prefix}`);
+        }
+        return lines.join('\n');
+    }
 }
-function escapeBraces(str) {
-    return str
-        .replace(slashPattern, escSlash)
-        .replace(openPattern, escOpen)
-        .replace(closePattern, escClose)
-        .replace(commaPattern, escComma)
-        .replace(periodPattern, escPeriod);
+Directives.defaultYaml = { explicit: false, version: '1.2' };
+Directives.defaultTags = { '!!': 'tag:yaml.org,2002:' };
+
+/**
+ * Verify that the input string is a valid anchor.
+ *
+ * Will throw on errors.
+ */
+function anchorIsValid(anchor) {
+    if (/[\x00-\x19\s,[\]{}]/.test(anchor)) {
+        const sa = JSON.stringify(anchor);
+        const msg = `Anchor must not contain whitespace or control characters: ${sa}`;
+        throw new Error(msg);
+    }
+    return true;
 }
-function unescapeBraces(str) {
-    return str
-        .replace(escSlashPattern, '\\')
-        .replace(escOpenPattern, '{')
-        .replace(escClosePattern, '}')
-        .replace(escCommaPattern, ',')
-        .replace(escPeriodPattern, '.');
+function anchorNames(root) {
+    const anchors = new Set();
+    visit(root, {
+        Value(_key, node) {
+            if (node.anchor)
+                anchors.add(node.anchor);
+        }
+    });
+    return anchors;
+}
+/** Find a new anchor name with the given `prefix` and a one-indexed suffix. */
+function findNewAnchor(prefix, exclude) {
+    for (let i = 1; true; ++i) {
+        const name = `${prefix}${i}`;
+        if (!exclude.has(name))
+            return name;
+    }
+}
+function createNodeAnchors(doc, prefix) {
+    const aliasObjects = [];
+    const sourceObjects = new Map();
+    let prevAnchors = null;
+    return {
+        onAnchor: (source) => {
+            aliasObjects.push(source);
+            prevAnchors ?? (prevAnchors = anchorNames(doc));
+            const anchor = findNewAnchor(prefix, prevAnchors);
+            prevAnchors.add(anchor);
+            return anchor;
+        },
+        /**
+         * With circular references, the source node is only resolved after all
+         * of its child nodes are. This is why anchors are set only after all of
+         * the nodes have been created.
+         */
+        setAnchors: () => {
+            for (const source of aliasObjects) {
+                const ref = sourceObjects.get(source);
+                if (typeof ref === 'object' &&
+                    ref.anchor &&
+                    (isScalar(ref.node) || isCollection(ref.node))) {
+                    ref.node.anchor = ref.anchor;
+                }
+                else {
+                    const error = new Error('Failed to resolve repeated object (this should not happen)');
+                    error.source = source;
+                    throw error;
+                }
+            }
+        },
+        sourceObjects
+    };
+}
+
+/**
+ * Applies the JSON.parse reviver algorithm as defined in the ECMA-262 spec,
+ * in section 24.5.1.1 "Runtime Semantics: InternalizeJSONProperty" of the
+ * 2021 edition: https://tc39.es/ecma262/#sec-json.parse
+ *
+ * Includes extensions for handling Map and Set objects.
+ */
+function applyReviver(reviver, obj, key, val) {
+    if (val && typeof val === 'object') {
+        if (Array.isArray(val)) {
+            for (let i = 0, len = val.length; i < len; ++i) {
+                const v0 = val[i];
+                const v1 = applyReviver(reviver, val, String(i), v0);
+                // eslint-disable-next-line @typescript-eslint/no-array-delete
+                if (v1 === undefined)
+                    delete val[i];
+                else if (v1 !== v0)
+                    val[i] = v1;
+            }
+        }
+        else if (val instanceof Map) {
+            for (const k of Array.from(val.keys())) {
+                const v0 = val.get(k);
+                const v1 = applyReviver(reviver, val, k, v0);
+                if (v1 === undefined)
+                    val.delete(k);
+                else if (v1 !== v0)
+                    val.set(k, v1);
+            }
+        }
+        else if (val instanceof Set) {
+            for (const v0 of Array.from(val)) {
+                const v1 = applyReviver(reviver, val, v0, v0);
+                if (v1 === undefined)
+                    val.delete(v0);
+                else if (v1 !== v0) {
+                    val.delete(v0);
+                    val.add(v1);
+                }
+            }
+        }
+        else {
+            for (const [k, v0] of Object.entries(val)) {
+                const v1 = applyReviver(reviver, val, k, v0);
+                if (v1 === undefined)
+                    delete val[k];
+                else if (v1 !== v0)
+                    val[k] = v1;
+            }
+        }
+    }
+    return reviver.call(obj, key, val);
+}
+
+/**
+ * Recursively convert any node or its contents to native JavaScript
+ *
+ * @param value - The input value
+ * @param arg - If `value` defines a `toJSON()` method, use this
+ *   as its first argument
+ * @param ctx - Conversion context, originally set in Document#toJS(). If
+ *   `{ keep: true }` is not set, output should be suitable for JSON
+ *   stringification.
+ */
+function toJS(value, arg, ctx) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    if (Array.isArray(value))
+        return value.map((v, i) => toJS(v, String(i), ctx));
+    if (value && typeof value.toJSON === 'function') {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+        if (!ctx || !hasAnchor(value))
+            return value.toJSON(arg, ctx);
+        const data = { aliasCount: 0, count: 1, res: undefined };
+        ctx.anchors.set(value, data);
+        ctx.onCreate = res => {
+            data.res = res;
+            delete ctx.onCreate;
+        };
+        const res = value.toJSON(arg, ctx);
+        if (ctx.onCreate)
+            ctx.onCreate(res);
+        return res;
+    }
+    if (typeof value === 'bigint' && !ctx?.keep)
+        return Number(value);
+    return value;
+}
+
+class NodeBase {
+    constructor(type) {
+        Object.defineProperty(this, NODE_TYPE, { value: type });
+    }
+    /** Create a copy of this node.  */
+    clone() {
+        const copy = Object.create(Object.getPrototypeOf(this), Object.getOwnPropertyDescriptors(this));
+        if (this.range)
+            copy.range = this.range.slice();
+        return copy;
+    }
+    /** A plain JavaScript representation of this node. */
+    toJS(doc, { mapAsMap, maxAliasCount, onAnchor, reviver } = {}) {
+        if (!isDocument(doc))
+            throw new TypeError('A document argument is required');
+        const ctx = {
+            anchors: new Map(),
+            doc,
+            keep: true,
+            mapAsMap: mapAsMap === true,
+            mapKeyWarned: false,
+            maxAliasCount: typeof maxAliasCount === 'number' ? maxAliasCount : 100
+        };
+        const res = toJS(this, '', ctx);
+        if (typeof onAnchor === 'function')
+            for (const { count, res } of ctx.anchors.values())
+                onAnchor(res, count);
+        return typeof reviver === 'function'
+            ? applyReviver(reviver, { '': res }, '', res)
+            : res;
+    }
+}
+
+class Alias extends NodeBase {
+    constructor(source) {
+        super(ALIAS);
+        this.source = source;
+        Object.defineProperty(this, 'tag', {
+            set() {
+                throw new Error('Alias nodes cannot have tags');
+            }
+        });
+    }
+    /**
+     * Resolve the value of this alias within `doc`, finding the last
+     * instance of the `source` anchor before this node.
+     */
+    resolve(doc, ctx) {
+        let nodes;
+        if (ctx?.aliasResolveCache) {
+            nodes = ctx.aliasResolveCache;
+        }
+        else {
+            nodes = [];
+            visit(doc, {
+                Node: (_key, node) => {
+                    if (isAlias(node) || hasAnchor(node))
+                        nodes.push(node);
+                }
+            });
+            if (ctx)
+                ctx.aliasResolveCache = nodes;
+        }
+        let found = undefined;
+        for (const node of nodes) {
+            if (node === this)
+                break;
+            if (node.anchor === this.source)
+                found = node;
+        }
+        return found;
+    }
+    toJSON(_arg, ctx) {
+        if (!ctx)
+            return { source: this.source };
+        const { anchors, doc, maxAliasCount } = ctx;
+        const source = this.resolve(doc, ctx);
+        if (!source) {
+            const msg = `Unresolved alias (the anchor must be set before the alias): ${this.source}`;
+            throw new ReferenceError(msg);
+        }
+        let data = anchors.get(source);
+        if (!data) {
+            // Resolve anchors for Node.prototype.toJS()
+            toJS(source, null, ctx);
+            data = anchors.get(source);
+        }
+        /* istanbul ignore if */
+        if (data?.res === undefined) {
+            const msg = 'This should not happen: Alias anchor was not resolved?';
+            throw new ReferenceError(msg);
+        }
+        if (maxAliasCount >= 0) {
+            data.count += 1;
+            if (data.aliasCount === 0)
+                data.aliasCount = getAliasCount(doc, source, anchors);
+            if (data.count * data.aliasCount > maxAliasCount) {
+                const msg = 'Excessive alias count indicates a resource exhaustion attack';
+                throw new ReferenceError(msg);
+            }
+        }
+        return data.res;
+    }
+    toString(ctx, _onComment, _onChompKeep) {
+        const src = `*${this.source}`;
+        if (ctx) {
+            anchorIsValid(this.source);
+            if (ctx.options.verifyAliasOrder && !ctx.anchors.has(this.source)) {
+                const msg = `Unresolved alias (the anchor must be set before the alias): ${this.source}`;
+                throw new Error(msg);
+            }
+            if (ctx.implicitKey)
+                return `${src} `;
+        }
+        return src;
+    }
+}
+function getAliasCount(doc, node, anchors) {
+    if (isAlias(node)) {
+        const source = node.resolve(doc);
+        const anchor = anchors && source && anchors.get(source);
+        return anchor ? anchor.count * anchor.aliasCount : 0;
+    }
+    else if (isCollection(node)) {
+        let count = 0;
+        for (const item of node.items) {
+            const c = getAliasCount(doc, item, anchors);
+            if (c > count)
+                count = c;
+        }
+        return count;
+    }
+    else if (isPair(node)) {
+        const kc = getAliasCount(doc, node.key, anchors);
+        const vc = getAliasCount(doc, node.value, anchors);
+        return Math.max(kc, vc);
+    }
+    return 1;
+}
+
+const isScalarValue = (value) => !value || (typeof value !== 'function' && typeof value !== 'object');
+class Scalar extends NodeBase {
+    constructor(value) {
+        super(SCALAR);
+        this.value = value;
+    }
+    toJSON(arg, ctx) {
+        return ctx?.keep ? this.value : toJS(this.value, arg, ctx);
+    }
+    toString() {
+        return String(this.value);
+    }
+}
+Scalar.BLOCK_FOLDED = 'BLOCK_FOLDED';
+Scalar.BLOCK_LITERAL = 'BLOCK_LITERAL';
+Scalar.PLAIN = 'PLAIN';
+Scalar.QUOTE_DOUBLE = 'QUOTE_DOUBLE';
+Scalar.QUOTE_SINGLE = 'QUOTE_SINGLE';
+
+const defaultTagPrefix = 'tag:yaml.org,2002:';
+function findTagObject(value, tagName, tags) {
+    if (tagName) {
+        const match = tags.filter(t => t.tag === tagName);
+        const tagObj = match.find(t => !t.format) ?? match[0];
+        if (!tagObj)
+            throw new Error(`Tag ${tagName} not found`);
+        return tagObj;
+    }
+    return tags.find(t => t.identify?.(value) && !t.format);
+}
+function createNode(value, tagName, ctx) {
+    if (isDocument(value))
+        value = value.contents;
+    if (isNode(value))
+        return value;
+    if (isPair(value)) {
+        const map = ctx.schema[MAP].createNode?.(ctx.schema, null, ctx);
+        map.items.push(value);
+        return map;
+    }
+    if (value instanceof String ||
+        value instanceof Number ||
+        value instanceof Boolean ||
+        (typeof BigInt !== 'undefined' && value instanceof BigInt) // not supported everywhere
+    ) {
+        // https://tc39.es/ecma262/#sec-serializejsonproperty
+        value = value.valueOf();
+    }
+    const { aliasDuplicateObjects, onAnchor, onTagObj, schema, sourceObjects } = ctx;
+    // Detect duplicate references to the same object & use Alias nodes for all
+    // after first. The `ref` wrapper allows for circular references to resolve.
+    let ref = undefined;
+    if (aliasDuplicateObjects && value && typeof value === 'object') {
+        ref = sourceObjects.get(value);
+        if (ref) {
+            ref.anchor ?? (ref.anchor = onAnchor(value));
+            return new Alias(ref.anchor);
+        }
+        else {
+            ref = { anchor: null, node: null };
+            sourceObjects.set(value, ref);
+        }
+    }
+    if (tagName?.startsWith('!!'))
+        tagName = defaultTagPrefix + tagName.slice(2);
+    let tagObj = findTagObject(value, tagName, schema.tags);
+    if (!tagObj) {
+        if (value && typeof value.toJSON === 'function') {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+            value = value.toJSON();
+        }
+        if (!value || typeof value !== 'object') {
+            const node = new Scalar(value);
+            if (ref)
+                ref.node = node;
+            return node;
+        }
+        tagObj =
+            value instanceof Map
+                ? schema[MAP]
+                : Symbol.iterator in Object(value)
+                    ? schema[SEQ]
+                    : schema[MAP];
+    }
+    if (onTagObj) {
+        onTagObj(tagObj);
+        delete ctx.onTagObj;
+    }
+    const node = tagObj?.createNode
+        ? tagObj.createNode(ctx.schema, value, ctx)
+        : typeof tagObj?.nodeClass?.from === 'function'
+            ? tagObj.nodeClass.from(ctx.schema, value, ctx)
+            : new Scalar(value);
+    if (tagName)
+        node.tag = tagName;
+    else if (!tagObj.default)
+        node.tag = tagObj.tag;
+    if (ref)
+        ref.node = node;
+    return node;
+}
+
+function collectionFromPath(schema, path, value) {
+    let v = value;
+    for (let i = path.length - 1; i >= 0; --i) {
+        const k = path[i];
+        if (typeof k === 'number' && Number.isInteger(k) && k >= 0) {
+            const a = [];
+            a[k] = v;
+            v = a;
+        }
+        else {
+            v = new Map([[k, v]]);
+        }
+    }
+    return createNode(v, undefined, {
+        aliasDuplicateObjects: false,
+        keepUndefined: false,
+        onAnchor: () => {
+            throw new Error('This should not happen, please report a bug.');
+        },
+        schema,
+        sourceObjects: new Map()
+    });
+}
+// Type guard is intentionally a little wrong so as to be more useful,
+// as it does not cover untypable empty non-string iterables (e.g. []).
+const isEmptyPath = (path) => path == null ||
+    (typeof path === 'object' && !!path[Symbol.iterator]().next().done);
+class Collection extends NodeBase {
+    constructor(type, schema) {
+        super(type);
+        Object.defineProperty(this, 'schema', {
+            value: schema,
+            configurable: true,
+            enumerable: false,
+            writable: true
+        });
+    }
+    /**
+     * Create a copy of this collection.
+     *
+     * @param schema - If defined, overwrites the original's schema
+     */
+    clone(schema) {
+        const copy = Object.create(Object.getPrototypeOf(this), Object.getOwnPropertyDescriptors(this));
+        if (schema)
+            copy.schema = schema;
+        copy.items = copy.items.map(it => isNode(it) || isPair(it) ? it.clone(schema) : it);
+        if (this.range)
+            copy.range = this.range.slice();
+        return copy;
+    }
+    /**
+     * Adds a value to the collection. For `!!map` and `!!omap` the value must
+     * be a Pair instance or a `{ key, value }` object, which may not have a key
+     * that already exists in the map.
+     */
+    addIn(path, value) {
+        if (isEmptyPath(path))
+            this.add(value);
+        else {
+            const [key, ...rest] = path;
+            const node = this.get(key, true);
+            if (isCollection(node))
+                node.addIn(rest, value);
+            else if (node === undefined && this.schema)
+                this.set(key, collectionFromPath(this.schema, rest, value));
+            else
+                throw new Error(`Expected YAML collection at ${key}. Remaining path: ${rest}`);
+        }
+    }
+    /**
+     * Removes a value from the collection.
+     * @returns `true` if the item was found and removed.
+     */
+    deleteIn(path) {
+        const [key, ...rest] = path;
+        if (rest.length === 0)
+            return this.delete(key);
+        const node = this.get(key, true);
+        if (isCollection(node))
+            return node.deleteIn(rest);
+        else
+            throw new Error(`Expected YAML collection at ${key}. Remaining path: ${rest}`);
+    }
+    /**
+     * Returns item at `key`, or `undefined` if not found. By default unwraps
+     * scalar values from their surrounding node; to disable set `keepScalar` to
+     * `true` (collections are always returned intact).
+     */
+    getIn(path, keepScalar) {
+        const [key, ...rest] = path;
+        const node = this.get(key, true);
+        if (rest.length === 0)
+            return !keepScalar && isScalar(node) ? node.value : node;
+        else
+            return isCollection(node) ? node.getIn(rest, keepScalar) : undefined;
+    }
+    hasAllNullValues(allowScalar) {
+        return this.items.every(node => {
+            if (!isPair(node))
+                return false;
+            const n = node.value;
+            return (n == null ||
+                (allowScalar &&
+                    isScalar(n) &&
+                    n.value == null &&
+                    !n.commentBefore &&
+                    !n.comment &&
+                    !n.tag));
+        });
+    }
+    /**
+     * Checks if the collection includes a value with the key `key`.
+     */
+    hasIn(path) {
+        const [key, ...rest] = path;
+        if (rest.length === 0)
+            return this.has(key);
+        const node = this.get(key, true);
+        return isCollection(node) ? node.hasIn(rest) : false;
+    }
+    /**
+     * Sets a value in this collection. For `!!set`, `value` needs to be a
+     * boolean to add/remove the item from the set.
+     */
+    setIn(path, value) {
+        const [key, ...rest] = path;
+        if (rest.length === 0) {
+            this.set(key, value);
+        }
+        else {
+            const node = this.get(key, true);
+            if (isCollection(node))
+                node.setIn(rest, value);
+            else if (node === undefined && this.schema)
+                this.set(key, collectionFromPath(this.schema, rest, value));
+            else
+                throw new Error(`Expected YAML collection at ${key}. Remaining path: ${rest}`);
+        }
+    }
+}
+
+/**
+ * Stringifies a comment.
+ *
+ * Empty comment lines are left empty,
+ * lines consisting of a single space are replaced by `#`,
+ * and all other lines are prefixed with a `#`.
+ */
+const stringifyComment = (str) => str.replace(/^(?!$)(?: $)?/gm, '#');
+function indentComment(comment, indent) {
+    if (/^\n+$/.test(comment))
+        return comment.substring(1);
+    return indent ? comment.replace(/^(?! *$)/gm, indent) : comment;
+}
+const lineComment = (str, indent, comment) => str.endsWith('\n')
+    ? indentComment(comment, indent)
+    : comment.includes('\n')
+        ? '\n' + indentComment(comment, indent)
+        : (str.endsWith(' ') ? '' : ' ') + comment;
+
+const FOLD_FLOW = 'flow';
+const FOLD_BLOCK = 'block';
+const FOLD_QUOTED = 'quoted';
+/**
+ * Tries to keep input at up to `lineWidth` characters, splitting only on spaces
+ * not followed by newlines or spaces unless `mode` is `'quoted'`. Lines are
+ * terminated with `\n` and started with `indent`.
+ */
+function foldFlowLines(text, indent, mode = 'flow', { indentAtStart, lineWidth = 80, minContentWidth = 20, onFold, onOverflow } = {}) {
+    if (!lineWidth || lineWidth < 0)
+        return text;
+    if (lineWidth < minContentWidth)
+        minContentWidth = 0;
+    const endStep = Math.max(1 + minContentWidth, 1 + lineWidth - indent.length);
+    if (text.length <= endStep)
+        return text;
+    const folds = [];
+    const escapedFolds = {};
+    let end = lineWidth - indent.length;
+    if (typeof indentAtStart === 'number') {
+        if (indentAtStart > lineWidth - Math.max(2, minContentWidth))
+            folds.push(0);
+        else
+            end = lineWidth - indentAtStart;
+    }
+    let split = undefined;
+    let prev = undefined;
+    let overflow = false;
+    let i = -1;
+    let escStart = -1;
+    let escEnd = -1;
+    if (mode === FOLD_BLOCK) {
+        i = consumeMoreIndentedLines(text, i, indent.length);
+        if (i !== -1)
+            end = i + endStep;
+    }
+    for (let ch; (ch = text[(i += 1)]);) {
+        if (mode === FOLD_QUOTED && ch === '\\') {
+            escStart = i;
+            switch (text[i + 1]) {
+                case 'x':
+                    i += 3;
+                    break;
+                case 'u':
+                    i += 5;
+                    break;
+                case 'U':
+                    i += 9;
+                    break;
+                default:
+                    i += 1;
+            }
+            escEnd = i;
+        }
+        if (ch === '\n') {
+            if (mode === FOLD_BLOCK)
+                i = consumeMoreIndentedLines(text, i, indent.length);
+            end = i + indent.length + endStep;
+            split = undefined;
+        }
+        else {
+            if (ch === ' ' &&
+                prev &&
+                prev !== ' ' &&
+                prev !== '\n' &&
+                prev !== '\t') {
+                // space surrounded by non-space can be replaced with newline + indent
+                const next = text[i + 1];
+                if (next && next !== ' ' && next !== '\n' && next !== '\t')
+                    split = i;
+            }
+            if (i >= end) {
+                if (split) {
+                    folds.push(split);
+                    end = split + endStep;
+                    split = undefined;
+                }
+                else if (mode === FOLD_QUOTED) {
+                    // white-space collected at end may stretch past lineWidth
+                    while (prev === ' ' || prev === '\t') {
+                        prev = ch;
+                        ch = text[(i += 1)];
+                        overflow = true;
+                    }
+                    // Account for newline escape, but don't break preceding escape
+                    const j = i > escEnd + 1 ? i - 2 : escStart - 1;
+                    // Bail out if lineWidth & minContentWidth are shorter than an escape string
+                    if (escapedFolds[j])
+                        return text;
+                    folds.push(j);
+                    escapedFolds[j] = true;
+                    end = j + endStep;
+                    split = undefined;
+                }
+                else {
+                    overflow = true;
+                }
+            }
+        }
+        prev = ch;
+    }
+    if (overflow && onOverflow)
+        onOverflow();
+    if (folds.length === 0)
+        return text;
+    if (onFold)
+        onFold();
+    let res = text.slice(0, folds[0]);
+    for (let i = 0; i < folds.length; ++i) {
+        const fold = folds[i];
+        const end = folds[i + 1] || text.length;
+        if (fold === 0)
+            res = `\n${indent}${text.slice(0, end)}`;
+        else {
+            if (mode === FOLD_QUOTED && escapedFolds[fold])
+                res += `${text[fold]}\\`;
+            res += `\n${indent}${text.slice(fold + 1, end)}`;
+        }
+    }
+    return res;
 }
 /**
- * Basically just str.split(","), but handling cases
- * where we have nested braced sections, which should be
- * treated as individual members, like {a,{b,c},d}
+ * Presumes `i + 1` is at the start of a line
+ * @returns index of last newline in more-indented block
  */
-function parseCommaParts(str) {
-    if (!str) {
-        return [''];
+function consumeMoreIndentedLines(text, i, indent) {
+    let end = i;
+    let start = i + 1;
+    let ch = text[start];
+    while (ch === ' ' || ch === '\t') {
+        if (i < start + indent) {
+            ch = text[++i];
+        }
+        else {
+            do {
+                ch = text[++i];
+            } while (ch && ch !== '\n');
+            end = i;
+            start = i + 1;
+            ch = text[start];
+        }
     }
-    const parts = [];
-    const m = balanced('{', '}', str);
-    if (!m) {
-        return str.split(',');
+    return end;
+}
+
+const getFoldOptions = (ctx, isBlock) => ({
+    indentAtStart: isBlock ? ctx.indent.length : ctx.indentAtStart,
+    lineWidth: ctx.options.lineWidth,
+    minContentWidth: ctx.options.minContentWidth
+});
+// Also checks for lines starting with %, as parsing the output as YAML 1.1 will
+// presume that's starting a new document.
+const containsDocumentMarker = (str) => /^(%|---|\.\.\.)/m.test(str);
+function lineLengthOverLimit(str, lineWidth, indentLength) {
+    if (!lineWidth || lineWidth < 0)
+        return false;
+    const limit = lineWidth - indentLength;
+    const strLen = str.length;
+    if (strLen <= limit)
+        return false;
+    for (let i = 0, start = 0; i < strLen; ++i) {
+        if (str[i] === '\n') {
+            if (i - start > limit)
+                return true;
+            start = i + 1;
+            if (strLen - start <= limit)
+                return false;
+        }
     }
-    const { pre, body, post } = m;
-    const p = pre.split(',');
-    p[p.length - 1] += '{' + body + '}';
-    const postParts = parseCommaParts(post);
-    if (post.length) {
-        p[p.length - 1] += postParts.shift();
-        p.push.apply(p, postParts);
+    return true;
+}
+function doubleQuotedString(value, ctx) {
+    const json = JSON.stringify(value);
+    if (ctx.options.doubleQuotedAsJSON)
+        return json;
+    const { implicitKey } = ctx;
+    const minMultiLineLength = ctx.options.doubleQuotedMinMultiLineLength;
+    const indent = ctx.indent || (containsDocumentMarker(value) ? '  ' : '');
+    let str = '';
+    let start = 0;
+    for (let i = 0, ch = json[i]; ch; ch = json[++i]) {
+        if (ch === ' ' && json[i + 1] === '\\' && json[i + 2] === 'n') {
+            // space before newline needs to be escaped to not be folded
+            str += json.slice(start, i) + '\\ ';
+            i += 1;
+            start = i;
+            ch = '\\';
+        }
+        if (ch === '\\')
+            switch (json[i + 1]) {
+                case 'u':
+                    {
+                        str += json.slice(start, i);
+                        const code = json.substr(i + 2, 4);
+                        switch (code) {
+                            case '0000':
+                                str += '\\0';
+                                break;
+                            case '0007':
+                                str += '\\a';
+                                break;
+                            case '000b':
+                                str += '\\v';
+                                break;
+                            case '001b':
+                                str += '\\e';
+                                break;
+                            case '0085':
+                                str += '\\N';
+                                break;
+                            case '00a0':
+                                str += '\\_';
+                                break;
+                            case '2028':
+                                str += '\\L';
+                                break;
+                            case '2029':
+                                str += '\\P';
+                                break;
+                            default:
+                                if (code.substr(0, 2) === '00')
+                                    str += '\\x' + code.substr(2);
+                                else
+                                    str += json.substr(i, 6);
+                        }
+                        i += 5;
+                        start = i + 1;
+                    }
+                    break;
+                case 'n':
+                    if (implicitKey ||
+                        json[i + 2] === '"' ||
+                        json.length < minMultiLineLength) {
+                        i += 1;
+                    }
+                    else {
+                        // folding will eat first newline
+                        str += json.slice(start, i) + '\n\n';
+                        while (json[i + 2] === '\\' &&
+                            json[i + 3] === 'n' &&
+                            json[i + 4] !== '"') {
+                            str += '\n';
+                            i += 2;
+                        }
+                        str += indent;
+                        // space after newline needs to be escaped to not be folded
+                        if (json[i + 2] === ' ')
+                            str += '\\';
+                        i += 1;
+                        start = i + 1;
+                    }
+                    break;
+                default:
+                    i += 1;
+            }
     }
-    parts.push.apply(parts, p);
-    return parts;
+    str = start ? str + json.slice(start) : json;
+    return implicitKey
+        ? str
+        : foldFlowLines(str, indent, FOLD_QUOTED, getFoldOptions(ctx, false));
 }
-function expand(str) {
-    if (!str) {
-        return [];
+function singleQuotedString(value, ctx) {
+    if (ctx.options.singleQuote === false ||
+        (ctx.implicitKey && value.includes('\n')) ||
+        /[ \t]\n|\n[ \t]/.test(value) // single quoted string can't have leading or trailing whitespace around newline
+    )
+        return doubleQuotedString(value, ctx);
+    const indent = ctx.indent || (containsDocumentMarker(value) ? '  ' : '');
+    const res = "'" + value.replace(/'/g, "''").replace(/\n+/g, `$&\n${indent}`) + "'";
+    return ctx.implicitKey
+        ? res
+        : foldFlowLines(res, indent, FOLD_FLOW, getFoldOptions(ctx, false));
+}
+function quotedString(value, ctx) {
+    const { singleQuote } = ctx.options;
+    let qs;
+    if (singleQuote === false)
+        qs = doubleQuotedString;
+    else {
+        const hasDouble = value.includes('"');
+        const hasSingle = value.includes("'");
+        if (hasDouble && !hasSingle)
+            qs = singleQuotedString;
+        else if (hasSingle && !hasDouble)
+            qs = doubleQuotedString;
+        else
+            qs = singleQuote ? singleQuotedString : doubleQuotedString;
     }
-    // I don't know why Bash 4.3 does this, but it does.
-    // Anything starting with {} will have the first two bytes preserved
-    // but *only* at the top level, so {},a}b will not expand to anything,
-    // but a{},b}c will be expanded to [a}c,abc].
-    // One could argue that this is a bug in Bash, but since the goal of
-    // this module is to match Bash's rules, we escape a leading {}
-    if (str.slice(0, 2) === '{}') {
-        str = '\\{\\}' + str.slice(2);
+    return qs(value, ctx);
+}
+// The negative lookbehind avoids a polynomial search,
+// but isn't supported yet on Safari: https://caniuse.com/js-regexp-lookbehind
+let blockEndNewlines;
+try {
+    blockEndNewlines = new RegExp('(^|(?<!\n))\n+(?!\n|$)', 'g');
+}
+catch {
+    blockEndNewlines = /\n+(?!\n|$)/g;
+}
+function blockString({ comment, type, value }, ctx, onComment, onChompKeep) {
+    const { blockQuote, commentString, lineWidth } = ctx.options;
+    // 1. Block can't end in whitespace unless the last line is non-empty.
+    // 2. Strings consisting of only whitespace are best rendered explicitly.
+    if (!blockQuote || /\n[\t ]+$/.test(value)) {
+        return quotedString(value, ctx);
     }
-    return expand_(escapeBraces(str), true).map(unescapeBraces);
+    const indent = ctx.indent ||
+        (ctx.forceBlockIndent || containsDocumentMarker(value) ? '  ' : '');
+    const literal = blockQuote === 'literal'
+        ? true
+        : blockQuote === 'folded' || type === Scalar.BLOCK_FOLDED
+            ? false
+            : type === Scalar.BLOCK_LITERAL
+                ? true
+                : !lineLengthOverLimit(value, lineWidth, indent.length);
+    if (!value)
+        return literal ? '|\n' : '>\n';
+    // determine chomping from whitespace at value end
+    let chomp;
+    let endStart;
+    for (endStart = value.length; endStart > 0; --endStart) {
+        const ch = value[endStart - 1];
+        if (ch !== '\n' && ch !== '\t' && ch !== ' ')
+            break;
+    }
+    let end = value.substring(endStart);
+    const endNlPos = end.indexOf('\n');
+    if (endNlPos === -1) {
+        chomp = '-'; // strip
+    }
+    else if (value === end || endNlPos !== end.length - 1) {
+        chomp = '+'; // keep
+        if (onChompKeep)
+            onChompKeep();
+    }
+    else {
+        chomp = ''; // clip
+    }
+    if (end) {
+        value = value.slice(0, -end.length);
+        if (end[end.length - 1] === '\n')
+            end = end.slice(0, -1);
+        end = end.replace(blockEndNewlines, `$&${indent}`);
+    }
+    // determine indent indicator from whitespace at value start
+    let startWithSpace = false;
+    let startEnd;
+    let startNlPos = -1;
+    for (startEnd = 0; startEnd < value.length; ++startEnd) {
+        const ch = value[startEnd];
+        if (ch === ' ')
+            startWithSpace = true;
+        else if (ch === '\n')
+            startNlPos = startEnd;
+        else
+            break;
+    }
+    let start = value.substring(0, startNlPos < startEnd ? startNlPos + 1 : startEnd);
+    if (start) {
+        value = value.substring(start.length);
+        start = start.replace(/\n+/g, `$&${indent}`);
+    }
+    const indentSize = indent ? '2' : '1'; // root is at -1
+    // Leading | or > is added later
+    let header = (startWithSpace ? indentSize : '') + chomp;
+    if (comment) {
+        header += ' ' + commentString(comment.replace(/ ?[\r\n]+/g, ' '));
+        if (onComment)
+            onComment();
+    }
+    if (!literal) {
+        const foldedValue = value
+            .replace(/\n+/g, '\n$&')
+            .replace(/(?:^|\n)([\t ].*)(?:([\n\t ]*)\n(?![\n\t ]))?/g, '$1$2') // more-indented lines aren't folded
+            //                ^ more-ind. ^ empty     ^ capture next empty lines only at end of indent
+            .replace(/\n+/g, `$&${indent}`);
+        let literalFallback = false;
+        const foldOptions = getFoldOptions(ctx, true);
+        if (blockQuote !== 'folded' && type !== Scalar.BLOCK_FOLDED) {
+            foldOptions.onOverflow = () => {
+                literalFallback = true;
+            };
+        }
+        const body = foldFlowLines(`${start}${foldedValue}${end}`, indent, FOLD_BLOCK, foldOptions);
+        if (!literalFallback)
+            return `>${header}\n${indent}${body}`;
+    }
+    value = value.replace(/\n+/g, `$&${indent}`);
+    return `|${header}\n${indent}${start}${value}${end}`;
 }
-function embrace(str) {
-    return '{' + str + '}';
+function plainString(item, ctx, onComment, onChompKeep) {
+    const { type, value } = item;
+    const { actualString, implicitKey, indent, indentStep, inFlow } = ctx;
+    if ((implicitKey && value.includes('\n')) ||
+        (inFlow && /[[\]{},]/.test(value))) {
+        return quotedString(value, ctx);
+    }
+    if (/^[\n\t ,[\]{}#&*!|>'"%@`]|^[?-]$|^[?-][ \t]|[\n:][ \t]|[ \t]\n|[\n\t ]#|[\n\t :]$/.test(value)) {
+        // not allowed:
+        // - '-' or '?'
+        // - start with an indicator character (except [?:-]) or /[?-] /
+        // - '\n ', ': ' or ' \n' anywhere
+        // - '#' not preceded by a non-space char
+        // - end with ' ' or ':'
+        return implicitKey || inFlow || !value.includes('\n')
+            ? quotedString(value, ctx)
+            : blockString(item, ctx, onComment, onChompKeep);
+    }
+    if (!implicitKey &&
+        !inFlow &&
+        type !== Scalar.PLAIN &&
+        value.includes('\n')) {
+        // Where allowed & type not set explicitly, prefer block style for multiline strings
+        return blockString(item, ctx, onComment, onChompKeep);
+    }
+    if (containsDocumentMarker(value)) {
+        if (indent === '') {
+            ctx.forceBlockIndent = true;
+            return blockString(item, ctx, onComment, onChompKeep);
+        }
+        else if (implicitKey && indent === indentStep) {
+            return quotedString(value, ctx);
+        }
+    }
+    const str = value.replace(/\n+/g, `$&\n${indent}`);
+    // Verify that output will be parsed as a string, as e.g. plain numbers and
+    // booleans get parsed with those types in v1.2 (e.g. '42', 'true' & '0.9e-3'),
+    // and others in v1.1.
+    if (actualString) {
+        const test = (tag) => tag.default && tag.tag !== 'tag:yaml.org,2002:str' && tag.test?.test(str);
+        const { compat, tags } = ctx.doc.schema;
+        if (tags.some(test) || compat?.some(test))
+            return quotedString(value, ctx);
+    }
+    return implicitKey
+        ? str
+        : foldFlowLines(str, indent, FOLD_FLOW, getFoldOptions(ctx, false));
 }
-function isPadded(el) {
-    return /^-?0\d/.test(el);
+function stringifyString(item, ctx, onComment, onChompKeep) {
+    const { implicitKey, inFlow } = ctx;
+    const ss = typeof item.value === 'string'
+        ? item
+        : Object.assign({}, item, { value: String(item.value) });
+    let { type } = item;
+    if (type !== Scalar.QUOTE_DOUBLE) {
+        // force double quotes on control characters & unpaired surrogates
+        if (/[\x00-\x08\x0b-\x1f\x7f-\x9f\u{D800}-\u{DFFF}]/u.test(ss.value))
+            type = Scalar.QUOTE_DOUBLE;
+    }
+    const _stringify = (_type) => {
+        switch (_type) {
+            case Scalar.BLOCK_FOLDED:
+            case Scalar.BLOCK_LITERAL:
+                return implicitKey || inFlow
+                    ? quotedString(ss.value, ctx) // blocks are not valid inside flow containers
+                    : blockString(ss, ctx, onComment, onChompKeep);
+            case Scalar.QUOTE_DOUBLE:
+                return doubleQuotedString(ss.value, ctx);
+            case Scalar.QUOTE_SINGLE:
+                return singleQuotedString(ss.value, ctx);
+            case Scalar.PLAIN:
+                return plainString(ss, ctx, onComment, onChompKeep);
+            default:
+                return null;
+        }
+    };
+    let res = _stringify(type);
+    if (res === null) {
+        const { defaultKeyType, defaultStringType } = ctx.options;
+        const t = (implicitKey && defaultKeyType) || defaultStringType;
+        res = _stringify(t);
+        if (res === null)
+            throw new Error(`Unsupported default string type ${t}`);
+    }
+    return res;
 }
-function lte(i, y) {
-    return i <= y;
+
+function createStringifyContext(doc, options) {
+    const opt = Object.assign({
+        blockQuote: true,
+        commentString: stringifyComment,
+        defaultKeyType: null,
+        defaultStringType: 'PLAIN',
+        directives: null,
+        doubleQuotedAsJSON: false,
+        doubleQuotedMinMultiLineLength: 40,
+        falseStr: 'false',
+        flowCollectionPadding: true,
+        indentSeq: true,
+        lineWidth: 80,
+        minContentWidth: 20,
+        nullStr: 'null',
+        simpleKeys: false,
+        singleQuote: null,
+        trueStr: 'true',
+        verifyAliasOrder: true
+    }, doc.schema.toStringOptions, options);
+    let inFlow;
+    switch (opt.collectionStyle) {
+        case 'block':
+            inFlow = false;
+            break;
+        case 'flow':
+            inFlow = true;
+            break;
+        default:
+            inFlow = null;
+    }
+    return {
+        anchors: new Set(),
+        doc,
+        flowCollectionPadding: opt.flowCollectionPadding ? ' ' : '',
+        indent: '',
+        indentStep: typeof opt.indent === 'number' ? ' '.repeat(opt.indent) : '  ',
+        inFlow,
+        options: opt
+    };
 }
-function gte(i, y) {
-    return i >= y;
+function getTagObject(tags, item) {
+    if (item.tag) {
+        const match = tags.filter(t => t.tag === item.tag);
+        if (match.length > 0)
+            return match.find(t => t.format === item.format) ?? match[0];
+    }
+    let tagObj = undefined;
+    let obj;
+    if (isScalar(item)) {
+        obj = item.value;
+        let match = tags.filter(t => t.identify?.(obj));
+        if (match.length > 1) {
+            const testMatch = match.filter(t => t.test);
+            if (testMatch.length > 0)
+                match = testMatch;
+        }
+        tagObj =
+            match.find(t => t.format === item.format) ?? match.find(t => !t.format);
+    }
+    else {
+        obj = item;
+        tagObj = tags.find(t => t.nodeClass && obj instanceof t.nodeClass);
+    }
+    if (!tagObj) {
+        const name = obj?.constructor?.name ?? (obj === null ? 'null' : typeof obj);
+        throw new Error(`Tag not resolved for ${name} value`);
+    }
+    return tagObj;
 }
-function expand_(str, isTop) {
-    /** @type {string[]} */
-    const expansions = [];
-    const m = balanced('{', '}', str);
-    if (!m)
-        return [str];
-    // no need to expand pre, since it is guaranteed to be free of brace-sets
-    const pre = m.pre;
-    const post = m.post.length ? expand_(m.post, false) : [''];
-    if (/\$$/.test(m.pre)) {
-        for (let k = 0; k < post.length; k++) {
-            const expansion = pre + '{' + m.body + '}' + post[k];
-            expansions.push(expansion);
+// needs to be called before value stringifier to allow for circular anchor refs
+function stringifyProps(node, tagObj, { anchors, doc }) {
+    if (!doc.directives)
+        return '';
+    const props = [];
+    const anchor = (isScalar(node) || isCollection(node)) && node.anchor;
+    if (anchor && anchorIsValid(anchor)) {
+        anchors.add(anchor);
+        props.push(`&${anchor}`);
+    }
+    const tag = node.tag ?? (tagObj.default ? null : tagObj.tag);
+    if (tag)
+        props.push(doc.directives.tagString(tag));
+    return props.join(' ');
+}
+function stringify$1(item, ctx, onComment, onChompKeep) {
+    if (isPair(item))
+        return item.toString(ctx, onComment, onChompKeep);
+    if (isAlias(item)) {
+        if (ctx.doc.directives)
+            return item.toString(ctx);
+        if (ctx.resolvedAliases?.has(item)) {
+            throw new TypeError(`Cannot stringify circular structure without alias nodes`);
+        }
+        else {
+            if (ctx.resolvedAliases)
+                ctx.resolvedAliases.add(item);
+            else
+                ctx.resolvedAliases = new Set([item]);
+            item = item.resolve(ctx.doc);
+        }
+    }
+    let tagObj = undefined;
+    const node = isNode(item)
+        ? item
+        : ctx.doc.createNode(item, { onTagObj: o => (tagObj = o) });
+    tagObj ?? (tagObj = getTagObject(ctx.doc.schema.tags, node));
+    const props = stringifyProps(node, tagObj, ctx);
+    if (props.length > 0)
+        ctx.indentAtStart = (ctx.indentAtStart ?? 0) + props.length + 1;
+    const str = typeof tagObj.stringify === 'function'
+        ? tagObj.stringify(node, ctx, onComment, onChompKeep)
+        : isScalar(node)
+            ? stringifyString(node, ctx, onComment, onChompKeep)
+            : node.toString(ctx, onComment, onChompKeep);
+    if (!props)
+        return str;
+    return isScalar(node) || str[0] === '{' || str[0] === '['
+        ? `${props} ${str}`
+        : `${props}\n${ctx.indent}${str}`;
+}
+
+function stringifyPair({ key, value }, ctx, onComment, onChompKeep) {
+    const { allNullValues, doc, indent, indentStep, options: { commentString, indentSeq, simpleKeys } } = ctx;
+    let keyComment = (isNode(key) && key.comment) || null;
+    if (simpleKeys) {
+        if (keyComment) {
+            throw new Error('With simple keys, key nodes cannot have comments');
+        }
+        if (isCollection(key) || (!isNode(key) && typeof key === 'object')) {
+            const msg = 'With simple keys, collection cannot be used as a key value';
+            throw new Error(msg);
+        }
+    }
+    let explicitKey = !simpleKeys &&
+        (!key ||
+            (keyComment && value == null && !ctx.inFlow) ||
+            isCollection(key) ||
+            (isScalar(key)
+                ? key.type === Scalar.BLOCK_FOLDED || key.type === Scalar.BLOCK_LITERAL
+                : typeof key === 'object'));
+    ctx = Object.assign({}, ctx, {
+        allNullValues: false,
+        implicitKey: !explicitKey && (simpleKeys || !allNullValues),
+        indent: indent + indentStep
+    });
+    let keyCommentDone = false;
+    let chompKeep = false;
+    let str = stringify$1(key, ctx, () => (keyCommentDone = true), () => (chompKeep = true));
+    if (!explicitKey && !ctx.inFlow && str.length > 1024) {
+        if (simpleKeys)
+            throw new Error('With simple keys, single line scalar must not span more than 1024 characters');
+        explicitKey = true;
+    }
+    if (ctx.inFlow) {
+        if (allNullValues || value == null) {
+            if (keyCommentDone && onComment)
+                onComment();
+            return str === '' ? '?' : explicitKey ? `? ${str}` : str;
+        }
+    }
+    else if ((allNullValues && !simpleKeys) || (value == null && explicitKey)) {
+        str = `? ${str}`;
+        if (keyComment && !keyCommentDone) {
+            str += lineComment(str, ctx.indent, commentString(keyComment));
+        }
+        else if (chompKeep && onChompKeep)
+            onChompKeep();
+        return str;
+    }
+    if (keyCommentDone)
+        keyComment = null;
+    if (explicitKey) {
+        if (keyComment)
+            str += lineComment(str, ctx.indent, commentString(keyComment));
+        str = `? ${str}\n${indent}:`;
+    }
+    else {
+        str = `${str}:`;
+        if (keyComment)
+            str += lineComment(str, ctx.indent, commentString(keyComment));
+    }
+    let vsb, vcb, valueComment;
+    if (isNode(value)) {
+        vsb = !!value.spaceBefore;
+        vcb = value.commentBefore;
+        valueComment = value.comment;
+    }
+    else {
+        vsb = false;
+        vcb = null;
+        valueComment = null;
+        if (value && typeof value === 'object')
+            value = doc.createNode(value);
+    }
+    ctx.implicitKey = false;
+    if (!explicitKey && !keyComment && isScalar(value))
+        ctx.indentAtStart = str.length + 1;
+    chompKeep = false;
+    if (!indentSeq &&
+        indentStep.length >= 2 &&
+        !ctx.inFlow &&
+        !explicitKey &&
+        isSeq(value) &&
+        !value.flow &&
+        !value.tag &&
+        !value.anchor) {
+        // If indentSeq === false, consider '- ' as part of indentation where possible
+        ctx.indent = ctx.indent.substring(2);
+    }
+    let valueCommentDone = false;
+    const valueStr = stringify$1(value, ctx, () => (valueCommentDone = true), () => (chompKeep = true));
+    let ws = ' ';
+    if (keyComment || vsb || vcb) {
+        ws = vsb ? '\n' : '';
+        if (vcb) {
+            const cs = commentString(vcb);
+            ws += `\n${indentComment(cs, ctx.indent)}`;
+        }
+        if (valueStr === '' && !ctx.inFlow) {
+            if (ws === '\n' && valueComment)
+                ws = '\n\n';
+        }
+        else {
+            ws += `\n${ctx.indent}`;
+        }
+    }
+    else if (!explicitKey && isCollection(value)) {
+        const vs0 = valueStr[0];
+        const nl0 = valueStr.indexOf('\n');
+        const hasNewline = nl0 !== -1;
+        const flow = ctx.inFlow ?? value.flow ?? value.items.length === 0;
+        if (hasNewline || !flow) {
+            let hasPropsLine = false;
+            if (hasNewline && (vs0 === '&' || vs0 === '!')) {
+                let sp0 = valueStr.indexOf(' ');
+                if (vs0 === '&' &&
+                    sp0 !== -1 &&
+                    sp0 < nl0 &&
+                    valueStr[sp0 + 1] === '!') {
+                    sp0 = valueStr.indexOf(' ', sp0 + 1);
+                }
+                if (sp0 === -1 || nl0 < sp0)
+                    hasPropsLine = true;
+            }
+            if (!hasPropsLine)
+                ws = `\n${ctx.indent}`;
+        }
+    }
+    else if (valueStr === '' || valueStr[0] === '\n') {
+        ws = '';
+    }
+    str += ws + valueStr;
+    if (ctx.inFlow) {
+        if (valueCommentDone && onComment)
+            onComment();
+    }
+    else if (valueComment && !valueCommentDone) {
+        str += lineComment(str, ctx.indent, commentString(valueComment));
+    }
+    else if (chompKeep && onChompKeep) {
+        onChompKeep();
+    }
+    return str;
+}
+
+function warn(logLevel, warning) {
+    if (logLevel === 'debug' || logLevel === 'warn') {
+        console.warn(warning);
+    }
+}
+
+// If the value associated with a merge key is a single mapping node, each of
+// its key/value pairs is inserted into the current mapping, unless the key
+// already exists in it. If the value associated with the merge key is a
+// sequence, then this sequence is expected to contain mapping nodes and each
+// of these nodes is merged in turn according to its order in the sequence.
+// Keys in mapping nodes earlier in the sequence override keys specified in
+// later mapping nodes. -- http://yaml.org/type/merge.html
+const MERGE_KEY = '<<';
+const merge = {
+    identify: value => value === MERGE_KEY ||
+        (typeof value === 'symbol' && value.description === MERGE_KEY),
+    default: 'key',
+    tag: 'tag:yaml.org,2002:merge',
+    test: /^<<$/,
+    resolve: () => Object.assign(new Scalar(Symbol(MERGE_KEY)), {
+        addToJSMap: addMergeToJSMap
+    }),
+    stringify: () => MERGE_KEY
+};
+const isMergeKey = (ctx, key) => (merge.identify(key) ||
+    (isScalar(key) &&
+        (!key.type || key.type === Scalar.PLAIN) &&
+        merge.identify(key.value))) &&
+    ctx?.doc.schema.tags.some(tag => tag.tag === merge.tag && tag.default);
+function addMergeToJSMap(ctx, map, value) {
+    value = ctx && isAlias(value) ? value.resolve(ctx.doc) : value;
+    if (isSeq(value))
+        for (const it of value.items)
+            mergeValue(ctx, map, it);
+    else if (Array.isArray(value))
+        for (const it of value)
+            mergeValue(ctx, map, it);
+    else
+        mergeValue(ctx, map, value);
+}
+function mergeValue(ctx, map, value) {
+    const source = ctx && isAlias(value) ? value.resolve(ctx.doc) : value;
+    if (!isMap(source))
+        throw new Error('Merge sources must be maps or map aliases');
+    const srcMap = source.toJSON(null, ctx, Map);
+    for (const [key, value] of srcMap) {
+        if (map instanceof Map) {
+            if (!map.has(key))
+                map.set(key, value);
+        }
+        else if (map instanceof Set) {
+            map.add(key);
+        }
+        else if (!Object.prototype.hasOwnProperty.call(map, key)) {
+            Object.defineProperty(map, key, {
+                value,
+                writable: true,
+                enumerable: true,
+                configurable: true
+            });
+        }
+    }
+    return map;
+}
+
+function addPairToJSMap(ctx, map, { key, value }) {
+    if (isNode(key) && key.addToJSMap)
+        key.addToJSMap(ctx, map, value);
+    // TODO: Should drop this special case for bare << handling
+    else if (isMergeKey(ctx, key))
+        addMergeToJSMap(ctx, map, value);
+    else {
+        const jsKey = toJS(key, '', ctx);
+        if (map instanceof Map) {
+            map.set(jsKey, toJS(value, jsKey, ctx));
+        }
+        else if (map instanceof Set) {
+            map.add(jsKey);
+        }
+        else {
+            const stringKey = stringifyKey(key, jsKey, ctx);
+            const jsValue = toJS(value, stringKey, ctx);
+            if (stringKey in map)
+                Object.defineProperty(map, stringKey, {
+                    value: jsValue,
+                    writable: true,
+                    enumerable: true,
+                    configurable: true
+                });
+            else
+                map[stringKey] = jsValue;
+        }
+    }
+    return map;
+}
+function stringifyKey(key, jsKey, ctx) {
+    if (jsKey === null)
+        return '';
+    // eslint-disable-next-line @typescript-eslint/no-base-to-string
+    if (typeof jsKey !== 'object')
+        return String(jsKey);
+    if (isNode(key) && ctx?.doc) {
+        const strCtx = createStringifyContext(ctx.doc, {});
+        strCtx.anchors = new Set();
+        for (const node of ctx.anchors.keys())
+            strCtx.anchors.add(node.anchor);
+        strCtx.inFlow = true;
+        strCtx.inStringifyKey = true;
+        const strKey = key.toString(strCtx);
+        if (!ctx.mapKeyWarned) {
+            let jsonStr = JSON.stringify(strKey);
+            if (jsonStr.length > 40)
+                jsonStr = jsonStr.substring(0, 36) + '..."';
+            warn(ctx.doc.options.logLevel, `Keys with collection values will be stringified due to JS Object restrictions: ${jsonStr}. Set mapAsMap: true to use object keys.`);
+            ctx.mapKeyWarned = true;
+        }
+        return strKey;
+    }
+    return JSON.stringify(jsKey);
+}
+
+function createPair(key, value, ctx) {
+    const k = createNode(key, undefined, ctx);
+    const v = createNode(value, undefined, ctx);
+    return new Pair(k, v);
+}
+class Pair {
+    constructor(key, value = null) {
+        Object.defineProperty(this, NODE_TYPE, { value: PAIR });
+        this.key = key;
+        this.value = value;
+    }
+    clone(schema) {
+        let { key, value } = this;
+        if (isNode(key))
+            key = key.clone(schema);
+        if (isNode(value))
+            value = value.clone(schema);
+        return new Pair(key, value);
+    }
+    toJSON(_, ctx) {
+        const pair = ctx?.mapAsMap ? new Map() : {};
+        return addPairToJSMap(ctx, pair, this);
+    }
+    toString(ctx, onComment, onChompKeep) {
+        return ctx?.doc
+            ? stringifyPair(this, ctx, onComment, onChompKeep)
+            : JSON.stringify(this);
+    }
+}
+
+function stringifyCollection(collection, ctx, options) {
+    const flow = ctx.inFlow ?? collection.flow;
+    const stringify = flow ? stringifyFlowCollection : stringifyBlockCollection;
+    return stringify(collection, ctx, options);
+}
+function stringifyBlockCollection({ comment, items }, ctx, { blockItemPrefix, flowChars, itemIndent, onChompKeep, onComment }) {
+    const { indent, options: { commentString } } = ctx;
+    const itemCtx = Object.assign({}, ctx, { indent: itemIndent, type: null });
+    let chompKeep = false; // flag for the preceding node's status
+    const lines = [];
+    for (let i = 0; i < items.length; ++i) {
+        const item = items[i];
+        let comment = null;
+        if (isNode(item)) {
+            if (!chompKeep && item.spaceBefore)
+                lines.push('');
+            addCommentBefore(ctx, lines, item.commentBefore, chompKeep);
+            if (item.comment)
+                comment = item.comment;
+        }
+        else if (isPair(item)) {
+            const ik = isNode(item.key) ? item.key : null;
+            if (ik) {
+                if (!chompKeep && ik.spaceBefore)
+                    lines.push('');
+                addCommentBefore(ctx, lines, ik.commentBefore, chompKeep);
+            }
+        }
+        chompKeep = false;
+        let str = stringify$1(item, itemCtx, () => (comment = null), () => (chompKeep = true));
+        if (comment)
+            str += lineComment(str, itemIndent, commentString(comment));
+        if (chompKeep && comment)
+            chompKeep = false;
+        lines.push(blockItemPrefix + str);
+    }
+    let str;
+    if (lines.length === 0) {
+        str = flowChars.start + flowChars.end;
+    }
+    else {
+        str = lines[0];
+        for (let i = 1; i < lines.length; ++i) {
+            const line = lines[i];
+            str += line ? `\n${indent}${line}` : '\n';
+        }
+    }
+    if (comment) {
+        str += '\n' + indentComment(commentString(comment), indent);
+        if (onComment)
+            onComment();
+    }
+    else if (chompKeep && onChompKeep)
+        onChompKeep();
+    return str;
+}
+function stringifyFlowCollection({ items }, ctx, { flowChars, itemIndent }) {
+    const { indent, indentStep, flowCollectionPadding: fcPadding, options: { commentString } } = ctx;
+    itemIndent += indentStep;
+    const itemCtx = Object.assign({}, ctx, {
+        indent: itemIndent,
+        inFlow: true,
+        type: null
+    });
+    let reqNewline = false;
+    let linesAtValue = 0;
+    const lines = [];
+    for (let i = 0; i < items.length; ++i) {
+        const item = items[i];
+        let comment = null;
+        if (isNode(item)) {
+            if (item.spaceBefore)
+                lines.push('');
+            addCommentBefore(ctx, lines, item.commentBefore, false);
+            if (item.comment)
+                comment = item.comment;
+        }
+        else if (isPair(item)) {
+            const ik = isNode(item.key) ? item.key : null;
+            if (ik) {
+                if (ik.spaceBefore)
+                    lines.push('');
+                addCommentBefore(ctx, lines, ik.commentBefore, false);
+                if (ik.comment)
+                    reqNewline = true;
+            }
+            const iv = isNode(item.value) ? item.value : null;
+            if (iv) {
+                if (iv.comment)
+                    comment = iv.comment;
+                if (iv.commentBefore)
+                    reqNewline = true;
+            }
+            else if (item.value == null && ik?.comment) {
+                comment = ik.comment;
+            }
+        }
+        if (comment)
+            reqNewline = true;
+        let str = stringify$1(item, itemCtx, () => (comment = null));
+        if (i < items.length - 1)
+            str += ',';
+        if (comment)
+            str += lineComment(str, itemIndent, commentString(comment));
+        if (!reqNewline && (lines.length > linesAtValue || str.includes('\n')))
+            reqNewline = true;
+        lines.push(str);
+        linesAtValue = lines.length;
+    }
+    const { start, end } = flowChars;
+    if (lines.length === 0) {
+        return start + end;
+    }
+    else {
+        if (!reqNewline) {
+            const len = lines.reduce((sum, line) => sum + line.length + 2, 2);
+            reqNewline = ctx.options.lineWidth > 0 && len > ctx.options.lineWidth;
+        }
+        if (reqNewline) {
+            let str = start;
+            for (const line of lines)
+                str += line ? `\n${indentStep}${indent}${line}` : '\n';
+            return `${str}\n${indent}${end}`;
+        }
+        else {
+            return `${start}${fcPadding}${lines.join(' ')}${fcPadding}${end}`;
+        }
+    }
+}
+function addCommentBefore({ indent, options: { commentString } }, lines, comment, chompKeep) {
+    if (comment && chompKeep)
+        comment = comment.replace(/^\n+/, '');
+    if (comment) {
+        const ic = indentComment(commentString(comment), indent);
+        lines.push(ic.trimStart()); // Avoid double indent on first line
+    }
+}
+
+function findPair(items, key) {
+    const k = isScalar(key) ? key.value : key;
+    for (const it of items) {
+        if (isPair(it)) {
+            if (it.key === key || it.key === k)
+                return it;
+            if (isScalar(it.key) && it.key.value === k)
+                return it;
+        }
+    }
+    return undefined;
+}
+class YAMLMap extends Collection {
+    static get tagName() {
+        return 'tag:yaml.org,2002:map';
+    }
+    constructor(schema) {
+        super(MAP, schema);
+        this.items = [];
+    }
+    /**
+     * A generic collection parsing method that can be extended
+     * to other node classes that inherit from YAMLMap
+     */
+    static from(schema, obj, ctx) {
+        const { keepUndefined, replacer } = ctx;
+        const map = new this(schema);
+        const add = (key, value) => {
+            if (typeof replacer === 'function')
+                value = replacer.call(obj, key, value);
+            else if (Array.isArray(replacer) && !replacer.includes(key))
+                return;
+            if (value !== undefined || keepUndefined)
+                map.items.push(createPair(key, value, ctx));
+        };
+        if (obj instanceof Map) {
+            for (const [key, value] of obj)
+                add(key, value);
+        }
+        else if (obj && typeof obj === 'object') {
+            for (const key of Object.keys(obj))
+                add(key, obj[key]);
+        }
+        if (typeof schema.sortMapEntries === 'function') {
+            map.items.sort(schema.sortMapEntries);
+        }
+        return map;
+    }
+    /**
+     * Adds a value to the collection.
+     *
+     * @param overwrite - If not set `true`, using a key that is already in the
+     *   collection will throw. Otherwise, overwrites the previous value.
+     */
+    add(pair, overwrite) {
+        let _pair;
+        if (isPair(pair))
+            _pair = pair;
+        else if (!pair || typeof pair !== 'object' || !('key' in pair)) {
+            // In TypeScript, this never happens.
+            _pair = new Pair(pair, pair?.value);
+        }
+        else
+            _pair = new Pair(pair.key, pair.value);
+        const prev = findPair(this.items, _pair.key);
+        const sortEntries = this.schema?.sortMapEntries;
+        if (prev) {
+            if (!overwrite)
+                throw new Error(`Key ${_pair.key} already set`);
+            // For scalars, keep the old node & its comments and anchors
+            if (isScalar(prev.value) && isScalarValue(_pair.value))
+                prev.value.value = _pair.value;
+            else
+                prev.value = _pair.value;
+        }
+        else if (sortEntries) {
+            const i = this.items.findIndex(item => sortEntries(_pair, item) < 0);
+            if (i === -1)
+                this.items.push(_pair);
+            else
+                this.items.splice(i, 0, _pair);
+        }
+        else {
+            this.items.push(_pair);
+        }
+    }
+    delete(key) {
+        const it = findPair(this.items, key);
+        if (!it)
+            return false;
+        const del = this.items.splice(this.items.indexOf(it), 1);
+        return del.length > 0;
+    }
+    get(key, keepScalar) {
+        const it = findPair(this.items, key);
+        const node = it?.value;
+        return (!keepScalar && isScalar(node) ? node.value : node) ?? undefined;
+    }
+    has(key) {
+        return !!findPair(this.items, key);
+    }
+    set(key, value) {
+        this.add(new Pair(key, value), true);
+    }
+    /**
+     * @param ctx - Conversion context, originally set in Document#toJS()
+     * @param {Class} Type - If set, forces the returned collection type
+     * @returns Instance of Type, Map, or Object
+     */
+    toJSON(_, ctx, Type) {
+        const map = Type ? new Type() : ctx?.mapAsMap ? new Map() : {};
+        if (ctx?.onCreate)
+            ctx.onCreate(map);
+        for (const item of this.items)
+            addPairToJSMap(ctx, map, item);
+        return map;
+    }
+    toString(ctx, onComment, onChompKeep) {
+        if (!ctx)
+            return JSON.stringify(this);
+        for (const item of this.items) {
+            if (!isPair(item))
+                throw new Error(`Map items must all be pairs; found ${JSON.stringify(item)} instead`);
+        }
+        if (!ctx.allNullValues && this.hasAllNullValues(false))
+            ctx = Object.assign({}, ctx, { allNullValues: true });
+        return stringifyCollection(this, ctx, {
+            blockItemPrefix: '',
+            flowChars: { start: '{', end: '}' },
+            itemIndent: ctx.indent || '',
+            onChompKeep,
+            onComment
+        });
+    }
+}
+
+const map = {
+    collection: 'map',
+    default: true,
+    nodeClass: YAMLMap,
+    tag: 'tag:yaml.org,2002:map',
+    resolve(map, onError) {
+        if (!isMap(map))
+            onError('Expected a mapping for this tag');
+        return map;
+    },
+    createNode: (schema, obj, ctx) => YAMLMap.from(schema, obj, ctx)
+};
+
+class YAMLSeq extends Collection {
+    static get tagName() {
+        return 'tag:yaml.org,2002:seq';
+    }
+    constructor(schema) {
+        super(SEQ, schema);
+        this.items = [];
+    }
+    add(value) {
+        this.items.push(value);
+    }
+    /**
+     * Removes a value from the collection.
+     *
+     * `key` must contain a representation of an integer for this to succeed.
+     * It may be wrapped in a `Scalar`.
+     *
+     * @returns `true` if the item was found and removed.
+     */
+    delete(key) {
+        const idx = asItemIndex(key);
+        if (typeof idx !== 'number')
+            return false;
+        const del = this.items.splice(idx, 1);
+        return del.length > 0;
+    }
+    get(key, keepScalar) {
+        const idx = asItemIndex(key);
+        if (typeof idx !== 'number')
+            return undefined;
+        const it = this.items[idx];
+        return !keepScalar && isScalar(it) ? it.value : it;
+    }
+    /**
+     * Checks if the collection includes a value with the key `key`.
+     *
+     * `key` must contain a representation of an integer for this to succeed.
+     * It may be wrapped in a `Scalar`.
+     */
+    has(key) {
+        const idx = asItemIndex(key);
+        return typeof idx === 'number' && idx < this.items.length;
+    }
+    /**
+     * Sets a value in this collection. For `!!set`, `value` needs to be a
+     * boolean to add/remove the item from the set.
+     *
+     * If `key` does not contain a representation of an integer, this will throw.
+     * It may be wrapped in a `Scalar`.
+     */
+    set(key, value) {
+        const idx = asItemIndex(key);
+        if (typeof idx !== 'number')
+            throw new Error(`Expected a valid index, not ${key}.`);
+        const prev = this.items[idx];
+        if (isScalar(prev) && isScalarValue(value))
+            prev.value = value;
+        else
+            this.items[idx] = value;
+    }
+    toJSON(_, ctx) {
+        const seq = [];
+        if (ctx?.onCreate)
+            ctx.onCreate(seq);
+        let i = 0;
+        for (const item of this.items)
+            seq.push(toJS(item, String(i++), ctx));
+        return seq;
+    }
+    toString(ctx, onComment, onChompKeep) {
+        if (!ctx)
+            return JSON.stringify(this);
+        return stringifyCollection(this, ctx, {
+            blockItemPrefix: '- ',
+            flowChars: { start: '[', end: ']' },
+            itemIndent: (ctx.indent || '') + '  ',
+            onChompKeep,
+            onComment
+        });
+    }
+    static from(schema, obj, ctx) {
+        const { replacer } = ctx;
+        const seq = new this(schema);
+        if (obj && Symbol.iterator in Object(obj)) {
+            let i = 0;
+            for (let it of obj) {
+                if (typeof replacer === 'function') {
+                    const key = obj instanceof Set ? it : String(i++);
+                    it = replacer.call(obj, key, it);
+                }
+                seq.items.push(createNode(it, undefined, ctx));
+            }
+        }
+        return seq;
+    }
+}
+function asItemIndex(key) {
+    let idx = isScalar(key) ? key.value : key;
+    if (idx && typeof idx === 'string')
+        idx = Number(idx);
+    return typeof idx === 'number' && Number.isInteger(idx) && idx >= 0
+        ? idx
+        : null;
+}
+
+const seq = {
+    collection: 'seq',
+    default: true,
+    nodeClass: YAMLSeq,
+    tag: 'tag:yaml.org,2002:seq',
+    resolve(seq, onError) {
+        if (!isSeq(seq))
+            onError('Expected a sequence for this tag');
+        return seq;
+    },
+    createNode: (schema, obj, ctx) => YAMLSeq.from(schema, obj, ctx)
+};
+
+const string = {
+    identify: value => typeof value === 'string',
+    default: true,
+    tag: 'tag:yaml.org,2002:str',
+    resolve: str => str,
+    stringify(item, ctx, onComment, onChompKeep) {
+        ctx = Object.assign({ actualString: true }, ctx);
+        return stringifyString(item, ctx, onComment, onChompKeep);
+    }
+};
+
+const nullTag = {
+    identify: value => value == null,
+    createNode: () => new Scalar(null),
+    default: true,
+    tag: 'tag:yaml.org,2002:null',
+    test: /^(?:~|[Nn]ull|NULL)?$/,
+    resolve: () => new Scalar(null),
+    stringify: ({ source }, ctx) => typeof source === 'string' && nullTag.test.test(source)
+        ? source
+        : ctx.options.nullStr
+};
+
+const boolTag = {
+    identify: value => typeof value === 'boolean',
+    default: true,
+    tag: 'tag:yaml.org,2002:bool',
+    test: /^(?:[Tt]rue|TRUE|[Ff]alse|FALSE)$/,
+    resolve: str => new Scalar(str[0] === 't' || str[0] === 'T'),
+    stringify({ source, value }, ctx) {
+        if (source && boolTag.test.test(source)) {
+            const sv = source[0] === 't' || source[0] === 'T';
+            if (value === sv)
+                return source;
+        }
+        return value ? ctx.options.trueStr : ctx.options.falseStr;
+    }
+};
+
+function stringifyNumber({ format, minFractionDigits, tag, value }) {
+    if (typeof value === 'bigint')
+        return String(value);
+    const num = typeof value === 'number' ? value : Number(value);
+    if (!isFinite(num))
+        return isNaN(num) ? '.nan' : num < 0 ? '-.inf' : '.inf';
+    let n = Object.is(value, -0) ? '-0' : JSON.stringify(value);
+    if (!format &&
+        minFractionDigits &&
+        (!tag || tag === 'tag:yaml.org,2002:float') &&
+        /^\d/.test(n)) {
+        let i = n.indexOf('.');
+        if (i < 0) {
+            i = n.length;
+            n += '.';
+        }
+        let d = minFractionDigits - (n.length - i - 1);
+        while (d-- > 0)
+            n += '0';
+    }
+    return n;
+}
+
+const floatNaN$1 = {
+    identify: value => typeof value === 'number',
+    default: true,
+    tag: 'tag:yaml.org,2002:float',
+    test: /^(?:[-+]?\.(?:inf|Inf|INF)|\.nan|\.NaN|\.NAN)$/,
+    resolve: str => str.slice(-3).toLowerCase() === 'nan'
+        ? NaN
+        : str[0] === '-'
+            ? Number.NEGATIVE_INFINITY
+            : Number.POSITIVE_INFINITY,
+    stringify: stringifyNumber
+};
+const floatExp$1 = {
+    identify: value => typeof value === 'number',
+    default: true,
+    tag: 'tag:yaml.org,2002:float',
+    format: 'EXP',
+    test: /^[-+]?(?:\.[0-9]+|[0-9]+(?:\.[0-9]*)?)[eE][-+]?[0-9]+$/,
+    resolve: str => parseFloat(str),
+    stringify(node) {
+        const num = Number(node.value);
+        return isFinite(num) ? num.toExponential() : stringifyNumber(node);
+    }
+};
+const float$1 = {
+    identify: value => typeof value === 'number',
+    default: true,
+    tag: 'tag:yaml.org,2002:float',
+    test: /^[-+]?(?:\.[0-9]+|[0-9]+\.[0-9]*)$/,
+    resolve(str) {
+        const node = new Scalar(parseFloat(str));
+        const dot = str.indexOf('.');
+        if (dot !== -1 && str[str.length - 1] === '0')
+            node.minFractionDigits = str.length - dot - 1;
+        return node;
+    },
+    stringify: stringifyNumber
+};
+
+const intIdentify$2 = (value) => typeof value === 'bigint' || Number.isInteger(value);
+const intResolve$1 = (str, offset, radix, { intAsBigInt }) => (intAsBigInt ? BigInt(str) : parseInt(str.substring(offset), radix));
+function intStringify$1(node, radix, prefix) {
+    const { value } = node;
+    if (intIdentify$2(value) && value >= 0)
+        return prefix + value.toString(radix);
+    return stringifyNumber(node);
+}
+const intOct$1 = {
+    identify: value => intIdentify$2(value) && value >= 0,
+    default: true,
+    tag: 'tag:yaml.org,2002:int',
+    format: 'OCT',
+    test: /^0o[0-7]+$/,
+    resolve: (str, _onError, opt) => intResolve$1(str, 2, 8, opt),
+    stringify: node => intStringify$1(node, 8, '0o')
+};
+const int$1 = {
+    identify: intIdentify$2,
+    default: true,
+    tag: 'tag:yaml.org,2002:int',
+    test: /^[-+]?[0-9]+$/,
+    resolve: (str, _onError, opt) => intResolve$1(str, 0, 10, opt),
+    stringify: stringifyNumber
+};
+const intHex$1 = {
+    identify: value => intIdentify$2(value) && value >= 0,
+    default: true,
+    tag: 'tag:yaml.org,2002:int',
+    format: 'HEX',
+    test: /^0x[0-9a-fA-F]+$/,
+    resolve: (str, _onError, opt) => intResolve$1(str, 2, 16, opt),
+    stringify: node => intStringify$1(node, 16, '0x')
+};
+
+const schema$2 = [
+    map,
+    seq,
+    string,
+    nullTag,
+    boolTag,
+    intOct$1,
+    int$1,
+    intHex$1,
+    floatNaN$1,
+    floatExp$1,
+    float$1
+];
+
+function intIdentify$1(value) {
+    return typeof value === 'bigint' || Number.isInteger(value);
+}
+const stringifyJSON = ({ value }) => JSON.stringify(value);
+const jsonScalars = [
+    {
+        identify: value => typeof value === 'string',
+        default: true,
+        tag: 'tag:yaml.org,2002:str',
+        resolve: str => str,
+        stringify: stringifyJSON
+    },
+    {
+        identify: value => value == null,
+        createNode: () => new Scalar(null),
+        default: true,
+        tag: 'tag:yaml.org,2002:null',
+        test: /^null$/,
+        resolve: () => null,
+        stringify: stringifyJSON
+    },
+    {
+        identify: value => typeof value === 'boolean',
+        default: true,
+        tag: 'tag:yaml.org,2002:bool',
+        test: /^true$|^false$/,
+        resolve: str => str === 'true',
+        stringify: stringifyJSON
+    },
+    {
+        identify: intIdentify$1,
+        default: true,
+        tag: 'tag:yaml.org,2002:int',
+        test: /^-?(?:0|[1-9][0-9]*)$/,
+        resolve: (str, _onError, { intAsBigInt }) => intAsBigInt ? BigInt(str) : parseInt(str, 10),
+        stringify: ({ value }) => intIdentify$1(value) ? value.toString() : JSON.stringify(value)
+    },
+    {
+        identify: value => typeof value === 'number',
+        default: true,
+        tag: 'tag:yaml.org,2002:float',
+        test: /^-?(?:0|[1-9][0-9]*)(?:\.[0-9]*)?(?:[eE][-+]?[0-9]+)?$/,
+        resolve: str => parseFloat(str),
+        stringify: stringifyJSON
+    }
+];
+const jsonError = {
+    default: true,
+    tag: '',
+    test: /^/,
+    resolve(str, onError) {
+        onError(`Unresolved plain scalar ${JSON.stringify(str)}`);
+        return str;
+    }
+};
+const schema$1 = [map, seq].concat(jsonScalars, jsonError);
+
+const binary = {
+    identify: value => value instanceof Uint8Array, // Buffer inherits from Uint8Array
+    default: false,
+    tag: 'tag:yaml.org,2002:binary',
+    /**
+     * Returns a Buffer in node and an Uint8Array in browsers
+     *
+     * To use the resulting buffer as an image, you'll want to do something like:
+     *
+     *   const blob = new Blob([buffer], { type: 'image/jpeg' })
+     *   document.querySelector('#photo').src = URL.createObjectURL(blob)
+     */
+    resolve(src, onError) {
+        if (typeof atob === 'function') {
+            // On IE 11, atob() can't handle newlines
+            const str = atob(src.replace(/[\n\r]/g, ''));
+            const buffer = new Uint8Array(str.length);
+            for (let i = 0; i < str.length; ++i)
+                buffer[i] = str.charCodeAt(i);
+            return buffer;
+        }
+        else {
+            onError('This environment does not support reading binary tags; either Buffer or atob is required');
+            return src;
+        }
+    },
+    stringify({ comment, type, value }, ctx, onComment, onChompKeep) {
+        if (!value)
+            return '';
+        const buf = value; // checked earlier by binary.identify()
+        let str;
+        if (typeof btoa === 'function') {
+            let s = '';
+            for (let i = 0; i < buf.length; ++i)
+                s += String.fromCharCode(buf[i]);
+            str = btoa(s);
+        }
+        else {
+            throw new Error('This environment does not support writing binary tags; either Buffer or btoa is required');
+        }
+        type ?? (type = Scalar.BLOCK_LITERAL);
+        if (type !== Scalar.QUOTE_DOUBLE) {
+            const lineWidth = Math.max(ctx.options.lineWidth - ctx.indent.length, ctx.options.minContentWidth);
+            const n = Math.ceil(str.length / lineWidth);
+            const lines = new Array(n);
+            for (let i = 0, o = 0; i < n; ++i, o += lineWidth) {
+                lines[i] = str.substr(o, lineWidth);
+            }
+            str = lines.join(type === Scalar.BLOCK_LITERAL ? '\n' : ' ');
+        }
+        return stringifyString({ comment, type, value: str }, ctx, onComment, onChompKeep);
+    }
+};
+
+function resolvePairs(seq, onError) {
+    if (isSeq(seq)) {
+        for (let i = 0; i < seq.items.length; ++i) {
+            let item = seq.items[i];
+            if (isPair(item))
+                continue;
+            else if (isMap(item)) {
+                if (item.items.length > 1)
+                    onError('Each pair must have its own sequence indicator');
+                const pair = item.items[0] || new Pair(new Scalar(null));
+                if (item.commentBefore)
+                    pair.key.commentBefore = pair.key.commentBefore
+                        ? `${item.commentBefore}\n${pair.key.commentBefore}`
+                        : item.commentBefore;
+                if (item.comment) {
+                    const cn = pair.value ?? pair.key;
+                    cn.comment = cn.comment
+                        ? `${item.comment}\n${cn.comment}`
+                        : item.comment;
+                }
+                item = pair;
+            }
+            seq.items[i] = isPair(item) ? item : new Pair(item);
+        }
+    }
+    else
+        onError('Expected a sequence for this tag');
+    return seq;
+}
+function createPairs(schema, iterable, ctx) {
+    const { replacer } = ctx;
+    const pairs = new YAMLSeq(schema);
+    pairs.tag = 'tag:yaml.org,2002:pairs';
+    let i = 0;
+    if (iterable && Symbol.iterator in Object(iterable))
+        for (let it of iterable) {
+            if (typeof replacer === 'function')
+                it = replacer.call(iterable, String(i++), it);
+            let key, value;
+            if (Array.isArray(it)) {
+                if (it.length === 2) {
+                    key = it[0];
+                    value = it[1];
+                }
+                else
+                    throw new TypeError(`Expected [key, value] tuple: ${it}`);
+            }
+            else if (it && it instanceof Object) {
+                const keys = Object.keys(it);
+                if (keys.length === 1) {
+                    key = keys[0];
+                    value = it[key];
+                }
+                else {
+                    throw new TypeError(`Expected tuple with one key, not ${keys.length} keys`);
+                }
+            }
+            else {
+                key = it;
+            }
+            pairs.items.push(createPair(key, value, ctx));
+        }
+    return pairs;
+}
+const pairs = {
+    collection: 'seq',
+    default: false,
+    tag: 'tag:yaml.org,2002:pairs',
+    resolve: resolvePairs,
+    createNode: createPairs
+};
+
+class YAMLOMap extends YAMLSeq {
+    constructor() {
+        super();
+        this.add = YAMLMap.prototype.add.bind(this);
+        this.delete = YAMLMap.prototype.delete.bind(this);
+        this.get = YAMLMap.prototype.get.bind(this);
+        this.has = YAMLMap.prototype.has.bind(this);
+        this.set = YAMLMap.prototype.set.bind(this);
+        this.tag = YAMLOMap.tag;
+    }
+    /**
+     * If `ctx` is given, the return type is actually `Map<unknown, unknown>`,
+     * but TypeScript won't allow widening the signature of a child method.
+     */
+    toJSON(_, ctx) {
+        if (!ctx)
+            return super.toJSON(_);
+        const map = new Map();
+        if (ctx?.onCreate)
+            ctx.onCreate(map);
+        for (const pair of this.items) {
+            let key, value;
+            if (isPair(pair)) {
+                key = toJS(pair.key, '', ctx);
+                value = toJS(pair.value, key, ctx);
+            }
+            else {
+                key = toJS(pair, '', ctx);
+            }
+            if (map.has(key))
+                throw new Error('Ordered maps must not include duplicate keys');
+            map.set(key, value);
+        }
+        return map;
+    }
+    static from(schema, iterable, ctx) {
+        const pairs = createPairs(schema, iterable, ctx);
+        const omap = new this();
+        omap.items = pairs.items;
+        return omap;
+    }
+}
+YAMLOMap.tag = 'tag:yaml.org,2002:omap';
+const omap = {
+    collection: 'seq',
+    identify: value => value instanceof Map,
+    nodeClass: YAMLOMap,
+    default: false,
+    tag: 'tag:yaml.org,2002:omap',
+    resolve(seq, onError) {
+        const pairs = resolvePairs(seq, onError);
+        const seenKeys = [];
+        for (const { key } of pairs.items) {
+            if (isScalar(key)) {
+                if (seenKeys.includes(key.value)) {
+                    onError(`Ordered maps must not include duplicate keys: ${key.value}`);
+                }
+                else {
+                    seenKeys.push(key.value);
+                }
+            }
+        }
+        return Object.assign(new YAMLOMap(), pairs);
+    },
+    createNode: (schema, iterable, ctx) => YAMLOMap.from(schema, iterable, ctx)
+};
+
+function boolStringify({ value, source }, ctx) {
+    const boolObj = value ? trueTag : falseTag;
+    if (source && boolObj.test.test(source))
+        return source;
+    return value ? ctx.options.trueStr : ctx.options.falseStr;
+}
+const trueTag = {
+    identify: value => value === true,
+    default: true,
+    tag: 'tag:yaml.org,2002:bool',
+    test: /^(?:Y|y|[Yy]es|YES|[Tt]rue|TRUE|[Oo]n|ON)$/,
+    resolve: () => new Scalar(true),
+    stringify: boolStringify
+};
+const falseTag = {
+    identify: value => value === false,
+    default: true,
+    tag: 'tag:yaml.org,2002:bool',
+    test: /^(?:N|n|[Nn]o|NO|[Ff]alse|FALSE|[Oo]ff|OFF)$/,
+    resolve: () => new Scalar(false),
+    stringify: boolStringify
+};
+
+const floatNaN = {
+    identify: value => typeof value === 'number',
+    default: true,
+    tag: 'tag:yaml.org,2002:float',
+    test: /^(?:[-+]?\.(?:inf|Inf|INF)|\.nan|\.NaN|\.NAN)$/,
+    resolve: (str) => str.slice(-3).toLowerCase() === 'nan'
+        ? NaN
+        : str[0] === '-'
+            ? Number.NEGATIVE_INFINITY
+            : Number.POSITIVE_INFINITY,
+    stringify: stringifyNumber
+};
+const floatExp = {
+    identify: value => typeof value === 'number',
+    default: true,
+    tag: 'tag:yaml.org,2002:float',
+    format: 'EXP',
+    test: /^[-+]?(?:[0-9][0-9_]*)?(?:\.[0-9_]*)?[eE][-+]?[0-9]+$/,
+    resolve: (str) => parseFloat(str.replace(/_/g, '')),
+    stringify(node) {
+        const num = Number(node.value);
+        return isFinite(num) ? num.toExponential() : stringifyNumber(node);
+    }
+};
+const float = {
+    identify: value => typeof value === 'number',
+    default: true,
+    tag: 'tag:yaml.org,2002:float',
+    test: /^[-+]?(?:[0-9][0-9_]*)?\.[0-9_]*$/,
+    resolve(str) {
+        const node = new Scalar(parseFloat(str.replace(/_/g, '')));
+        const dot = str.indexOf('.');
+        if (dot !== -1) {
+            const f = str.substring(dot + 1).replace(/_/g, '');
+            if (f[f.length - 1] === '0')
+                node.minFractionDigits = f.length;
+        }
+        return node;
+    },
+    stringify: stringifyNumber
+};
+
+const intIdentify = (value) => typeof value === 'bigint' || Number.isInteger(value);
+function intResolve(str, offset, radix, { intAsBigInt }) {
+    const sign = str[0];
+    if (sign === '-' || sign === '+')
+        offset += 1;
+    str = str.substring(offset).replace(/_/g, '');
+    if (intAsBigInt) {
+        switch (radix) {
+            case 2:
+                str = `0b${str}`;
+                break;
+            case 8:
+                str = `0o${str}`;
+                break;
+            case 16:
+                str = `0x${str}`;
+                break;
+        }
+        const n = BigInt(str);
+        return sign === '-' ? BigInt(-1) * n : n;
+    }
+    const n = parseInt(str, radix);
+    return sign === '-' ? -1 * n : n;
+}
+function intStringify(node, radix, prefix) {
+    const { value } = node;
+    if (intIdentify(value)) {
+        const str = value.toString(radix);
+        return value < 0 ? '-' + prefix + str.substr(1) : prefix + str;
+    }
+    return stringifyNumber(node);
+}
+const intBin = {
+    identify: intIdentify,
+    default: true,
+    tag: 'tag:yaml.org,2002:int',
+    format: 'BIN',
+    test: /^[-+]?0b[0-1_]+$/,
+    resolve: (str, _onError, opt) => intResolve(str, 2, 2, opt),
+    stringify: node => intStringify(node, 2, '0b')
+};
+const intOct = {
+    identify: intIdentify,
+    default: true,
+    tag: 'tag:yaml.org,2002:int',
+    format: 'OCT',
+    test: /^[-+]?0[0-7_]+$/,
+    resolve: (str, _onError, opt) => intResolve(str, 1, 8, opt),
+    stringify: node => intStringify(node, 8, '0')
+};
+const int = {
+    identify: intIdentify,
+    default: true,
+    tag: 'tag:yaml.org,2002:int',
+    test: /^[-+]?[0-9][0-9_]*$/,
+    resolve: (str, _onError, opt) => intResolve(str, 0, 10, opt),
+    stringify: stringifyNumber
+};
+const intHex = {
+    identify: intIdentify,
+    default: true,
+    tag: 'tag:yaml.org,2002:int',
+    format: 'HEX',
+    test: /^[-+]?0x[0-9a-fA-F_]+$/,
+    resolve: (str, _onError, opt) => intResolve(str, 2, 16, opt),
+    stringify: node => intStringify(node, 16, '0x')
+};
+
+class YAMLSet extends YAMLMap {
+    constructor(schema) {
+        super(schema);
+        this.tag = YAMLSet.tag;
+    }
+    add(key) {
+        let pair;
+        if (isPair(key))
+            pair = key;
+        else if (key &&
+            typeof key === 'object' &&
+            'key' in key &&
+            'value' in key &&
+            key.value === null)
+            pair = new Pair(key.key, null);
+        else
+            pair = new Pair(key, null);
+        const prev = findPair(this.items, pair.key);
+        if (!prev)
+            this.items.push(pair);
+    }
+    /**
+     * If `keepPair` is `true`, returns the Pair matching `key`.
+     * Otherwise, returns the value of that Pair's key.
+     */
+    get(key, keepPair) {
+        const pair = findPair(this.items, key);
+        return !keepPair && isPair(pair)
+            ? isScalar(pair.key)
+                ? pair.key.value
+                : pair.key
+            : pair;
+    }
+    set(key, value) {
+        if (typeof value !== 'boolean')
+            throw new Error(`Expected boolean value for set(key, value) in a YAML set, not ${typeof value}`);
+        const prev = findPair(this.items, key);
+        if (prev && !value) {
+            this.items.splice(this.items.indexOf(prev), 1);
+        }
+        else if (!prev && value) {
+            this.items.push(new Pair(key));
+        }
+    }
+    toJSON(_, ctx) {
+        return super.toJSON(_, ctx, Set);
+    }
+    toString(ctx, onComment, onChompKeep) {
+        if (!ctx)
+            return JSON.stringify(this);
+        if (this.hasAllNullValues(true))
+            return super.toString(Object.assign({}, ctx, { allNullValues: true }), onComment, onChompKeep);
+        else
+            throw new Error('Set items must all have null values');
+    }
+    static from(schema, iterable, ctx) {
+        const { replacer } = ctx;
+        const set = new this(schema);
+        if (iterable && Symbol.iterator in Object(iterable))
+            for (let value of iterable) {
+                if (typeof replacer === 'function')
+                    value = replacer.call(iterable, value, value);
+                set.items.push(createPair(value, null, ctx));
+            }
+        return set;
+    }
+}
+YAMLSet.tag = 'tag:yaml.org,2002:set';
+const set = {
+    collection: 'map',
+    identify: value => value instanceof Set,
+    nodeClass: YAMLSet,
+    default: false,
+    tag: 'tag:yaml.org,2002:set',
+    createNode: (schema, iterable, ctx) => YAMLSet.from(schema, iterable, ctx),
+    resolve(map, onError) {
+        if (isMap(map)) {
+            if (map.hasAllNullValues(true))
+                return Object.assign(new YAMLSet(), map);
+            else
+                onError('Set items must all have null values');
+        }
+        else
+            onError('Expected a mapping for this tag');
+        return map;
+    }
+};
+
+/** Internal types handle bigint as number, because TS can't figure it out. */
+function parseSexagesimal(str, asBigInt) {
+    const sign = str[0];
+    const parts = sign === '-' || sign === '+' ? str.substring(1) : str;
+    const num = (n) => asBigInt ? BigInt(n) : Number(n);
+    const res = parts
+        .replace(/_/g, '')
+        .split(':')
+        .reduce((res, p) => res * num(60) + num(p), num(0));
+    return (sign === '-' ? num(-1) * res : res);
+}
+/**
+ * hhhh:mm:ss.sss
+ *
+ * Internal types handle bigint as number, because TS can't figure it out.
+ */
+function stringifySexagesimal(node) {
+    let { value } = node;
+    let num = (n) => n;
+    if (typeof value === 'bigint')
+        num = n => BigInt(n);
+    else if (isNaN(value) || !isFinite(value))
+        return stringifyNumber(node);
+    let sign = '';
+    if (value < 0) {
+        sign = '-';
+        value *= num(-1);
+    }
+    const _60 = num(60);
+    const parts = [value % _60]; // seconds, including ms
+    if (value < 60) {
+        parts.unshift(0); // at least one : is required
+    }
+    else {
+        value = (value - parts[0]) / _60;
+        parts.unshift(value % _60); // minutes
+        if (value >= 60) {
+            value = (value - parts[0]) / _60;
+            parts.unshift(value); // hours
+        }
+    }
+    return (sign +
+        parts
+            .map(n => String(n).padStart(2, '0'))
+            .join(':')
+            .replace(/000000\d*$/, '') // % 60 may introduce error
+    );
+}
+const intTime = {
+    identify: value => typeof value === 'bigint' || Number.isInteger(value),
+    default: true,
+    tag: 'tag:yaml.org,2002:int',
+    format: 'TIME',
+    test: /^[-+]?[0-9][0-9_]*(?::[0-5]?[0-9])+$/,
+    resolve: (str, _onError, { intAsBigInt }) => parseSexagesimal(str, intAsBigInt),
+    stringify: stringifySexagesimal
+};
+const floatTime = {
+    identify: value => typeof value === 'number',
+    default: true,
+    tag: 'tag:yaml.org,2002:float',
+    format: 'TIME',
+    test: /^[-+]?[0-9][0-9_]*(?::[0-5]?[0-9])+\.[0-9_]*$/,
+    resolve: str => parseSexagesimal(str, false),
+    stringify: stringifySexagesimal
+};
+const timestamp = {
+    identify: value => value instanceof Date,
+    default: true,
+    tag: 'tag:yaml.org,2002:timestamp',
+    // If the time zone is omitted, the timestamp is assumed to be specified in UTC. The time part
+    // may be omitted altogether, resulting in a date format. In such a case, the time part is
+    // assumed to be 00:00:00Z (start of day, UTC).
+    test: RegExp('^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})' + // YYYY-Mm-Dd
+        '(?:' + // time is optional
+        '(?:t|T|[ \\t]+)' + // t | T | whitespace
+        '([0-9]{1,2}):([0-9]{1,2}):([0-9]{1,2}(\\.[0-9]+)?)' + // Hh:Mm:Ss(.ss)?
+        '(?:[ \\t]*(Z|[-+][012]?[0-9](?::[0-9]{2})?))?' + // Z | +5 | -03:30
+        ')?$'),
+    resolve(str) {
+        const match = str.match(timestamp.test);
+        if (!match)
+            throw new Error('!!timestamp expects a date, starting with yyyy-mm-dd');
+        const [, year, month, day, hour, minute, second] = match.map(Number);
+        const millisec = match[7] ? Number((match[7] + '00').substr(1, 3)) : 0;
+        let date = Date.UTC(year, month - 1, day, hour || 0, minute || 0, second || 0, millisec);
+        const tz = match[8];
+        if (tz && tz !== 'Z') {
+            let d = parseSexagesimal(tz, false);
+            if (Math.abs(d) < 30)
+                d *= 60;
+            date -= 60000 * d;
+        }
+        return new Date(date);
+    },
+    stringify: ({ value }) => value?.toISOString().replace(/(T00:00:00)?\.000Z$/, '') ?? ''
+};
+
+const schema = [
+    map,
+    seq,
+    string,
+    nullTag,
+    trueTag,
+    falseTag,
+    intBin,
+    intOct,
+    int,
+    intHex,
+    floatNaN,
+    floatExp,
+    float,
+    binary,
+    merge,
+    omap,
+    pairs,
+    set,
+    intTime,
+    floatTime,
+    timestamp
+];
+
+const schemas = new Map([
+    ['core', schema$2],
+    ['failsafe', [map, seq, string]],
+    ['json', schema$1],
+    ['yaml11', schema],
+    ['yaml-1.1', schema]
+]);
+const tagsByName = {
+    binary,
+    bool: boolTag,
+    float: float$1,
+    floatExp: floatExp$1,
+    floatNaN: floatNaN$1,
+    floatTime,
+    int: int$1,
+    intHex: intHex$1,
+    intOct: intOct$1,
+    intTime,
+    map,
+    merge,
+    null: nullTag,
+    omap,
+    pairs,
+    seq,
+    set,
+    timestamp
+};
+const coreKnownTags = {
+    'tag:yaml.org,2002:binary': binary,
+    'tag:yaml.org,2002:merge': merge,
+    'tag:yaml.org,2002:omap': omap,
+    'tag:yaml.org,2002:pairs': pairs,
+    'tag:yaml.org,2002:set': set,
+    'tag:yaml.org,2002:timestamp': timestamp
+};
+function getTags(customTags, schemaName, addMergeTag) {
+    const schemaTags = schemas.get(schemaName);
+    if (schemaTags && !customTags) {
+        return addMergeTag && !schemaTags.includes(merge)
+            ? schemaTags.concat(merge)
+            : schemaTags.slice();
+    }
+    let tags = schemaTags;
+    if (!tags) {
+        if (Array.isArray(customTags))
+            tags = [];
+        else {
+            const keys = Array.from(schemas.keys())
+                .filter(key => key !== 'yaml11')
+                .map(key => JSON.stringify(key))
+                .join(', ');
+            throw new Error(`Unknown schema "${schemaName}"; use one of ${keys} or define customTags array`);
+        }
+    }
+    if (Array.isArray(customTags)) {
+        for (const tag of customTags)
+            tags = tags.concat(tag);
+    }
+    else if (typeof customTags === 'function') {
+        tags = customTags(tags.slice());
+    }
+    if (addMergeTag)
+        tags = tags.concat(merge);
+    return tags.reduce((tags, tag) => {
+        const tagObj = typeof tag === 'string' ? tagsByName[tag] : tag;
+        if (!tagObj) {
+            const tagName = JSON.stringify(tag);
+            const keys = Object.keys(tagsByName)
+                .map(key => JSON.stringify(key))
+                .join(', ');
+            throw new Error(`Unknown custom tag ${tagName}; use one of ${keys}`);
+        }
+        if (!tags.includes(tagObj))
+            tags.push(tagObj);
+        return tags;
+    }, []);
+}
+
+const sortMapEntriesByKey = (a, b) => a.key < b.key ? -1 : a.key > b.key ? 1 : 0;
+class Schema {
+    constructor({ compat, customTags, merge, resolveKnownTags, schema, sortMapEntries, toStringDefaults }) {
+        this.compat = Array.isArray(compat)
+            ? getTags(compat, 'compat')
+            : compat
+                ? getTags(null, compat)
+                : null;
+        this.name = (typeof schema === 'string' && schema) || 'core';
+        this.knownTags = resolveKnownTags ? coreKnownTags : {};
+        this.tags = getTags(customTags, this.name, merge);
+        this.toStringOptions = toStringDefaults ?? null;
+        Object.defineProperty(this, MAP, { value: map });
+        Object.defineProperty(this, SCALAR, { value: string });
+        Object.defineProperty(this, SEQ, { value: seq });
+        // Used by createMap()
+        this.sortMapEntries =
+            typeof sortMapEntries === 'function'
+                ? sortMapEntries
+                : sortMapEntries === true
+                    ? sortMapEntriesByKey
+                    : null;
+    }
+    clone() {
+        const copy = Object.create(Schema.prototype, Object.getOwnPropertyDescriptors(this));
+        copy.tags = this.tags.slice();
+        return copy;
+    }
+}
+
+function stringifyDocument(doc, options) {
+    const lines = [];
+    let hasDirectives = options.directives === true;
+    if (options.directives !== false && doc.directives) {
+        const dir = doc.directives.toString(doc);
+        if (dir) {
+            lines.push(dir);
+            hasDirectives = true;
+        }
+        else if (doc.directives.docStart)
+            hasDirectives = true;
+    }
+    if (hasDirectives)
+        lines.push('---');
+    const ctx = createStringifyContext(doc, options);
+    const { commentString } = ctx.options;
+    if (doc.commentBefore) {
+        if (lines.length !== 1)
+            lines.unshift('');
+        const cs = commentString(doc.commentBefore);
+        lines.unshift(indentComment(cs, ''));
+    }
+    let chompKeep = false;
+    let contentComment = null;
+    if (doc.contents) {
+        if (isNode(doc.contents)) {
+            if (doc.contents.spaceBefore && hasDirectives)
+                lines.push('');
+            if (doc.contents.commentBefore) {
+                const cs = commentString(doc.contents.commentBefore);
+                lines.push(indentComment(cs, ''));
+            }
+            // top-level block scalars need to be indented if followed by a comment
+            ctx.forceBlockIndent = !!doc.comment;
+            contentComment = doc.contents.comment;
+        }
+        const onChompKeep = contentComment ? undefined : () => (chompKeep = true);
+        let body = stringify$1(doc.contents, ctx, () => (contentComment = null), onChompKeep);
+        if (contentComment)
+            body += lineComment(body, '', commentString(contentComment));
+        if ((body[0] === '|' || body[0] === '>') &&
+            lines[lines.length - 1] === '---') {
+            // Top-level block scalars with a preceding doc marker ought to use the
+            // same line for their header.
+            lines[lines.length - 1] = `--- ${body}`;
+        }
+        else
+            lines.push(body);
+    }
+    else {
+        lines.push(stringify$1(doc.contents, ctx));
+    }
+    if (doc.directives?.docEnd) {
+        if (doc.comment) {
+            const cs = commentString(doc.comment);
+            if (cs.includes('\n')) {
+                lines.push('...');
+                lines.push(indentComment(cs, ''));
+            }
+            else {
+                lines.push(`... ${cs}`);
+            }
+        }
+        else {
+            lines.push('...');
         }
     }
     else {
-        const isNumericSequence = /^-?\d+\.\.-?\d+(?:\.\.-?\d+)?$/.test(m.body);
-        const isAlphaSequence = /^[a-zA-Z]\.\.[a-zA-Z](?:\.\.-?\d+)?$/.test(m.body);
-        const isSequence = isNumericSequence || isAlphaSequence;
-        const isOptions = m.body.indexOf(',') >= 0;
-        if (!isSequence && !isOptions) {
-            // {a},b}
-            if (m.post.match(/,(?!,).*\}/)) {
-                str = m.pre + '{' + m.body + escClose + m.post;
-                return expand_(str);
-            }
-            return [str];
-        }
-        let n;
-        if (isSequence) {
-            n = m.body.split(/\.\./);
-        }
-        else {
-            n = parseCommaParts(m.body);
-            if (n.length === 1 && n[0] !== undefined) {
-                // x{{a,b}}y ==> x{a}y x{b}y
-                n = expand_(n[0], false).map(embrace);
-                //XXX is this necessary? Can't seem to hit it in tests.
-                /* c8 ignore start */
-                if (n.length === 1) {
-                    return post.map(p => m.pre + n[0] + p);
-                }
-                /* c8 ignore stop */
-            }
-        }
-        // at this point, n is the parts, and we know it's not a comma set
-        // with a single entry.
-        let N;
-        if (isSequence && n[0] !== undefined && n[1] !== undefined) {
-            const x = numeric(n[0]);
-            const y = numeric(n[1]);
-            const width = Math.max(n[0].length, n[1].length);
-            let incr = n.length === 3 && n[2] !== undefined ? Math.abs(numeric(n[2])) : 1;
-            let test = lte;
-            const reverse = y < x;
-            if (reverse) {
-                incr *= -1;
-                test = gte;
-            }
-            const pad = n.some(isPadded);
-            N = [];
-            for (let i = x; test(i, y); i += incr) {
-                let c;
-                if (isAlphaSequence) {
-                    c = String.fromCharCode(i);
-                    if (c === '\\') {
-                        c = '';
-                    }
-                }
-                else {
-                    c = String(i);
-                    if (pad) {
-                        const need = width - c.length;
-                        if (need > 0) {
-                            const z = new Array(need + 1).join('0');
-                            if (i < 0) {
-                                c = '-' + z + c.slice(1);
-                            }
-                            else {
-                                c = z + c;
-                            }
-                        }
-                    }
-                }
-                N.push(c);
-            }
-        }
-        else {
-            N = [];
-            for (let j = 0; j < n.length; j++) {
-                N.push.apply(N, expand_(n[j], false));
-            }
-        }
-        for (let j = 0; j < N.length; j++) {
-            for (let k = 0; k < post.length; k++) {
-                const expansion = pre + N[j] + post[k];
-                if (!isTop || isSequence || expansion) {
-                    expansions.push(expansion);
-                }
-            }
+        let dc = doc.comment;
+        if (dc && chompKeep)
+            dc = dc.replace(/^\n+/, '');
+        if (dc) {
+            if ((!chompKeep || contentComment) && lines[lines.length - 1] !== '')
+                lines.push('');
+            lines.push(indentComment(commentString(dc), ''));
         }
     }
-    return expansions;
+    return lines.join('\n') + '\n';
 }
 
-const MAX_PATTERN_LENGTH = 1024 * 64;
-const assertValidPattern = (pattern) => {
-    if (typeof pattern !== 'string') {
-        throw new TypeError('invalid pattern');
-    }
-    if (pattern.length > MAX_PATTERN_LENGTH) {
-        throw new TypeError('pattern is too long');
-    }
-};
-
-// translate the various posix character classes into unicode properties
-// this works across all unicode locales
-// { <posix class>: [<translation>, /u flag required, negated]
-const posixClasses = {
-    '[:alnum:]': ['\\p{L}\\p{Nl}\\p{Nd}', true],
-    '[:alpha:]': ['\\p{L}\\p{Nl}', true],
-    '[:ascii:]': ['\\x' + '00-\\x' + '7f', false],
-    '[:blank:]': ['\\p{Zs}\\t', true],
-    '[:cntrl:]': ['\\p{Cc}', true],
-    '[:digit:]': ['\\p{Nd}', true],
-    '[:graph:]': ['\\p{Z}\\p{C}', true, true],
-    '[:lower:]': ['\\p{Ll}', true],
-    '[:print:]': ['\\p{C}', true],
-    '[:punct:]': ['\\p{P}', true],
-    '[:space:]': ['\\p{Z}\\t\\r\\n\\v\\f', true],
-    '[:upper:]': ['\\p{Lu}', true],
-    '[:word:]': ['\\p{L}\\p{Nl}\\p{Nd}\\p{Pc}', true],
-    '[:xdigit:]': ['A-Fa-f0-9', false],
-};
-// only need to escape a few things inside of brace expressions
-// escapes: [ \ ] -
-const braceEscape = (s) => s.replace(/[[\]\\-]/g, '\\$&');
-// escape all regexp magic characters
-const regexpEscape = (s) => s.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
-// everything has already been escaped, we just have to join
-const rangesToString = (ranges) => ranges.join('');
-// takes a glob string at a posix brace expression, and returns
-// an equivalent regular expression source, and boolean indicating
-// whether the /u flag needs to be applied, and the number of chars
-// consumed to parse the character class.
-// This also removes out of order ranges, and returns ($.) if the
-// entire class just no good.
-const parseClass = (glob, position) => {
-    const pos = position;
-    /* c8 ignore start */
-    if (glob.charAt(pos) !== '[') {
-        throw new Error('not in a brace expression');
-    }
-    /* c8 ignore stop */
-    const ranges = [];
-    const negs = [];
-    let i = pos + 1;
-    let sawStart = false;
-    let uflag = false;
-    let escaping = false;
-    let negate = false;
-    let endPos = pos;
-    let rangeStart = '';
-    WHILE: while (i < glob.length) {
-        const c = glob.charAt(i);
-        if ((c === '!' || c === '^') && i === pos + 1) {
-            negate = true;
-            i++;
-            continue;
+class Document {
+    constructor(value, replacer, options) {
+        /** A comment before this Document */
+        this.commentBefore = null;
+        /** A comment immediately after this Document */
+        this.comment = null;
+        /** Errors encountered during parsing. */
+        this.errors = [];
+        /** Warnings encountered during parsing. */
+        this.warnings = [];
+        Object.defineProperty(this, NODE_TYPE, { value: DOC });
+        let _replacer = null;
+        if (typeof replacer === 'function' || Array.isArray(replacer)) {
+            _replacer = replacer;
         }
-        if (c === ']' && sawStart && !escaping) {
-            endPos = i + 1;
-            break;
+        else if (options === undefined && replacer) {
+            options = replacer;
+            replacer = undefined;
         }
-        sawStart = true;
-        if (c === '\\') {
-            if (!escaping) {
-                escaping = true;
-                i++;
-                continue;
-            }
-            // escaped \ char, fall through and treat like normal char
+        const opt = Object.assign({
+            intAsBigInt: false,
+            keepSourceTokens: false,
+            logLevel: 'warn',
+            prettyErrors: true,
+            strict: true,
+            stringKeys: false,
+            uniqueKeys: true,
+            version: '1.2'
+        }, options);
+        this.options = opt;
+        let { version } = opt;
+        if (options?._directives) {
+            this.directives = options._directives.atDocument();
+            if (this.directives.yaml.explicit)
+                version = this.directives.yaml.version;
         }
-        if (c === '[' && !escaping) {
-            // either a posix class, a collation equivalent, or just a [
-            for (const [cls, [unip, u, neg]] of Object.entries(posixClasses)) {
-                if (glob.startsWith(cls, i)) {
-                    // invalid, [a-[] is fine, but not [a-[:alpha]]
-                    if (rangeStart) {
-                        return ['$.', false, glob.length - pos, true];
-                    }
-                    i += cls.length;
-                    if (neg)
-                        negs.push(unip);
-                    else
-                        ranges.push(unip);
-                    uflag = uflag || u;
-                    continue WHILE;
-                }
-            }
-        }
-        // now it's just a normal character, effectively
-        escaping = false;
-        if (rangeStart) {
-            // throw this range away if it's not valid, but others
-            // can still match.
-            if (c > rangeStart) {
-                ranges.push(braceEscape(rangeStart) + '-' + braceEscape(c));
-            }
-            else if (c === rangeStart) {
-                ranges.push(braceEscape(c));
-            }
-            rangeStart = '';
-            i++;
-            continue;
-        }
-        // now might be the start of a range.
-        // can be either c-d or c-] or c<more...>] or c] at this point
-        if (glob.startsWith('-]', i + 1)) {
-            ranges.push(braceEscape(c + '-'));
-            i += 2;
-            continue;
-        }
-        if (glob.startsWith('-', i + 1)) {
-            rangeStart = c;
-            i += 2;
-            continue;
-        }
-        // not the start of a range, just a single character
-        ranges.push(braceEscape(c));
-        i++;
-    }
-    if (endPos < i) {
-        // didn't see the end of the class, not a valid class,
-        // but might still be valid as a literal match.
-        return ['', false, 0, false];
-    }
-    // if we got no ranges and no negates, then we have a range that
-    // cannot possibly match anything, and that poisons the whole glob
-    if (!ranges.length && !negs.length) {
-        return ['$.', false, glob.length - pos, true];
-    }
-    // if we got one positive range, and it's a single character, then that's
-    // not actually a magic pattern, it's just that one literal character.
-    // we should not treat that as "magic", we should just return the literal
-    // character. [_] is a perfectly valid way to escape glob magic chars.
-    if (negs.length === 0 &&
-        ranges.length === 1 &&
-        /^\\?.$/.test(ranges[0]) &&
-        !negate) {
-        const r = ranges[0].length === 2 ? ranges[0].slice(-1) : ranges[0];
-        return [regexpEscape(r), false, endPos - pos, false];
-    }
-    const sranges = '[' + (negate ? '^' : '') + rangesToString(ranges) + ']';
-    const snegs = '[' + (negate ? '' : '^') + rangesToString(negs) + ']';
-    const comb = ranges.length && negs.length
-        ? '(' + sranges + '|' + snegs + ')'
-        : ranges.length
-            ? sranges
-            : snegs;
-    return [comb, uflag, endPos - pos, true];
-};
-
-/**
- * Un-escape a string that has been escaped with {@link escape}.
- *
- * If the {@link MinimatchOptions.windowsPathsNoEscape} option is used, then
- * square-bracket escapes are removed, but not backslash escapes.
- *
- * For example, it will turn the string `'[*]'` into `*`, but it will not
- * turn `'\\*'` into `'*'`, because `\` is a path separator in
- * `windowsPathsNoEscape` mode.
- *
- * When `windowsPathsNoEscape` is not set, then both square-bracket escapes and
- * backslash escapes are removed.
- *
- * Slashes (and backslashes in `windowsPathsNoEscape` mode) cannot be escaped
- * or unescaped.
- *
- * When `magicalBraces` is not set, escapes of braces (`{` and `}`) will not be
- * unescaped.
- */
-const unescape = (s, { windowsPathsNoEscape = false, magicalBraces = true, } = {}) => {
-    if (magicalBraces) {
-        return windowsPathsNoEscape
-            ? s.replace(/\[([^\/\\])\]/g, '$1')
-            : s
-                .replace(/((?!\\).|^)\[([^\/\\])\]/g, '$1$2')
-                .replace(/\\([^\/])/g, '$1');
-    }
-    return windowsPathsNoEscape
-        ? s.replace(/\[([^\/\\{}])\]/g, '$1')
-        : s
-            .replace(/((?!\\).|^)\[([^\/\\{}])\]/g, '$1$2')
-            .replace(/\\([^\/{}])/g, '$1');
-};
-
-// parse a single path portion
-const types = new Set(['!', '?', '+', '*', '@']);
-const isExtglobType = (c) => types.has(c);
-// Patterns that get prepended to bind to the start of either the
-// entire string, or just a single path portion, to prevent dots
-// and/or traversal patterns, when needed.
-// Exts don't need the ^ or / bit, because the root binds that already.
-const startNoTraversal = '(?!(?:^|/)\\.\\.?(?:$|/))';
-const startNoDot = '(?!\\.)';
-// characters that indicate a start of pattern needs the "no dots" bit,
-// because a dot *might* be matched. ( is not in the list, because in
-// the case of a child extglob, it will handle the prevention itself.
-const addPatternStart = new Set(['[', '.']);
-// cases where traversal is A-OK, no dot prevention needed
-const justDots = new Set(['..', '.']);
-const reSpecials = new Set('().*{}+?[]^$\\!');
-const regExpEscape$1 = (s) => s.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
-// any single thing other than /
-const qmark$1 = '[^/]';
-// * => any number of characters
-const star$1 = qmark$1 + '*?';
-// use + when we need to ensure that *something* matches, because the * is
-// the only thing in the path portion.
-const starNoEmpty = qmark$1 + '+?';
-// remove the \ chars that we added if we end up doing a nonmagic compare
-// const deslash = (s: string) => s.replace(/\\(.)/g, '$1')
-class AST {
-    type;
-    #root;
-    #hasMagic;
-    #uflag = false;
-    #parts = [];
-    #parent;
-    #parentIndex;
-    #negs;
-    #filledNegs = false;
-    #options;
-    #toString;
-    // set to true if it's an extglob with no children
-    // (which really means one child of '')
-    #emptyExt = false;
-    constructor(type, parent, options = {}) {
-        this.type = type;
-        // extglobs are inherently magical
-        if (type)
-            this.#hasMagic = true;
-        this.#parent = parent;
-        this.#root = this.#parent ? this.#parent.#root : this;
-        this.#options = this.#root === this ? options : this.#root.#options;
-        this.#negs = this.#root === this ? [] : this.#root.#negs;
-        if (type === '!' && !this.#root.#filledNegs)
-            this.#negs.push(this);
-        this.#parentIndex = this.#parent ? this.#parent.#parts.length : 0;
-    }
-    get hasMagic() {
-        /* c8 ignore start */
-        if (this.#hasMagic !== undefined)
-            return this.#hasMagic;
-        /* c8 ignore stop */
-        for (const p of this.#parts) {
-            if (typeof p === 'string')
-                continue;
-            if (p.type || p.hasMagic)
-                return (this.#hasMagic = true);
-        }
-        // note: will be undefined until we generate the regexp src and find out
-        return this.#hasMagic;
-    }
-    // reconstructs the pattern
-    toString() {
-        if (this.#toString !== undefined)
-            return this.#toString;
-        if (!this.type) {
-            return (this.#toString = this.#parts.map(p => String(p)).join(''));
-        }
-        else {
-            return (this.#toString =
-                this.type + '(' + this.#parts.map(p => String(p)).join('|') + ')');
-        }
-    }
-    #fillNegs() {
-        /* c8 ignore start */
-        if (this !== this.#root)
-            throw new Error('should only call on root');
-        if (this.#filledNegs)
-            return this;
-        /* c8 ignore stop */
-        // call toString() once to fill this out
-        this.toString();
-        this.#filledNegs = true;
-        let n;
-        while ((n = this.#negs.pop())) {
-            if (n.type !== '!')
-                continue;
-            // walk up the tree, appending everthing that comes AFTER parentIndex
-            let p = n;
-            let pp = p.#parent;
-            while (pp) {
-                for (let i = p.#parentIndex + 1; !pp.type && i < pp.#parts.length; i++) {
-                    for (const part of n.#parts) {
-                        /* c8 ignore start */
-                        if (typeof part === 'string') {
-                            throw new Error('string part in extglob AST??');
-                        }
-                        /* c8 ignore stop */
-                        part.copyIn(pp.#parts[i]);
-                    }
-                }
-                p = pp;
-                pp = p.#parent;
-            }
-        }
-        return this;
-    }
-    push(...parts) {
-        for (const p of parts) {
-            if (p === '')
-                continue;
-            /* c8 ignore start */
-            if (typeof p !== 'string' && !(p instanceof AST && p.#parent === this)) {
-                throw new Error('invalid part: ' + p);
-            }
-            /* c8 ignore stop */
-            this.#parts.push(p);
-        }
-    }
-    toJSON() {
-        const ret = this.type === null
-            ? this.#parts.slice().map(p => (typeof p === 'string' ? p : p.toJSON()))
-            : [this.type, ...this.#parts.map(p => p.toJSON())];
-        if (this.isStart() && !this.type)
-            ret.unshift([]);
-        if (this.isEnd() &&
-            (this === this.#root ||
-                (this.#root.#filledNegs && this.#parent?.type === '!'))) {
-            ret.push({});
-        }
-        return ret;
-    }
-    isStart() {
-        if (this.#root === this)
-            return true;
-        // if (this.type) return !!this.#parent?.isStart()
-        if (!this.#parent?.isStart())
-            return false;
-        if (this.#parentIndex === 0)
-            return true;
-        // if everything AHEAD of this is a negation, then it's still the "start"
-        const p = this.#parent;
-        for (let i = 0; i < this.#parentIndex; i++) {
-            const pp = p.#parts[i];
-            if (!(pp instanceof AST && pp.type === '!')) {
-                return false;
-            }
-        }
-        return true;
-    }
-    isEnd() {
-        if (this.#root === this)
-            return true;
-        if (this.#parent?.type === '!')
-            return true;
-        if (!this.#parent?.isEnd())
-            return false;
-        if (!this.type)
-            return this.#parent?.isEnd();
-        // if not root, it'll always have a parent
-        /* c8 ignore start */
-        const pl = this.#parent ? this.#parent.#parts.length : 0;
-        /* c8 ignore stop */
-        return this.#parentIndex === pl - 1;
-    }
-    copyIn(part) {
-        if (typeof part === 'string')
-            this.push(part);
         else
-            this.push(part.clone(this));
+            this.directives = new Directives({ version });
+        this.setSchema(version, options);
+        // @ts-expect-error We can't really know that this matches Contents.
+        this.contents =
+            value === undefined ? null : this.createNode(value, _replacer, options);
     }
-    clone(parent) {
-        const c = new AST(this.type, parent);
-        for (const p of this.#parts) {
-            c.copyIn(p);
-        }
-        return c;
-    }
-    static #parseAST(str, ast, pos, opt) {
-        let escaping = false;
-        let inBrace = false;
-        let braceStart = -1;
-        let braceNeg = false;
-        if (ast.type === null) {
-            // outside of a extglob, append until we find a start
-            let i = pos;
-            let acc = '';
-            while (i < str.length) {
-                const c = str.charAt(i++);
-                // still accumulate escapes at this point, but we do ignore
-                // starts that are escaped
-                if (escaping || c === '\\') {
-                    escaping = !escaping;
-                    acc += c;
-                    continue;
-                }
-                if (inBrace) {
-                    if (i === braceStart + 1) {
-                        if (c === '^' || c === '!') {
-                            braceNeg = true;
-                        }
-                    }
-                    else if (c === ']' && !(i === braceStart + 2 && braceNeg)) {
-                        inBrace = false;
-                    }
-                    acc += c;
-                    continue;
-                }
-                else if (c === '[') {
-                    inBrace = true;
-                    braceStart = i;
-                    braceNeg = false;
-                    acc += c;
-                    continue;
-                }
-                if (!opt.noext && isExtglobType(c) && str.charAt(i) === '(') {
-                    ast.push(acc);
-                    acc = '';
-                    const ext = new AST(c, ast);
-                    i = AST.#parseAST(str, ext, i, opt);
-                    ast.push(ext);
-                    continue;
-                }
-                acc += c;
-            }
-            ast.push(acc);
-            return i;
-        }
-        // some kind of extglob, pos is at the (
-        // find the next | or )
-        let i = pos + 1;
-        let part = new AST(null, ast);
-        const parts = [];
-        let acc = '';
-        while (i < str.length) {
-            const c = str.charAt(i++);
-            // still accumulate escapes at this point, but we do ignore
-            // starts that are escaped
-            if (escaping || c === '\\') {
-                escaping = !escaping;
-                acc += c;
-                continue;
-            }
-            if (inBrace) {
-                if (i === braceStart + 1) {
-                    if (c === '^' || c === '!') {
-                        braceNeg = true;
-                    }
-                }
-                else if (c === ']' && !(i === braceStart + 2 && braceNeg)) {
-                    inBrace = false;
-                }
-                acc += c;
-                continue;
-            }
-            else if (c === '[') {
-                inBrace = true;
-                braceStart = i;
-                braceNeg = false;
-                acc += c;
-                continue;
-            }
-            if (isExtglobType(c) && str.charAt(i) === '(') {
-                part.push(acc);
-                acc = '';
-                const ext = new AST(c, part);
-                part.push(ext);
-                i = AST.#parseAST(str, ext, i, opt);
-                continue;
-            }
-            if (c === '|') {
-                part.push(acc);
-                acc = '';
-                parts.push(part);
-                part = new AST(null, ast);
-                continue;
-            }
-            if (c === ')') {
-                if (acc === '' && ast.#parts.length === 0) {
-                    ast.#emptyExt = true;
-                }
-                part.push(acc);
-                acc = '';
-                ast.push(...parts, part);
-                return i;
-            }
-            acc += c;
-        }
-        // unfinished extglob
-        // if we got here, it was a malformed extglob! not an extglob, but
-        // maybe something else in there.
-        ast.type = null;
-        ast.#hasMagic = undefined;
-        ast.#parts = [str.substring(pos - 1)];
-        return i;
-    }
-    static fromGlob(pattern, options = {}) {
-        const ast = new AST(null, undefined, options);
-        AST.#parseAST(pattern, ast, 0, options);
-        return ast;
-    }
-    // returns the regular expression if there's magic, or the unescaped
-    // string if not.
-    toMMPattern() {
-        // should only be called on root
-        /* c8 ignore start */
-        if (this !== this.#root)
-            return this.#root.toMMPattern();
-        /* c8 ignore stop */
-        const glob = this.toString();
-        const [re, body, hasMagic, uflag] = this.toRegExpSource();
-        // if we're in nocase mode, and not nocaseMagicOnly, then we do
-        // still need a regular expression if we have to case-insensitively
-        // match capital/lowercase characters.
-        const anyMagic = hasMagic ||
-            this.#hasMagic ||
-            (this.#options.nocase &&
-                !this.#options.nocaseMagicOnly &&
-                glob.toUpperCase() !== glob.toLowerCase());
-        if (!anyMagic) {
-            return body;
-        }
-        const flags = (this.#options.nocase ? 'i' : '') + (uflag ? 'u' : '');
-        return Object.assign(new RegExp(`^${re}$`, flags), {
-            _src: re,
-            _glob: glob,
+    /**
+     * Create a deep copy of this Document and its contents.
+     *
+     * Custom Node values that inherit from `Object` still refer to their original instances.
+     */
+    clone() {
+        const copy = Object.create(Document.prototype, {
+            [NODE_TYPE]: { value: DOC }
         });
+        copy.commentBefore = this.commentBefore;
+        copy.comment = this.comment;
+        copy.errors = this.errors.slice();
+        copy.warnings = this.warnings.slice();
+        copy.options = Object.assign({}, this.options);
+        if (this.directives)
+            copy.directives = this.directives.clone();
+        copy.schema = this.schema.clone();
+        // @ts-expect-error We can't really know that this matches Contents.
+        copy.contents = isNode(this.contents)
+            ? this.contents.clone(copy.schema)
+            : this.contents;
+        if (this.range)
+            copy.range = this.range.slice();
+        return copy;
     }
-    get options() {
-        return this.#options;
+    /** Adds a value to the document. */
+    add(value) {
+        if (assertCollection(this.contents))
+            this.contents.add(value);
     }
-    // returns the string match, the regexp source, whether there's magic
-    // in the regexp (so a regular expression is required) and whether or
-    // not the uflag is needed for the regular expression (for posix classes)
-    // TODO: instead of injecting the start/end at this point, just return
-    // the BODY of the regexp, along with the start/end portions suitable
-    // for binding the start/end in either a joined full-path makeRe context
-    // (where we bind to (^|/), or a standalone matchPart context (where
-    // we bind to ^, and not /).  Otherwise slashes get duped!
-    //
-    // In part-matching mode, the start is:
-    // - if not isStart: nothing
-    // - if traversal possible, but not allowed: ^(?!\.\.?$)
-    // - if dots allowed or not possible: ^
-    // - if dots possible and not allowed: ^(?!\.)
-    // end is:
-    // - if not isEnd(): nothing
-    // - else: $
-    //
-    // In full-path matching mode, we put the slash at the START of the
-    // pattern, so start is:
-    // - if first pattern: same as part-matching mode
-    // - if not isStart(): nothing
-    // - if traversal possible, but not allowed: /(?!\.\.?(?:$|/))
-    // - if dots allowed or not possible: /
-    // - if dots possible and not allowed: /(?!\.)
-    // end is:
-    // - if last pattern, same as part-matching mode
-    // - else nothing
-    //
-    // Always put the (?:$|/) on negated tails, though, because that has to be
-    // there to bind the end of the negated pattern portion, and it's easier to
-    // just stick it in now rather than try to inject it later in the middle of
-    // the pattern.
-    //
-    // We can just always return the same end, and leave it up to the caller
-    // to know whether it's going to be used joined or in parts.
-    // And, if the start is adjusted slightly, can do the same there:
-    // - if not isStart: nothing
-    // - if traversal possible, but not allowed: (?:/|^)(?!\.\.?$)
-    // - if dots allowed or not possible: (?:/|^)
-    // - if dots possible and not allowed: (?:/|^)(?!\.)
-    //
-    // But it's better to have a simpler binding without a conditional, for
-    // performance, so probably better to return both start options.
-    //
-    // Then the caller just ignores the end if it's not the first pattern,
-    // and the start always gets applied.
-    //
-    // But that's always going to be $ if it's the ending pattern, or nothing,
-    // so the caller can just attach $ at the end of the pattern when building.
-    //
-    // So the todo is:
-    // - better detect what kind of start is needed
-    // - return both flavors of starting pattern
-    // - attach $ at the end of the pattern when creating the actual RegExp
-    //
-    // Ah, but wait, no, that all only applies to the root when the first pattern
-    // is not an extglob. If the first pattern IS an extglob, then we need all
-    // that dot prevention biz to live in the extglob portions, because eg
-    // +(*|.x*) can match .xy but not .yx.
-    //
-    // So, return the two flavors if it's #root and the first child is not an
-    // AST, otherwise leave it to the child AST to handle it, and there,
-    // use the (?:^|/) style of start binding.
-    //
-    // Even simplified further:
-    // - Since the start for a join is eg /(?!\.) and the start for a part
-    // is ^(?!\.), we can just prepend (?!\.) to the pattern (either root
-    // or start or whatever) and prepend ^ or / at the Regexp construction.
-    toRegExpSource(allowDot) {
-        const dot = allowDot ?? !!this.#options.dot;
-        if (this.#root === this)
-            this.#fillNegs();
-        if (!this.type) {
-            const noEmpty = this.isStart() &&
-                this.isEnd() &&
-                !this.#parts.some(s => typeof s !== 'string');
-            const src = this.#parts
-                .map(p => {
-                const [re, _, hasMagic, uflag] = typeof p === 'string'
-                    ? AST.#parseGlob(p, this.#hasMagic, noEmpty)
-                    : p.toRegExpSource(allowDot);
-                this.#hasMagic = this.#hasMagic || hasMagic;
-                this.#uflag = this.#uflag || uflag;
-                return re;
-            })
-                .join('');
-            let start = '';
-            if (this.isStart()) {
-                if (typeof this.#parts[0] === 'string') {
-                    // this is the string that will match the start of the pattern,
-                    // so we need to protect against dots and such.
-                    // '.' and '..' cannot match unless the pattern is that exactly,
-                    // even if it starts with . or dot:true is set.
-                    const dotTravAllowed = this.#parts.length === 1 && justDots.has(this.#parts[0]);
-                    if (!dotTravAllowed) {
-                        const aps = addPatternStart;
-                        // check if we have a possibility of matching . or ..,
-                        // and prevent that.
-                        const needNoTrav = 
-                        // dots are allowed, and the pattern starts with [ or .
-                        (dot && aps.has(src.charAt(0))) ||
-                            // the pattern starts with \., and then [ or .
-                            (src.startsWith('\\.') && aps.has(src.charAt(2))) ||
-                            // the pattern starts with \.\., and then [ or .
-                            (src.startsWith('\\.\\.') && aps.has(src.charAt(4)));
-                        // no need to prevent dots if it can't match a dot, or if a
-                        // sub-pattern will be preventing it anyway.
-                        const needNoDot = !dot && !allowDot && aps.has(src.charAt(0));
-                        start = needNoTrav ? startNoTraversal : needNoDot ? startNoDot : '';
-                    }
-                }
-            }
-            // append the "end of path portion" pattern to negation tails
-            let end = '';
-            if (this.isEnd() &&
-                this.#root.#filledNegs &&
-                this.#parent?.type === '!') {
-                end = '(?:$|\\/)';
-            }
-            const final = start + src + end;
-            return [
-                final,
-                unescape(src),
-                (this.#hasMagic = !!this.#hasMagic),
-                this.#uflag,
-            ];
-        }
-        // We need to calculate the body *twice* if it's a repeat pattern
-        // at the start, once in nodot mode, then again in dot mode, so a
-        // pattern like *(?) can match 'x.y'
-        const repeated = this.type === '*' || this.type === '+';
-        // some kind of extglob
-        const start = this.type === '!' ? '(?:(?!(?:' : '(?:';
-        let body = this.#partsToRegExp(dot);
-        if (this.isStart() && this.isEnd() && !body && this.type !== '!') {
-            // invalid extglob, has to at least be *something* present, if it's
-            // the entire path portion.
-            const s = this.toString();
-            this.#parts = [s];
-            this.type = null;
-            this.#hasMagic = undefined;
-            return [s, unescape(this.toString()), false, false];
-        }
-        // XXX abstract out this map method
-        let bodyDotAllowed = !repeated || allowDot || dot || !startNoDot
-            ? ''
-            : this.#partsToRegExp(true);
-        if (bodyDotAllowed === body) {
-            bodyDotAllowed = '';
-        }
-        if (bodyDotAllowed) {
-            body = `(?:${body})(?:${bodyDotAllowed})*?`;
-        }
-        // an empty !() is exactly equivalent to a starNoEmpty
-        let final = '';
-        if (this.type === '!' && this.#emptyExt) {
-            final = (this.isStart() && !dot ? startNoDot : '') + starNoEmpty;
-        }
-        else {
-            const close = this.type === '!'
-                ? // !() must match something,but !(x) can match ''
-                    '))' +
-                        (this.isStart() && !dot && !allowDot ? startNoDot : '') +
-                        star$1 +
-                        ')'
-                : this.type === '@'
-                    ? ')'
-                    : this.type === '?'
-                        ? ')?'
-                        : this.type === '+' && bodyDotAllowed
-                            ? ')'
-                            : this.type === '*' && bodyDotAllowed
-                                ? `)?`
-                                : `)${this.type}`;
-            final = start + body + close;
-        }
-        return [
-            final,
-            unescape(body),
-            (this.#hasMagic = !!this.#hasMagic),
-            this.#uflag,
-        ];
+    /** Adds a value to the document. */
+    addIn(path, value) {
+        if (assertCollection(this.contents))
+            this.contents.addIn(path, value);
     }
-    #partsToRegExp(dot) {
-        return this.#parts
-            .map(p => {
-            // extglob ASTs should only contain parent ASTs
-            /* c8 ignore start */
-            if (typeof p === 'string') {
-                throw new Error('string type in extglob ast??');
-            }
-            /* c8 ignore stop */
-            // can ignore hasMagic, because extglobs are already always magic
-            const [re, _, _hasMagic, uflag] = p.toRegExpSource(dot);
-            this.#uflag = this.#uflag || uflag;
-            return re;
-        })
-            .filter(p => !(this.isStart() && this.isEnd()) || !!p)
-            .join('|');
-    }
-    static #parseGlob(glob, hasMagic, noEmpty = false) {
-        let escaping = false;
-        let re = '';
-        let uflag = false;
-        for (let i = 0; i < glob.length; i++) {
-            const c = glob.charAt(i);
-            if (escaping) {
-                escaping = false;
-                re += (reSpecials.has(c) ? '\\' : '') + c;
-                continue;
-            }
-            if (c === '\\') {
-                if (i === glob.length - 1) {
-                    re += '\\\\';
-                }
-                else {
-                    escaping = true;
-                }
-                continue;
-            }
-            if (c === '[') {
-                const [src, needUflag, consumed, magic] = parseClass(glob, i);
-                if (consumed) {
-                    re += src;
-                    uflag = uflag || needUflag;
-                    i += consumed - 1;
-                    hasMagic = hasMagic || magic;
-                    continue;
-                }
-            }
-            if (c === '*') {
-                re += noEmpty && glob === '*' ? starNoEmpty : star$1;
-                hasMagic = true;
-                continue;
-            }
-            if (c === '?') {
-                re += qmark$1;
-                hasMagic = true;
-                continue;
-            }
-            re += regExpEscape$1(c);
+    /**
+     * Create a new `Alias` node, ensuring that the target `node` has the required anchor.
+     *
+     * If `node` already has an anchor, `name` is ignored.
+     * Otherwise, the `node.anchor` value will be set to `name`,
+     * or if an anchor with that name is already present in the document,
+     * `name` will be used as a prefix for a new unique anchor.
+     * If `name` is undefined, the generated anchor will use 'a' as a prefix.
+     */
+    createAlias(node, name) {
+        if (!node.anchor) {
+            const prev = anchorNames(this);
+            node.anchor =
+                // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+                !name || prev.has(name) ? findNewAnchor(name || 'a', prev) : name;
         }
-        return [re, unescape(glob), !!hasMagic, uflag];
+        return new Alias(node.anchor);
+    }
+    createNode(value, replacer, options) {
+        let _replacer = undefined;
+        if (typeof replacer === 'function') {
+            value = replacer.call({ '': value }, '', value);
+            _replacer = replacer;
+        }
+        else if (Array.isArray(replacer)) {
+            const keyToStr = (v) => typeof v === 'number' || v instanceof String || v instanceof Number;
+            const asStr = replacer.filter(keyToStr).map(String);
+            if (asStr.length > 0)
+                replacer = replacer.concat(asStr);
+            _replacer = replacer;
+        }
+        else if (options === undefined && replacer) {
+            options = replacer;
+            replacer = undefined;
+        }
+        const { aliasDuplicateObjects, anchorPrefix, flow, keepUndefined, onTagObj, tag } = options ?? {};
+        const { onAnchor, setAnchors, sourceObjects } = createNodeAnchors(this, 
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+        anchorPrefix || 'a');
+        const ctx = {
+            aliasDuplicateObjects: aliasDuplicateObjects ?? true,
+            keepUndefined: keepUndefined ?? false,
+            onAnchor,
+            onTagObj,
+            replacer: _replacer,
+            schema: this.schema,
+            sourceObjects
+        };
+        const node = createNode(value, tag, ctx);
+        if (flow && isCollection(node))
+            node.flow = true;
+        setAnchors();
+        return node;
+    }
+    /**
+     * Convert a key and a value into a `Pair` using the current schema,
+     * recursively wrapping all values as `Scalar` or `Collection` nodes.
+     */
+    createPair(key, value, options = {}) {
+        const k = this.createNode(key, null, options);
+        const v = this.createNode(value, null, options);
+        return new Pair(k, v);
+    }
+    /**
+     * Removes a value from the document.
+     * @returns `true` if the item was found and removed.
+     */
+    delete(key) {
+        return assertCollection(this.contents) ? this.contents.delete(key) : false;
+    }
+    /**
+     * Removes a value from the document.
+     * @returns `true` if the item was found and removed.
+     */
+    deleteIn(path) {
+        if (isEmptyPath(path)) {
+            if (this.contents == null)
+                return false;
+            // @ts-expect-error Presumed impossible if Strict extends false
+            this.contents = null;
+            return true;
+        }
+        return assertCollection(this.contents)
+            ? this.contents.deleteIn(path)
+            : false;
+    }
+    /**
+     * Returns item at `key`, or `undefined` if not found. By default unwraps
+     * scalar values from their surrounding node; to disable set `keepScalar` to
+     * `true` (collections are always returned intact).
+     */
+    get(key, keepScalar) {
+        return isCollection(this.contents)
+            ? this.contents.get(key, keepScalar)
+            : undefined;
+    }
+    /**
+     * Returns item at `path`, or `undefined` if not found. By default unwraps
+     * scalar values from their surrounding node; to disable set `keepScalar` to
+     * `true` (collections are always returned intact).
+     */
+    getIn(path, keepScalar) {
+        if (isEmptyPath(path))
+            return !keepScalar && isScalar(this.contents)
+                ? this.contents.value
+                : this.contents;
+        return isCollection(this.contents)
+            ? this.contents.getIn(path, keepScalar)
+            : undefined;
+    }
+    /**
+     * Checks if the document includes a value with the key `key`.
+     */
+    has(key) {
+        return isCollection(this.contents) ? this.contents.has(key) : false;
+    }
+    /**
+     * Checks if the document includes a value at `path`.
+     */
+    hasIn(path) {
+        if (isEmptyPath(path))
+            return this.contents !== undefined;
+        return isCollection(this.contents) ? this.contents.hasIn(path) : false;
+    }
+    /**
+     * Sets a value in this document. For `!!set`, `value` needs to be a
+     * boolean to add/remove the item from the set.
+     */
+    set(key, value) {
+        if (this.contents == null) {
+            // @ts-expect-error We can't really know that this matches Contents.
+            this.contents = collectionFromPath(this.schema, [key], value);
+        }
+        else if (assertCollection(this.contents)) {
+            this.contents.set(key, value);
+        }
+    }
+    /**
+     * Sets a value in this document. For `!!set`, `value` needs to be a
+     * boolean to add/remove the item from the set.
+     */
+    setIn(path, value) {
+        if (isEmptyPath(path)) {
+            // @ts-expect-error We can't really know that this matches Contents.
+            this.contents = value;
+        }
+        else if (this.contents == null) {
+            // @ts-expect-error We can't really know that this matches Contents.
+            this.contents = collectionFromPath(this.schema, Array.from(path), value);
+        }
+        else if (assertCollection(this.contents)) {
+            this.contents.setIn(path, value);
+        }
+    }
+    /**
+     * Change the YAML version and schema used by the document.
+     * A `null` version disables support for directives, explicit tags, anchors, and aliases.
+     * It also requires the `schema` option to be given as a `Schema` instance value.
+     *
+     * Overrides all previously set schema options.
+     */
+    setSchema(version, options = {}) {
+        if (typeof version === 'number')
+            version = String(version);
+        let opt;
+        switch (version) {
+            case '1.1':
+                if (this.directives)
+                    this.directives.yaml.version = '1.1';
+                else
+                    this.directives = new Directives({ version: '1.1' });
+                opt = { resolveKnownTags: false, schema: 'yaml-1.1' };
+                break;
+            case '1.2':
+            case 'next':
+                if (this.directives)
+                    this.directives.yaml.version = version;
+                else
+                    this.directives = new Directives({ version });
+                opt = { resolveKnownTags: true, schema: 'core' };
+                break;
+            case null:
+                if (this.directives)
+                    delete this.directives;
+                opt = null;
+                break;
+            default: {
+                const sv = JSON.stringify(version);
+                throw new Error(`Expected '1.1', '1.2' or null as first argument, but found: ${sv}`);
+            }
+        }
+        // Not using `instanceof Schema` to allow for duck typing
+        if (options.schema instanceof Object)
+            this.schema = options.schema;
+        else if (opt)
+            this.schema = new Schema(Object.assign(opt, options));
+        else
+            throw new Error(`With a null YAML version, the { schema: Schema } option is required`);
+    }
+    // json & jsonArg are only used from toJSON()
+    toJS({ json, jsonArg, mapAsMap, maxAliasCount, onAnchor, reviver } = {}) {
+        const ctx = {
+            anchors: new Map(),
+            doc: this,
+            keep: !json,
+            mapAsMap: mapAsMap === true,
+            mapKeyWarned: false,
+            maxAliasCount: typeof maxAliasCount === 'number' ? maxAliasCount : 100
+        };
+        const res = toJS(this.contents, jsonArg ?? '', ctx);
+        if (typeof onAnchor === 'function')
+            for (const { count, res } of ctx.anchors.values())
+                onAnchor(res, count);
+        return typeof reviver === 'function'
+            ? applyReviver(reviver, { '': res }, '', res)
+            : res;
+    }
+    /**
+     * A JSON representation of the document `contents`.
+     *
+     * @param jsonArg Used by `JSON.stringify` to indicate the array index or
+     *   property name.
+     */
+    toJSON(jsonArg, onAnchor) {
+        return this.toJS({ json: true, jsonArg, mapAsMap: false, onAnchor });
+    }
+    /** A YAML representation of the document. */
+    toString(options = {}) {
+        if (this.errors.length > 0)
+            throw new Error('Document with errors cannot be stringified');
+        if ('indent' in options &&
+            (!Number.isInteger(options.indent) || Number(options.indent) <= 0)) {
+            const s = JSON.stringify(options.indent);
+            throw new Error(`"indent" option must be a positive integer, not ${s}`);
+        }
+        return stringifyDocument(this, options);
     }
 }
+function assertCollection(contents) {
+    if (isCollection(contents))
+        return true;
+    throw new Error('Expected a YAML collection as document contents');
+}
 
-/**
- * Escape all magic characters in a glob pattern.
- *
- * If the {@link MinimatchOptions.windowsPathsNoEscape}
- * option is used, then characters are escaped by wrapping in `[]`, because
- * a magic character wrapped in a character class can only be satisfied by
- * that exact character.  In this mode, `\` is _not_ escaped, because it is
- * not interpreted as a magic character, but instead as a path separator.
- *
- * If the {@link MinimatchOptions.magicalBraces} option is used,
- * then braces (`{` and `}`) will be escaped.
- */
-const escape = (s, { windowsPathsNoEscape = false, magicalBraces = false, } = {}) => {
-    // don't need to escape +@! because we escape the parens
-    // that make those magic, and escaping ! as [!] isn't valid,
-    // because [!]] is a valid glob class meaning not ']'.
-    if (magicalBraces) {
-        return windowsPathsNoEscape
-            ? s.replace(/[?*()[\]{}]/g, '[$&]')
-            : s.replace(/[?*()[\]\\{}]/g, '\\$&');
-    }
-    return windowsPathsNoEscape
-        ? s.replace(/[?*()[\]]/g, '[$&]')
-        : s.replace(/[?*()[\]\\]/g, '\\$&');
-};
+new Set('0123456789ABCDEFabcdef');
+new Set("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-#;/?:@&=+$_.!~*'()");
+new Set(',[]{}');
+new Set(' ,[]{}\n\r\t');
 
-const minimatch = (p, pattern, options = {}) => {
-    assertValidPattern(pattern);
-    // shortcut: comments match nothing.
-    if (!options.nocomment && pattern.charAt(0) === '#') {
-        return false;
+function stringify(value, replacer, options) {
+    let _replacer = null;
+    if (typeof replacer === 'function' || Array.isArray(replacer)) {
+        _replacer = replacer;
     }
-    return new Minimatch(pattern, options).match(p);
-};
-// Optimized checking for the most common glob patterns.
-const starDotExtRE = /^\*+([^+@!?\*\[\(]*)$/;
-const starDotExtTest = (ext) => (f) => !f.startsWith('.') && f.endsWith(ext);
-const starDotExtTestDot = (ext) => (f) => f.endsWith(ext);
-const starDotExtTestNocase = (ext) => {
-    ext = ext.toLowerCase();
-    return (f) => !f.startsWith('.') && f.toLowerCase().endsWith(ext);
-};
-const starDotExtTestNocaseDot = (ext) => {
-    ext = ext.toLowerCase();
-    return (f) => f.toLowerCase().endsWith(ext);
-};
-const starDotStarRE = /^\*+\.\*+$/;
-const starDotStarTest = (f) => !f.startsWith('.') && f.includes('.');
-const starDotStarTestDot = (f) => f !== '.' && f !== '..' && f.includes('.');
-const dotStarRE = /^\.\*+$/;
-const dotStarTest = (f) => f !== '.' && f !== '..' && f.startsWith('.');
-const starRE = /^\*+$/;
-const starTest = (f) => f.length !== 0 && !f.startsWith('.');
-const starTestDot = (f) => f.length !== 0 && f !== '.' && f !== '..';
-const qmarksRE = /^\?+([^+@!?\*\[\(]*)?$/;
-const qmarksTestNocase = ([$0, ext = '']) => {
-    const noext = qmarksTestNoExt([$0]);
-    if (!ext)
-        return noext;
-    ext = ext.toLowerCase();
-    return (f) => noext(f) && f.toLowerCase().endsWith(ext);
-};
-const qmarksTestNocaseDot = ([$0, ext = '']) => {
-    const noext = qmarksTestNoExtDot([$0]);
-    if (!ext)
-        return noext;
-    ext = ext.toLowerCase();
-    return (f) => noext(f) && f.toLowerCase().endsWith(ext);
-};
-const qmarksTestDot = ([$0, ext = '']) => {
-    const noext = qmarksTestNoExtDot([$0]);
-    return !ext ? noext : (f) => noext(f) && f.endsWith(ext);
-};
-const qmarksTest = ([$0, ext = '']) => {
-    const noext = qmarksTestNoExt([$0]);
-    return !ext ? noext : (f) => noext(f) && f.endsWith(ext);
-};
-const qmarksTestNoExt = ([$0]) => {
-    const len = $0.length;
-    return (f) => f.length === len && !f.startsWith('.');
-};
-const qmarksTestNoExtDot = ([$0]) => {
-    const len = $0.length;
-    return (f) => f.length === len && f !== '.' && f !== '..';
-};
-/* c8 ignore start */
-const defaultPlatform = (typeof process === 'object' && process
-    ? (typeof process.env === 'object' &&
-        process.env &&
-        process.env.__MINIMATCH_TESTING_PLATFORM__) ||
-        process.platform
-    : 'posix');
-const path = {
-    win32: { sep: '\\' },
-    posix: { sep: '/' },
-};
-/* c8 ignore stop */
-const sep = defaultPlatform === 'win32' ? path.win32.sep : path.posix.sep;
-minimatch.sep = sep;
-const GLOBSTAR = Symbol('globstar **');
-minimatch.GLOBSTAR = GLOBSTAR;
-// any single thing other than /
-// don't need to escape / when using new RegExp()
-const qmark = '[^/]';
-// * => any number of characters
-const star = qmark + '*?';
-// ** when dots are allowed.  Anything goes, except .. and .
-// not (^ or / followed by one or two dots followed by $ or /),
-// followed by anything, any number of times.
-const twoStarDot = '(?:(?!(?:\\/|^)(?:\\.{1,2})($|\\/)).)*?';
-// not a ^ or / followed by a dot,
-// followed by anything, any number of times.
-const twoStarNoDot = '(?:(?!(?:\\/|^)\\.).)*?';
-const filter = (pattern, options = {}) => (p) => minimatch(p, pattern, options);
-minimatch.filter = filter;
-const ext = (a, b = {}) => Object.assign({}, a, b);
-const defaults = (def) => {
-    if (!def || typeof def !== 'object' || !Object.keys(def).length) {
-        return minimatch;
+    else if (options === undefined && replacer) {
+        options = replacer;
     }
-    const orig = minimatch;
-    const m = (p, pattern, options = {}) => orig(p, pattern, ext(def, options));
-    return Object.assign(m, {
-        Minimatch: class Minimatch extends orig.Minimatch {
-            constructor(pattern, options = {}) {
-                super(pattern, ext(def, options));
-            }
-            static defaults(options) {
-                return orig.defaults(ext(def, options)).Minimatch;
-            }
-        },
-        AST: class AST extends orig.AST {
-            /* c8 ignore start */
-            constructor(type, parent, options = {}) {
-                super(type, parent, ext(def, options));
-            }
-            /* c8 ignore stop */
-            static fromGlob(pattern, options = {}) {
-                return orig.AST.fromGlob(pattern, ext(def, options));
-            }
-        },
-        unescape: (s, options = {}) => orig.unescape(s, ext(def, options)),
-        escape: (s, options = {}) => orig.escape(s, ext(def, options)),
-        filter: (pattern, options = {}) => orig.filter(pattern, ext(def, options)),
-        defaults: (options) => orig.defaults(ext(def, options)),
-        makeRe: (pattern, options = {}) => orig.makeRe(pattern, ext(def, options)),
-        braceExpand: (pattern, options = {}) => orig.braceExpand(pattern, ext(def, options)),
-        match: (list, pattern, options = {}) => orig.match(list, pattern, ext(def, options)),
-        sep: orig.sep,
-        GLOBSTAR: GLOBSTAR,
-    });
-};
-minimatch.defaults = defaults;
-// Brace expansion:
-// a{b,c}d -> abd acd
-// a{b,}c -> abc ac
-// a{0..3}d -> a0d a1d a2d a3d
-// a{b,c{d,e}f}g -> abg acdfg acefg
-// a{b,c}d{e,f}g -> abdeg acdeg abdeg abdfg
-//
-// Invalid sets are not expanded.
-// a{2..}b -> a{2..}b
-// a{b}c -> a{b}c
-const braceExpand = (pattern, options = {}) => {
-    assertValidPattern(pattern);
-    // Thanks to Yeting Li <https://github.com/yetingli> for
-    // improving this regexp to avoid a ReDOS vulnerability.
-    if (options.nobrace || !/\{(?:(?!\{).)*\}/.test(pattern)) {
-        // shortcut. no need to expand.
-        return [pattern];
+    if (typeof options === 'string')
+        options = options.length;
+    if (typeof options === 'number') {
+        const indent = Math.round(options);
+        options = indent < 1 ? undefined : indent > 8 ? { indent: 8 } : { indent };
     }
-    return expand(pattern);
-};
-minimatch.braceExpand = braceExpand;
-// parse a component of the expanded set.
-// At this point, no pattern may contain "/" in it
-// so we're going to return a 2d array, where each entry is the full
-// pattern, split on '/', and then turned into a regular expression.
-// A regexp is made at the end which joins each array with an
-// escaped /, and another full one which joins each regexp with |.
-//
-// Following the lead of Bash 4.1, note that "**" only has special meaning
-// when it is the *only* thing in a path portion.  Otherwise, any series
-// of * is equivalent to a single *.  Globstar behavior is enabled by
-// default, and can be disabled by setting options.noglobstar.
-const makeRe = (pattern, options = {}) => new Minimatch(pattern, options).makeRe();
-minimatch.makeRe = makeRe;
-const match = (list, pattern, options = {}) => {
-    const mm = new Minimatch(pattern, options);
-    list = list.filter(f => mm.match(f));
-    if (mm.options.nonull && !list.length) {
-        list.push(pattern);
+    if (value === undefined) {
+        const { keepUndefined } = options ?? replacer ?? {};
+        if (!keepUndefined)
+            return undefined;
     }
-    return list;
-};
-minimatch.match = match;
-// replace stuff like \* with *
-const globMagic = /[?*]|[+@!]\(.*?\)|\[|\]/;
-const regExpEscape = (s) => s.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
-class Minimatch {
-    options;
-    set;
-    pattern;
-    windowsPathsNoEscape;
-    nonegate;
-    negate;
-    comment;
-    empty;
-    preserveMultipleSlashes;
-    partial;
-    globSet;
-    globParts;
-    nocase;
-    isWindows;
-    platform;
-    windowsNoMagicRoot;
-    regexp;
-    constructor(pattern, options = {}) {
-        assertValidPattern(pattern);
-        options = options || {};
-        this.options = options;
-        this.pattern = pattern;
-        this.platform = options.platform || defaultPlatform;
-        this.isWindows = this.platform === 'win32';
-        this.windowsPathsNoEscape =
-            !!options.windowsPathsNoEscape || options.allowWindowsEscape === false;
-        if (this.windowsPathsNoEscape) {
-            this.pattern = this.pattern.replace(/\\/g, '/');
-        }
-        this.preserveMultipleSlashes = !!options.preserveMultipleSlashes;
-        this.regexp = null;
-        this.negate = false;
-        this.nonegate = !!options.nonegate;
-        this.comment = false;
-        this.empty = false;
-        this.partial = !!options.partial;
-        this.nocase = !!this.options.nocase;
-        this.windowsNoMagicRoot =
-            options.windowsNoMagicRoot !== undefined
-                ? options.windowsNoMagicRoot
-                : !!(this.isWindows && this.nocase);
-        this.globSet = [];
-        this.globParts = [];
-        this.set = [];
-        // make the set of regexps etc.
-        this.make();
+    if (isDocument(value) && !_replacer)
+        return value.toString(options);
+    return new Document(value, _replacer, options).toString(options);
+}
+
+async function convertMigrationMapsToOpenRewrite(options) {
+    let convertedCount = 0;
+    // Ensure output directory exists
+    if (!existsSync(options.outputDirectory)) {
+        await mkdir(options.outputDirectory, { recursive: true });
     }
-    hasMagic() {
-        if (this.options.magicalBraces && this.set.length > 1) {
-            return true;
-        }
-        for (const pattern of this.set) {
-            for (const part of pattern) {
-                if (typeof part !== 'string')
-                    return true;
-            }
-        }
-        return false;
-    }
-    debug(..._) { }
-    make() {
-        const pattern = this.pattern;
-        const options = this.options;
-        // empty patterns and comments match nothing.
-        if (!options.nocomment && pattern.charAt(0) === '#') {
-            this.comment = true;
-            return;
-        }
-        if (!pattern) {
-            this.empty = true;
-            return;
-        }
-        // step 1: figure out negation, etc.
-        this.parseNegate();
-        // step 2: expand braces
-        this.globSet = [...new Set(this.braceExpand())];
-        if (options.debug) {
-            this.debug = (...args) => console.error(...args);
-        }
-        this.debug(this.pattern, this.globSet);
-        // step 3: now we have a set, so turn each one into a series of
-        // path-portion matching patterns.
-        // These will be regexps, except in the case of "**", which is
-        // set to the GLOBSTAR object for globstar behavior,
-        // and will not contain any / characters
-        //
-        // First, we preprocess to make the glob pattern sets a bit simpler
-        // and deduped.  There are some perf-killing patterns that can cause
-        // problems with a glob walk, but we can simplify them down a bit.
-        const rawGlobParts = this.globSet.map(s => this.slashSplit(s));
-        this.globParts = this.preprocess(rawGlobParts);
-        this.debug(this.pattern, this.globParts);
-        // glob --> regexps
-        let set = this.globParts.map((s, _, __) => {
-            if (this.isWindows && this.windowsNoMagicRoot) {
-                // check if it's a drive or unc path.
-                const isUNC = s[0] === '' &&
-                    s[1] === '' &&
-                    (s[2] === '?' || !globMagic.test(s[2])) &&
-                    !globMagic.test(s[3]);
-                const isDrive = /^[a-z]:/i.test(s[0]);
-                if (isUNC) {
-                    return [...s.slice(0, 4), ...s.slice(4).map(ss => this.parse(ss))];
-                }
-                else if (isDrive) {
-                    return [s[0], ...s.slice(1).map(ss => this.parse(ss))];
-                }
-            }
-            return s.map(ss => this.parse(ss));
-        });
-        this.debug(this.pattern, set);
-        // filter out everything that didn't compile properly.
-        this.set = set.filter(s => s.indexOf(false) === -1);
-        // do not treat the ? in UNC paths as magic
-        if (this.isWindows) {
-            for (let i = 0; i < this.set.length; i++) {
-                const p = this.set[i];
-                if (p[0] === '' &&
-                    p[1] === '' &&
-                    this.globParts[i][2] === '?' &&
-                    typeof p[3] === 'string' &&
-                    /^[a-z]:$/i.test(p[3])) {
-                    p[2] = '?';
-                }
-            }
-        }
-        this.debug(this.pattern, this.set);
-    }
-    // various transforms to equivalent pattern sets that are
-    // faster to process in a filesystem walk.  The goal is to
-    // eliminate what we can, and push all ** patterns as far
-    // to the right as possible, even if it increases the number
-    // of patterns that we have to process.
-    preprocess(globParts) {
-        // if we're not in globstar mode, then turn all ** into *
-        if (this.options.noglobstar) {
-            for (let i = 0; i < globParts.length; i++) {
-                for (let j = 0; j < globParts[i].length; j++) {
-                    if (globParts[i][j] === '**') {
-                        globParts[i][j] = '*';
-                    }
-                }
-            }
-        }
-        const { optimizationLevel = 1 } = this.options;
-        if (optimizationLevel >= 2) {
-            // aggressive optimization for the purpose of fs walking
-            globParts = this.firstPhasePreProcess(globParts);
-            globParts = this.secondPhasePreProcess(globParts);
-        }
-        else if (optimizationLevel >= 1) {
-            // just basic optimizations to remove some .. parts
-            globParts = this.levelOneOptimize(globParts);
-        }
-        else {
-            // just collapse multiple ** portions into one
-            globParts = this.adjascentGlobstarOptimize(globParts);
-        }
-        return globParts;
-    }
-    // just get rid of adjascent ** portions
-    adjascentGlobstarOptimize(globParts) {
-        return globParts.map(parts => {
-            let gs = -1;
-            while (-1 !== (gs = parts.indexOf('**', gs + 1))) {
-                let i = gs;
-                while (parts[i + 1] === '**') {
-                    i++;
-                }
-                if (i !== gs) {
-                    parts.splice(gs, i - gs);
-                }
-            }
-            return parts;
-        });
-    }
-    // get rid of adjascent ** and resolve .. portions
-    levelOneOptimize(globParts) {
-        return globParts.map(parts => {
-            parts = parts.reduce((set, part) => {
-                const prev = set[set.length - 1];
-                if (part === '**' && prev === '**') {
-                    return set;
-                }
-                if (part === '..') {
-                    if (prev && prev !== '..' && prev !== '.' && prev !== '**') {
-                        set.pop();
-                        return set;
-                    }
-                }
-                set.push(part);
-                return set;
-            }, []);
-            return parts.length === 0 ? [''] : parts;
-        });
-    }
-    levelTwoFileOptimize(parts) {
-        if (!Array.isArray(parts)) {
-            parts = this.slashSplit(parts);
-        }
-        let didSomething = false;
-        do {
-            didSomething = false;
-            // <pre>/<e>/<rest> -> <pre>/<rest>
-            if (!this.preserveMultipleSlashes) {
-                for (let i = 1; i < parts.length - 1; i++) {
-                    const p = parts[i];
-                    // don't squeeze out UNC patterns
-                    if (i === 1 && p === '' && parts[0] === '')
-                        continue;
-                    if (p === '.' || p === '') {
-                        didSomething = true;
-                        parts.splice(i, 1);
-                        i--;
-                    }
-                }
-                if (parts[0] === '.' &&
-                    parts.length === 2 &&
-                    (parts[1] === '.' || parts[1] === '')) {
-                    didSomething = true;
-                    parts.pop();
-                }
-            }
-            // <pre>/<p>/../<rest> -> <pre>/<rest>
-            let dd = 0;
-            while (-1 !== (dd = parts.indexOf('..', dd + 1))) {
-                const p = parts[dd - 1];
-                if (p && p !== '.' && p !== '..' && p !== '**') {
-                    didSomething = true;
-                    parts.splice(dd - 1, 2);
-                    dd -= 2;
-                }
-            }
-        } while (didSomething);
-        return parts.length === 0 ? [''] : parts;
-    }
-    // First phase: single-pattern processing
-    // <pre> is 1 or more portions
-    // <rest> is 1 or more portions
-    // <p> is any portion other than ., .., '', or **
-    // <e> is . or ''
-    //
-    // **/.. is *brutal* for filesystem walking performance, because
-    // it effectively resets the recursive walk each time it occurs,
-    // and ** cannot be reduced out by a .. pattern part like a regexp
-    // or most strings (other than .., ., and '') can be.
-    //
-    // <pre>/**/../<p>/<p>/<rest> -> {<pre>/../<p>/<p>/<rest>,<pre>/**/<p>/<p>/<rest>}
-    // <pre>/<e>/<rest> -> <pre>/<rest>
-    // <pre>/<p>/../<rest> -> <pre>/<rest>
-    // **/**/<rest> -> **/<rest>
-    //
-    // **/*/<rest> -> */**/<rest> <== not valid because ** doesn't follow
-    // this WOULD be allowed if ** did follow symlinks, or * didn't
-    firstPhasePreProcess(globParts) {
-        let didSomething = false;
-        do {
-            didSomething = false;
-            // <pre>/**/../<p>/<p>/<rest> -> {<pre>/../<p>/<p>/<rest>,<pre>/**/<p>/<p>/<rest>}
-            for (let parts of globParts) {
-                let gs = -1;
-                while (-1 !== (gs = parts.indexOf('**', gs + 1))) {
-                    let gss = gs;
-                    while (parts[gss + 1] === '**') {
-                        // <pre>/**/**/<rest> -> <pre>/**/<rest>
-                        gss++;
-                    }
-                    // eg, if gs is 2 and gss is 4, that means we have 3 **
-                    // parts, and can remove 2 of them.
-                    if (gss > gs) {
-                        parts.splice(gs + 1, gss - gs);
-                    }
-                    let next = parts[gs + 1];
-                    const p = parts[gs + 2];
-                    const p2 = parts[gs + 3];
-                    if (next !== '..')
-                        continue;
-                    if (!p ||
-                        p === '.' ||
-                        p === '..' ||
-                        !p2 ||
-                        p2 === '.' ||
-                        p2 === '..') {
-                        continue;
-                    }
-                    didSomething = true;
-                    // edit parts in place, and push the new one
-                    parts.splice(gs, 1);
-                    const other = parts.slice(0);
-                    other[gs] = '**';
-                    globParts.push(other);
-                    gs--;
-                }
-                // <pre>/<e>/<rest> -> <pre>/<rest>
-                if (!this.preserveMultipleSlashes) {
-                    for (let i = 1; i < parts.length - 1; i++) {
-                        const p = parts[i];
-                        // don't squeeze out UNC patterns
-                        if (i === 1 && p === '' && parts[0] === '')
-                            continue;
-                        if (p === '.' || p === '') {
-                            didSomething = true;
-                            parts.splice(i, 1);
-                            i--;
-                        }
-                    }
-                    if (parts[0] === '.' &&
-                        parts.length === 2 &&
-                        (parts[1] === '.' || parts[1] === '')) {
-                        didSomething = true;
-                        parts.pop();
-                    }
-                }
-                // <pre>/<p>/../<rest> -> <pre>/<rest>
-                let dd = 0;
-                while (-1 !== (dd = parts.indexOf('..', dd + 1))) {
-                    const p = parts[dd - 1];
-                    if (p && p !== '.' && p !== '..' && p !== '**') {
-                        didSomething = true;
-                        const needDot = dd === 1 && parts[dd + 1] === '**';
-                        const splin = needDot ? ['.'] : [];
-                        parts.splice(dd - 1, 2, ...splin);
-                        if (parts.length === 0)
-                            parts.push('');
-                        dd -= 2;
-                    }
-                }
-            }
-        } while (didSomething);
-        return globParts;
-    }
-    // second phase: multi-pattern dedupes
-    // {<pre>/*/<rest>,<pre>/<p>/<rest>} -> <pre>/*/<rest>
-    // {<pre>/<rest>,<pre>/<rest>} -> <pre>/<rest>
-    // {<pre>/**/<rest>,<pre>/<rest>} -> <pre>/**/<rest>
-    //
-    // {<pre>/**/<rest>,<pre>/**/<p>/<rest>} -> <pre>/**/<rest>
-    // ^-- not valid because ** doens't follow symlinks
-    secondPhasePreProcess(globParts) {
-        for (let i = 0; i < globParts.length - 1; i++) {
-            for (let j = i + 1; j < globParts.length; j++) {
-                const matched = this.partsMatch(globParts[i], globParts[j], !this.preserveMultipleSlashes);
-                if (matched) {
-                    globParts[i] = [];
-                    globParts[j] = matched;
-                    break;
-                }
-            }
-        }
-        return globParts.filter(gs => gs.length);
-    }
-    partsMatch(a, b, emptyGSMatch = false) {
-        let ai = 0;
-        let bi = 0;
-        let result = [];
-        let which = '';
-        while (ai < a.length && bi < b.length) {
-            if (a[ai] === b[bi]) {
-                result.push(which === 'b' ? b[bi] : a[ai]);
-                ai++;
-                bi++;
-            }
-            else if (emptyGSMatch && a[ai] === '**' && b[bi] === a[ai + 1]) {
-                result.push(a[ai]);
-                ai++;
-            }
-            else if (emptyGSMatch && b[bi] === '**' && a[ai] === b[bi + 1]) {
-                result.push(b[bi]);
-                bi++;
-            }
-            else if (a[ai] === '*' &&
-                b[bi] &&
-                (this.options.dot || !b[bi].startsWith('.')) &&
-                b[bi] !== '**') {
-                if (which === 'b')
-                    return false;
-                which = 'a';
-                result.push(a[ai]);
-                ai++;
-                bi++;
-            }
-            else if (b[bi] === '*' &&
-                a[ai] &&
-                (this.options.dot || !a[ai].startsWith('.')) &&
-                a[ai] !== '**') {
-                if (which === 'a')
-                    return false;
-                which = 'b';
-                result.push(b[bi]);
-                ai++;
-                bi++;
-            }
-            else {
-                return false;
-            }
-        }
-        // if we fall out of the loop, it means they two are identical
-        // as long as their lengths match
-        return a.length === b.length && result;
-    }
-    parseNegate() {
-        if (this.nonegate)
-            return;
-        const pattern = this.pattern;
-        let negate = false;
-        let negateOffset = 0;
-        for (let i = 0; i < pattern.length && pattern.charAt(i) === '!'; i++) {
-            negate = !negate;
-            negateOffset++;
-        }
-        if (negateOffset)
-            this.pattern = pattern.slice(negateOffset);
-        this.negate = negate;
-    }
-    // set partial to true to test if, for example,
-    // "/a/b" matches the start of "/*/b/*/d"
-    // Partial means, if you run out of file before you run
-    // out of pattern, then that's fine, as long as all
-    // the parts match.
-    matchOne(file, pattern, partial = false) {
-        const options = this.options;
-        // UNC paths like //?/X:/... can match X:/... and vice versa
-        // Drive letters in absolute drive or unc paths are always compared
-        // case-insensitively.
-        if (this.isWindows) {
-            const fileDrive = typeof file[0] === 'string' && /^[a-z]:$/i.test(file[0]);
-            const fileUNC = !fileDrive &&
-                file[0] === '' &&
-                file[1] === '' &&
-                file[2] === '?' &&
-                /^[a-z]:$/i.test(file[3]);
-            const patternDrive = typeof pattern[0] === 'string' && /^[a-z]:$/i.test(pattern[0]);
-            const patternUNC = !patternDrive &&
-                pattern[0] === '' &&
-                pattern[1] === '' &&
-                pattern[2] === '?' &&
-                typeof pattern[3] === 'string' &&
-                /^[a-z]:$/i.test(pattern[3]);
-            const fdi = fileUNC ? 3 : fileDrive ? 0 : undefined;
-            const pdi = patternUNC ? 3 : patternDrive ? 0 : undefined;
-            if (typeof fdi === 'number' && typeof pdi === 'number') {
-                const [fd, pd] = [file[fdi], pattern[pdi]];
-                if (fd.toLowerCase() === pd.toLowerCase()) {
-                    pattern[pdi] = fd;
-                    if (pdi > fdi) {
-                        pattern = pattern.slice(pdi);
-                    }
-                    else if (fdi > pdi) {
-                        file = file.slice(fdi);
-                    }
-                }
-            }
-        }
-        // resolve and reduce . and .. portions in the file as well.
-        // don't need to do the second phase, because it's only one string[]
-        const { optimizationLevel = 1 } = this.options;
-        if (optimizationLevel >= 2) {
-            file = this.levelTwoFileOptimize(file);
-        }
-        this.debug('matchOne', this, { file, pattern });
-        this.debug('matchOne', file.length, pattern.length);
-        for (var fi = 0, pi = 0, fl = file.length, pl = pattern.length; fi < fl && pi < pl; fi++, pi++) {
-            this.debug('matchOne loop');
-            var p = pattern[pi];
-            var f = file[fi];
-            this.debug(pattern, p, f);
-            // should be impossible.
-            // some invalid regexp stuff in the set.
-            /* c8 ignore start */
-            if (p === false) {
-                return false;
-            }
-            /* c8 ignore stop */
-            if (p === GLOBSTAR) {
-                this.debug('GLOBSTAR', [pattern, p, f]);
-                // "**"
-                // a/**/b/**/c would match the following:
-                // a/b/x/y/z/c
-                // a/x/y/z/b/c
-                // a/b/x/b/x/c
-                // a/b/c
-                // To do this, take the rest of the pattern after
-                // the **, and see if it would match the file remainder.
-                // If so, return success.
-                // If not, the ** "swallows" a segment, and try again.
-                // This is recursively awful.
-                //
-                // a/**/b/**/c matching a/b/x/y/z/c
-                // - a matches a
-                // - doublestar
-                //   - matchOne(b/x/y/z/c, b/**/c)
-                //     - b matches b
-                //     - doublestar
-                //       - matchOne(x/y/z/c, c) -> no
-                //       - matchOne(y/z/c, c) -> no
-                //       - matchOne(z/c, c) -> no
-                //       - matchOne(c, c) yes, hit
-                var fr = fi;
-                var pr = pi + 1;
-                if (pr === pl) {
-                    this.debug('** at the end');
-                    // a ** at the end will just swallow the rest.
-                    // We have found a match.
-                    // however, it will not swallow /.x, unless
-                    // options.dot is set.
-                    // . and .. are *never* matched by **, for explosively
-                    // exponential reasons.
-                    for (; fi < fl; fi++) {
-                        if (file[fi] === '.' ||
-                            file[fi] === '..' ||
-                            (!options.dot && file[fi].charAt(0) === '.'))
-                            return false;
-                    }
-                    return true;
-                }
-                // ok, let's see if we can swallow whatever we can.
-                while (fr < fl) {
-                    var swallowee = file[fr];
-                    this.debug('\nglobstar while', file, fr, pattern, pr, swallowee);
-                    // XXX remove this slice.  Just pass the start index.
-                    if (this.matchOne(file.slice(fr), pattern.slice(pr), partial)) {
-                        this.debug('globstar found match!', fr, fl, swallowee);
-                        // found a match.
-                        return true;
-                    }
-                    else {
-                        // can't swallow "." or ".." ever.
-                        // can only swallow ".foo" when explicitly asked.
-                        if (swallowee === '.' ||
-                            swallowee === '..' ||
-                            (!options.dot && swallowee.charAt(0) === '.')) {
-                            this.debug('dot detected!', file, fr, pattern, pr);
-                            break;
-                        }
-                        // ** swallows a segment, and continue.
-                        this.debug('globstar swallow a segment, and continue');
-                        fr++;
-                    }
-                }
-                // no match was found.
-                // However, in partial mode, we can't say this is necessarily over.
-                /* c8 ignore start */
-                if (partial) {
-                    // ran out of file
-                    this.debug('\n>>> no match, partial?', file, fr, pattern, pr);
-                    if (fr === fl) {
-                        return true;
-                    }
-                }
-                /* c8 ignore stop */
-                return false;
-            }
-            // something other than **
-            // non-magic patterns just have to match exactly
-            // patterns with magic have been turned into regexps.
-            let hit;
-            if (typeof p === 'string') {
-                hit = f === p;
-                this.debug('string match', p, f, hit);
-            }
-            else {
-                hit = p.test(f);
-                this.debug('pattern match', p, f, hit);
-            }
-            if (!hit)
-                return false;
-        }
-        // Note: ending in / means that we'll get a final ""
-        // at the end of the pattern.  This can only match a
-        // corresponding "" at the end of the file.
-        // If the file ends in /, then it can only match a
-        // a pattern that ends in /, unless the pattern just
-        // doesn't have any more for it. But, a/b/ should *not*
-        // match "a/b/*", even though "" matches against the
-        // [^/]*? pattern, except in partial mode, where it might
-        // simply not be reached yet.
-        // However, a/b/ should still satisfy a/*
-        // now either we fell off the end of the pattern, or we're done.
-        if (fi === fl && pi === pl) {
-            // ran out of pattern and filename at the same time.
-            // an exact hit!
-            return true;
-        }
-        else if (fi === fl) {
-            // ran out of file, but still had pattern left.
-            // this is ok if we're doing the match as part of
-            // a glob fs traversal.
-            return partial;
-        }
-        else if (pi === pl) {
-            // ran out of pattern, still have file left.
-            // this is only acceptable if we're on the very last
-            // empty segment of a file with a trailing slash.
-            // a/* should match a/b/
-            return fi === fl - 1 && file[fi] === '';
-            /* c8 ignore start */
-        }
-        else {
-            // should be unreachable.
-            throw new Error('wtf?');
-        }
-        /* c8 ignore stop */
-    }
-    braceExpand() {
-        return braceExpand(this.pattern, this.options);
-    }
-    parse(pattern) {
-        assertValidPattern(pattern);
-        const options = this.options;
-        // shortcuts
-        if (pattern === '**')
-            return GLOBSTAR;
-        if (pattern === '')
-            return '';
-        // far and away, the most common glob pattern parts are
-        // *, *.*, and *.<ext>  Add a fast check method for those.
-        let m;
-        let fastTest = null;
-        if ((m = pattern.match(starRE))) {
-            fastTest = options.dot ? starTestDot : starTest;
-        }
-        else if ((m = pattern.match(starDotExtRE))) {
-            fastTest = (options.nocase
-                ? options.dot
-                    ? starDotExtTestNocaseDot
-                    : starDotExtTestNocase
-                : options.dot
-                    ? starDotExtTestDot
-                    : starDotExtTest)(m[1]);
-        }
-        else if ((m = pattern.match(qmarksRE))) {
-            fastTest = (options.nocase
-                ? options.dot
-                    ? qmarksTestNocaseDot
-                    : qmarksTestNocase
-                : options.dot
-                    ? qmarksTestDot
-                    : qmarksTest)(m);
-        }
-        else if ((m = pattern.match(starDotStarRE))) {
-            fastTest = options.dot ? starDotStarTestDot : starDotStarTest;
-        }
-        else if ((m = pattern.match(dotStarRE))) {
-            fastTest = dotStarTest;
-        }
-        const re = AST.fromGlob(pattern, this.options).toMMPattern();
-        if (fastTest && typeof re === 'object') {
-            // Avoids overriding in frozen environments
-            Reflect.defineProperty(re, 'test', { value: fastTest });
-        }
-        return re;
-    }
-    makeRe() {
-        if (this.regexp || this.regexp === false)
-            return this.regexp;
-        // at this point, this.set is a 2d array of partial
-        // pattern strings, or "**".
-        //
-        // It's better to use .match().  This function shouldn't
-        // be used, really, but it's pretty convenient sometimes,
-        // when you just want to work with a regex.
-        const set = this.set;
-        if (!set.length) {
-            this.regexp = false;
-            return this.regexp;
-        }
-        const options = this.options;
-        const twoStar = options.noglobstar
-            ? star
-            : options.dot
-                ? twoStarDot
-                : twoStarNoDot;
-        const flags = new Set(options.nocase ? ['i'] : []);
-        // regexpify non-globstar patterns
-        // if ** is only item, then we just do one twoStar
-        // if ** is first, and there are more, prepend (\/|twoStar\/)? to next
-        // if ** is last, append (\/twoStar|) to previous
-        // if ** is in the middle, append (\/|\/twoStar\/) to previous
-        // then filter out GLOBSTAR symbols
-        let re = set
-            .map(pattern => {
-            const pp = pattern.map(p => {
-                if (p instanceof RegExp) {
-                    for (const f of p.flags.split(''))
-                        flags.add(f);
-                }
-                return typeof p === 'string'
-                    ? regExpEscape(p)
-                    : p === GLOBSTAR
-                        ? GLOBSTAR
-                        : p._src;
-            });
-            pp.forEach((p, i) => {
-                const next = pp[i + 1];
-                const prev = pp[i - 1];
-                if (p !== GLOBSTAR || prev === GLOBSTAR) {
-                    return;
-                }
-                if (prev === undefined) {
-                    if (next !== undefined && next !== GLOBSTAR) {
-                        pp[i + 1] = '(?:\\/|' + twoStar + '\\/)?' + next;
-                    }
-                    else {
-                        pp[i] = twoStar;
-                    }
-                }
-                else if (next === undefined) {
-                    pp[i - 1] = prev + '(?:\\/|\\/' + twoStar + ')?';
-                }
-                else if (next !== GLOBSTAR) {
-                    pp[i - 1] = prev + '(?:\\/|\\/' + twoStar + '\\/)' + next;
-                    pp[i + 1] = GLOBSTAR;
-                }
-            });
-            const filtered = pp.filter(p => p !== GLOBSTAR);
-            // For partial matches, we need to make the pattern match
-            // any prefix of the full path. We do this by generating
-            // alternative patterns that match progressively longer prefixes.
-            if (this.partial && filtered.length >= 1) {
-                const prefixes = [];
-                for (let i = 1; i <= filtered.length; i++) {
-                    prefixes.push(filtered.slice(0, i).join('/'));
-                }
-                return '(?:' + prefixes.join('|') + ')';
-            }
-            return filtered.join('/');
-        })
-            .join('|');
-        // need to wrap in parens if we had more than one thing with |,
-        // otherwise only the first will be anchored to ^ and the last to $
-        const [open, close] = set.length > 1 ? ['(?:', ')'] : ['', ''];
-        // must match entire pattern
-        // ending in a * or ** will make it less strict.
-        re = '^' + open + re + close + '$';
-        // In partial mode, '/' should always match as it's a valid prefix for any pattern
-        if (this.partial) {
-            re = '^(?:\\/|' + open + re.slice(1, -1) + close + ')$';
-        }
-        // can match anything, as long as it's not this.
-        if (this.negate)
-            re = '^(?!' + re + ').+$';
+    // Find all XML files in input directory
+    const xmlFiles = await findXmlFiles(options.inputDirectory);
+    for (const xmlFile of xmlFiles) {
         try {
-            this.regexp = new RegExp(re, [...flags].join(''));
-            /* c8 ignore start */
-        }
-        catch (ex) {
-            // should be impossible
-            this.regexp = false;
-        }
-        /* c8 ignore stop */
-        return this.regexp;
-    }
-    slashSplit(p) {
-        // if p starts with // on windows, we preserve that
-        // so that UNC paths aren't broken.  Otherwise, any number of
-        // / characters are coalesced into one, unless
-        // preserveMultipleSlashes is set to true.
-        if (this.preserveMultipleSlashes) {
-            return p.split('/');
-        }
-        else if (this.isWindows && /^\/\/[^\/]+/.test(p)) {
-            // add an extra '' for the one we lose
-            return ['', ...p.split(/\/+/)];
-        }
-        else {
-            return p.split(/\/+/);
-        }
-    }
-    match(f, partial = this.partial) {
-        this.debug('match', f, this.pattern);
-        // short-circuit in the case of busted things.
-        // comments, etc.
-        if (this.comment) {
-            return false;
-        }
-        if (this.empty) {
-            return f === '';
-        }
-        if (f === '/' && partial) {
-            return true;
-        }
-        const options = this.options;
-        // windows: need to use /, not \
-        if (this.isWindows) {
-            f = f.split('\\').join('/');
-        }
-        // treat the test path as a set of pathparts.
-        const ff = this.slashSplit(f);
-        this.debug(this.pattern, 'split', ff);
-        // just ONE of the pattern sets in this.set needs to match
-        // in order for it to be valid.  If negating, then just one
-        // match means that we have failed.
-        // Either way, return on the first hit.
-        const set = this.set;
-        this.debug(this.pattern, 'set', set);
-        // Find the basename of the path by looking for the last non-empty segment
-        let filename = ff[ff.length - 1];
-        if (!filename) {
-            for (let i = ff.length - 2; !filename && i >= 0; i--) {
-                filename = ff[i];
+            const converted = await convertXmlFile(xmlFile, options.outputDirectory);
+            if (converted) {
+                convertedCount++;
             }
         }
-        for (let i = 0; i < set.length; i++) {
-            const pattern = set[i];
-            let file = ff;
-            if (options.matchBase && pattern.length === 1) {
-                file = [filename];
-            }
-            const hit = this.matchOne(file, pattern, partial);
-            if (hit) {
-                if (options.flipNegate) {
-                    return true;
-                }
-                return !this.negate;
-            }
+        catch (error) {
+            console.error(`Error converting ${xmlFile}:`, error);
         }
-        // didn't get any hits.  this is success if it's a negative
-        // pattern, failure otherwise.
-        if (options.flipNegate) {
-            return false;
-        }
-        return this.negate;
     }
-    static defaults(def) {
-        return minimatch.defaults(def).Minimatch;
-    }
+    return convertedCount;
 }
-/* c8 ignore stop */
-minimatch.AST = AST;
-minimatch.Minimatch = Minimatch;
-minimatch.escape = escape;
-minimatch.unescape = unescape;
-
-async function findNeoForgeVersion(options) {
-    const { version: versionSearch } = options;
-    if (!versionSearch || typeof versionSearch !== 'string') {
-        throw new Error('version is not a string');
+async function findXmlFiles(directory) {
+    const xmlFiles = [];
+    const entries = await readdir(directory, { withFileTypes: true });
+    for (const entry of entries) {
+        const fullPath = join(directory, entry.name);
+        if (entry.isDirectory()) {
+            xmlFiles.push(...(await findXmlFiles(fullPath)));
+        }
+        else if (extname(entry.name).toLowerCase() === '.xml') {
+            xmlFiles.push(fullPath);
+        }
     }
-    const response = await fetch('https://maven.neoforged.net/api/maven/versions/releases/net/neoforged/neoforge');
-    const json = (await response.json());
-    if (!response.ok) {
-        throw new Error(`NeoForge API request failed: ${response.status} ${response.statusText}`);
+    return xmlFiles;
+}
+async function convertXmlFile(xmlFilePath, outputDirectory) {
+    const xmlContent = await readFile(xmlFilePath, 'utf-8');
+    const parser = new fxpExports.XMLParser({
+        ignoreAttributes: false,
+        attributeNamePrefix: '_'
+    });
+    const parsed = parser.parse(xmlContent);
+    // Check if this is a migrationMap
+    if (!parsed.migrationMap || !parsed.migrationMap.entry) {
+        return false;
     }
-    const versions = json.versions.filter((it) => minimatch(it, versionSearch));
-    if (versions.length === 0) {
-        return undefined;
+    const entries = Array.isArray(parsed.migrationMap.entry)
+        ? parsed.migrationMap.entry
+        : [parsed.migrationMap.entry];
+    // Filter for class type entries
+    const classEntries = entries.filter((entry) => entry._type === 'class');
+    if (classEntries.length === 0) {
+        return false;
     }
-    return versions[versions.length - 1];
+    const recipeName = generateRecipeName(xmlFilePath, parsed.migrationMap.name?._value);
+    const recipe = createOpenRewriteRecipe(recipeName, classEntries);
+    const yamlContent = stringify(recipe, { indent: 2 });
+    const outputPath = join(outputDirectory, `${recipeName}.yml`);
+    await writeFile(outputPath, yamlContent, 'utf-8');
+    console.log(`Converted: ${xmlFilePath} -> ${outputPath}`);
+    return true;
+}
+function generateRecipeName(xmlFilePath, mapName) {
+    if (mapName) {
+        return mapName.replace(/[^a-zA-Z0-9-_]/g, '-');
+    }
+    const fileName = basename$1(xmlFilePath, '.xml');
+    return fileName.replace(/[^a-zA-Z0-9-_]/g, '-');
+}
+function createOpenRewriteRecipe(name, entries) {
+    return {
+        type: 'specs.openrewrite.org/v1beta/recipe',
+        name: `com.twelveiterations.${name}`,
+        displayName: name,
+        description: `Apply package and class name migrations`,
+        recipeList: entries.map((entry) => ({
+            type: 'org.openrewrite.java.ChangeType',
+            oldFullyQualifiedTypeName: entry._oldName,
+            newFullyQualifiedTypeName: entry._newName,
+            ignoreDefinition: true
+        }))
+    };
 }
 
 async function run() {
     try {
-        const version = coreExports.getInput('version', {
+        const inputDirectory = coreExports.getInput('inputDirectory', {
             required: true
         });
-        const result = await findNeoForgeVersion({ version });
-        if (result) {
-            coreExports.setOutput('version', result);
+        const outputDirectory = coreExports.getInput('outputDirectory', {
+            required: true
+        });
+        const count = await convertMigrationMapsToOpenRewrite({
+            inputDirectory,
+            outputDirectory
+        });
+        if (count) {
+            coreExports.setOutput('count', count);
         }
         else {
             coreExports.setFailed('No matching version found');

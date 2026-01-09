@@ -7,11 +7,13 @@
  */
 import { jest } from '@jest/globals'
 import * as core from '../__fixtures__/core.js'
-import { findNeoForgeVersion } from '../__fixtures__/version.js'
+import { convertMigrationMapsToOpenRewrite } from '../__fixtures__/rewrite.js'
 
 // Mocks should be declared before the module being tested is imported.
 jest.unstable_mockModule('@actions/core', () => core)
-jest.unstable_mockModule('../src/version.js', () => ({ findNeoForgeVersion }))
+jest.unstable_mockModule('../src/rewrite.js', () => ({
+  convertMigrationMapsToOpenRewrite
+}))
 
 // The module being tested should be imported dynamically. This ensures that the
 // mocks are used in place of any actual dependencies.
@@ -22,34 +24,38 @@ describe('main.ts', () => {
     // Set the action's inputs as return values from core.getInput().
     core.getInput.mockImplementation((name: string) => {
       const inputs: Record<string, string> = {
-        version: '21.11.*'
+        inputDirectory: '/input',
+        outputDirectory: '/output'
       }
       return inputs[name] || ''
     })
 
-    // Mock findNeoForgeVersion to return a version.
-    findNeoForgeVersion.mockImplementation(() => Promise.resolve('21.11.1'))
+    // Mock convertMigrationMapsToOpenRewrite to return a count.
+    convertMigrationMapsToOpenRewrite.mockImplementation(() =>
+      Promise.resolve(5)
+    )
   })
 
   afterEach(() => {
     jest.resetAllMocks()
   })
 
-  it('Sets the version output when a version is found', async () => {
+  it('Sets the count output when migration maps are converted', async () => {
     await run()
 
-    // Verify findNeoForgeVersion was called with correct parameters.
-    expect(findNeoForgeVersion).toHaveBeenCalledWith({
-      version: '21.11.*'
+    // Verify convertMigrationMapsToOpenRewrite was called with correct parameters.
+    expect(convertMigrationMapsToOpenRewrite).toHaveBeenCalledWith({
+      inputDirectory: '/input',
+      outputDirectory: '/output'
     })
 
-    // Verify the version output was set.
-    expect(core.setOutput).toHaveBeenCalledWith('version', '21.11.1')
+    // Verify the count output was set.
+    expect(core.setOutput).toHaveBeenCalledWith('count', 5)
   })
 
-  it('Sets a failed status when no version is found', async () => {
-    // Mock findNeoForgeVersion to return undefined.
-    findNeoForgeVersion.mockClear().mockResolvedValueOnce(undefined)
+  it('Sets a failed status when no migration maps are found', async () => {
+    // Mock convertMigrationMapsToOpenRewrite to return 0.
+    convertMigrationMapsToOpenRewrite.mockClear().mockResolvedValueOnce(0)
 
     await run()
 
@@ -58,16 +64,16 @@ describe('main.ts', () => {
   })
 
   it('Sets a failed status when an error occurs', async () => {
-    // Mock findNeoForgeVersion to throw an error.
-    findNeoForgeVersion
+    // Mock convertMigrationMapsToOpenRewrite to throw an error.
+    convertMigrationMapsToOpenRewrite
       .mockClear()
-      .mockRejectedValueOnce(new Error('NeoForge API request failed: 500'))
+      .mockRejectedValueOnce(new Error('Failed to read directory: ENOENT'))
 
     await run()
 
     // Verify that the action was marked as failed.
     expect(core.setFailed).toHaveBeenCalledWith(
-      'NeoForge API request failed: 500'
+      'Failed to read directory: ENOENT'
     )
   })
 })

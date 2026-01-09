@@ -6,7 +6,8 @@
 ![CodeQL](https://github.com/TwelveIterations/apply-rewrite/actions/workflows/codeql-analysis.yml/badge.svg)
 ![Coverage](./badges/coverage.svg)
 
-GitHub Action that converts IntelliJ IDEA migration maps (XML format) to OpenRewrite recipes (YAML format).
+GitHub Action that converts IntelliJ IDEA migration maps (XML format) to
+OpenRewrite recipes (YAML format).
 
 ## Usage
 
@@ -19,8 +20,10 @@ with:
 
 ### Inputs
 
-- **inputDirectory** (required): Path to the directory containing IntelliJ migration map XML files
-- **outputDirectory** (required): Path where the generated OpenRewrite recipe YAML files will be saved
+- **inputDirectory** (required): Path to the directory containing IntelliJ
+  migration map XML files
+- **outputDirectory** (required): Path where the generated OpenRewrite recipe
+  YAML files will be saved
 
 ### Outputs
 

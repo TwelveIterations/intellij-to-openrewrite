@@ -62,4 +62,5 @@ jobs:
 
       - name: Print Output
         id: output
-        run: echo "Converted ${{ steps.test-action.outputs.count }} migration maps"
+        run:
+          echo "Converted ${{ steps.test-action.outputs.count }} migration maps"
