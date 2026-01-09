@@ -1,17 +1,17 @@
 {
-  "name": "apply-rewrite",
-  "description": "Finds the latest NeoForge version for a Minecraft version",
+  "name": "intellij-to-openrewrite",
+  "description": "Converts IntelliJ IDEA migration maps (XML) to OpenRewrite recipes (YAML)",
   "version": "1.0.0",
   "author": "BlayTheNinth",
   "type": "module",
   "private": true,
-  "homepage": "https://github.com/TwelveIterations/apply-rewrite#readme",
+  "homepage": "https://github.com/TwelveIterations/intellij-to-openrewrite#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/TwelveIterations/apply-rewrite.git"
+    "url": "git+https://github.com/TwelveIterations/intellij-to-openrewrite.git"
   },
   "bugs": {
-    "url": "https://github.com/TwelveIterations/apply-rewrite/issues"
+    "url": "https://github.com/TwelveIterations/intellij-to-openrewrite/issues"
   },
   "keywords": [
     "actions"

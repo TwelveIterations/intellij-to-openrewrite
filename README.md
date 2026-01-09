@@ -1,9 +1,9 @@
 # IntelliJ Migration Map to OpenRewrite Recipe Converter
 
-![Linter](https://github.com/TwelveIterations/apply-rewrite/actions/workflows/linter.yml/badge.svg)
-![CI](https://github.com/TwelveIterations/apply-rewrite/actions/workflows/ci.yml/badge.svg)
-![Check dist/](https://github.com/TwelveIterations/apply-rewrite/actions/workflows/check-dist.yml/badge.svg)
-![CodeQL](https://github.com/TwelveIterations/apply-rewrite/actions/workflows/codeql-analysis.yml/badge.svg)
+![Linter](https://github.com/TwelveIterations/intellij-to-openrewrite/actions/workflows/linter.yml/badge.svg)
+![CI](https://github.com/TwelveIterations/intellij-to-openrewrite/actions/workflows/ci.yml/badge.svg)
+![Check dist/](https://github.com/TwelveIterations/intellij-to-openrewrite/actions/workflows/check-dist.yml/badge.svg)
+![CodeQL](https://github.com/TwelveIterations/intellij-to-openrewrite/actions/workflows/codeql-analysis.yml/badge.svg)
 ![Coverage](./badges/coverage.svg)
 
 GitHub Action that converts IntelliJ IDEA migration maps (XML format) to
