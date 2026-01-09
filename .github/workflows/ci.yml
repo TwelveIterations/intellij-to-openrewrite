@@ -57,8 +57,8 @@ jobs:
         id: test-action
         uses: ./
         with:
-          inputDirectory: '__fixtures__'
-          outputDirectory: 'test-output'
+          input_directory: '__fixtures__'
+          output_directory: 'test-output'
 
       - name: Print Output
         id: output

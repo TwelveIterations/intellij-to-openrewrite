@@ -3,10 +3,10 @@ import { convertMigrationMapsToOpenRewrite } from './rewrite.js'
 
 export async function run(): Promise<void> {
   try {
-    const inputDirectory: string = core.getInput('inputDirectory', {
+    const inputDirectory: string = core.getInput('input_directory', {
       required: true
     })
-    const outputDirectory: string = core.getInput('outputDirectory', {
+    const outputDirectory: string = core.getInput('output_directory', {
       required: true
     })
 

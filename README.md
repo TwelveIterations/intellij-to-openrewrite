@@ -14,15 +14,15 @@ OpenRewrite recipes (YAML format).
 ```yaml
 uses: TwelveIterations/intellij-to-openrewrite@v1
 with:
-  inputDirectory: 'path/to/intellij-migration-maps'
-  outputDirectory: 'path/to/openrewrite-recipes'
+  input_directory: 'path/to/intellij-migration-maps'
+  output_directory: 'path/to/openrewrite-recipes'
 ```
 
 ### Inputs
 
-- **inputDirectory** (required): Path to the directory containing IntelliJ
+- **input_directory** (required): Path to the directory containing IntelliJ
   migration map XML files
-- **outputDirectory** (required): Path where the generated OpenRewrite recipe
+- **output_directory** (required): Path where the generated OpenRewrite recipe
   YAML files will be saved
 
 ### Outputs

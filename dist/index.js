@@ -33220,10 +33220,10 @@ function createOpenRewriteRecipe(name, entries) {
 
 async function run() {
     try {
-        const inputDirectory = coreExports.getInput('inputDirectory', {
+        const inputDirectory = coreExports.getInput('input_directory', {
             required: true
         });
-        const outputDirectory = coreExports.getInput('outputDirectory', {
+        const outputDirectory = coreExports.getInput('output_directory', {
             required: true
         });
         const count = await convertMigrationMapsToOpenRewrite({

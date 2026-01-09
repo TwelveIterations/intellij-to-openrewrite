@@ -24,8 +24,8 @@ describe('main.ts', () => {
     // Set the action's inputs as return values from core.getInput().
     core.getInput.mockImplementation((name: string) => {
       const inputs: Record<string, string> = {
-        inputDirectory: '/input',
-        outputDirectory: '/output'
+        input_directory: '/input',
+        output_directory: '/output'
       }
       return inputs[name] || ''
     })

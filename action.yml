@@ -8,10 +8,10 @@ branding:
   color: green
 
 inputs:
-  inputDirectory:
+  input_directory:
     description: 'Path to directory containing IntelliJ migration map XML files'
     required: true
-  outputDirectory:
+  output_directory:
     description: 'Path where OpenRewrite recipe YAML files will be saved'
     required: true
 
