@@ -1,0 +1,24 @@
+name: 'IntelliJ to OpenRewrite Migration Converter'
+description:
+  'Converts IntelliJ IDEA migration maps (XML) to OpenRewrite recipes (YAML)'
+author: Twelve Iterations
+
+branding:
+  icon: git-branch
+  color: green
+
+inputs:
+  inputDirectory:
+    description: 'Path to directory containing IntelliJ migration map XML files'
+    required: true
+  outputDirectory:
+    description: 'Path where OpenRewrite recipe YAML files will be saved'
+    required: true
+
+outputs:
+  count:
+    description: 'The number of migration maps successfully converted'
+
+runs:
+  using: node20
+  main: dist/index.js
