@@ -25,9 +25,11 @@ interface OpenRewriteRecipe {
   description: string
   tags?: string[]
   recipeList: Array<{
-    type: string
-    oldFullyQualifiedTypeName: string
-    newFullyQualifiedTypeName: string
+    'org.openrewrite.java.ChangeType': {
+      oldFullyQualifiedTypeName: string
+      newFullyQualifiedTypeName: string
+      ignoreDefinition: boolean
+    }
   }>
 }
 
@@ -138,10 +140,11 @@ function createOpenRewriteRecipe(
     displayName: name,
     description: `Apply package and class name migrations`,
     recipeList: entries.map((entry) => ({
-      type: 'org.openrewrite.java.ChangeType',
-      oldFullyQualifiedTypeName: entry._oldName,
-      newFullyQualifiedTypeName: entry._newName,
-      ignoreDefinition: true
+      'org.openrewrite.java.ChangeType': {
+        oldFullyQualifiedTypeName: entry._oldName,
+        newFullyQualifiedTypeName: entry._newName,
+        ignoreDefinition: true
+      }
     }))
   }
 }
